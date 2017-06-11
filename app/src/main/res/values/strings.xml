@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Finance Tracker</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="tab1_name">Accounts</string>
+    <string name="tab2_name">Transactions</string>
+    <string name="tab3_name">Categories</string>
+</resources>

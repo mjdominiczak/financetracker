@@ -15,7 +15,7 @@ public final class DatabaseContract {
 
     public static abstract class AccountEntry implements BaseColumns {
         public static final String TABLE_NAME               = "account";
-        public static final String COLUMN_NAME_DESCRIPTION  = "description";
+        public static final String COLUMN_NAME_NAME         = "name";
         public static final String COLUMN_NAME_TYPE         = "type";
         public static final String COLUMN_NAME_BALANCE      = "balance";
         public static final String COLUMN_NAME_CURRENCY     = "currency";
@@ -24,7 +24,7 @@ public final class DatabaseContract {
                 "CREATE TABLE %s (%s INTEGER PRIMARY KEY, %s %s, %s %s, %s %s, %s %s)",
                 TABLE_NAME,
                 _ID,
-                COLUMN_NAME_DESCRIPTION, TEXT_TYPE,
+                COLUMN_NAME_NAME, TEXT_TYPE,
                 COLUMN_NAME_TYPE, TEXT_TYPE,
                 COLUMN_NAME_BALANCE, REAL_TYPE,
                 COLUMN_NAME_CURRENCY, TEXT_TYPE);

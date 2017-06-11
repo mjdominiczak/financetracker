@@ -9,7 +9,6 @@ import android.os.Environment;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Manveru on 07.05.2017.
@@ -43,7 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         if (db != null) {
             ContentValues cv = new ContentValues();
-            cv.put(DatabaseContract.AccountEntry.COLUMN_NAME_DESCRIPTION, description);
+            cv.put(DatabaseContract.AccountEntry.COLUMN_NAME_NAME, description);
             cv.put(DatabaseContract.AccountEntry.COLUMN_NAME_TYPE, type);
             cv.put(DatabaseContract.AccountEntry.COLUMN_NAME_BALANCE, balance);
             cv.put(DatabaseContract.AccountEntry.COLUMN_NAME_CURRENCY, currency);
@@ -67,7 +66,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Cursor result = db.rawQuery("SELECT * FROM " + DatabaseContract.AccountEntry.TABLE_NAME, null);
             result.moveToFirst();
             while (!result.isAfterLast()) {
-                accountsList.add(result.getString(result.getColumnIndex(DatabaseContract.AccountEntry.COLUMN_NAME_DESCRIPTION)));
+                accountsList.add(result.getString(result.getColumnIndex(DatabaseContract.AccountEntry.COLUMN_NAME_NAME)));
                 result.moveToNext();
             }
             result.close();
