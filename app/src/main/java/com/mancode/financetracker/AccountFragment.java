@@ -1,8 +1,11 @@
 package com.mancode.financetracker;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -51,6 +54,7 @@ public class AccountFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+
     }
 
     @Override
@@ -70,6 +74,19 @@ public class AccountFragment extends Fragment {
             }
             rView.setAdapter(new AccountRecyclerViewAdapter(Accounts.ITEMS, mListener));
         }
+
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAddAccountDialog();
+
+//                // TODO app context?
+//                DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
+//                dbHelper.getWritableDatabase();
+
+            }
+        });
         return view;
     }
 
@@ -104,5 +121,16 @@ public class AccountFragment extends Fragment {
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(AccountItem item);
+    }
+
+    public void showAddAccountDialog() {
+        FragmentManager fragmentManager = getFragmentManager();
+        AddAccountFragment addAccountFragment = new AddAccountFragment();
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.add(android.R.id.content, addAccountFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

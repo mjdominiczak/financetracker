@@ -5,9 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Environment;
 
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -16,13 +14,20 @@ import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final int     DATABASE_VERSION    = 1;
-    public static final String  DATA_PATH           = Environment.getExternalStorageDirectory().getPath() + File.separator + "FinanceTrackerData" + File.separator;
-    public static final String  DATABASE_NAME       = "database.db";
+    private static DatabaseHelper sInstance;
 
-    public DatabaseHelper(Context context) {
-//        super(context, DATA_PATH + DATABASE_NAME, null, DATABASE_VERSION);
+    private static final int     DATABASE_VERSION    = 1;
+    private static final String  DATABASE_NAME       = "database.db";
+
+    private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    public static synchronized DatabaseHelper getInstance(Context context) {
+        if (sInstance == null) {
+            sInstance = new DatabaseHelper(context);
+        }
+        return sInstance;
     }
 
     @Override
@@ -44,8 +49,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ContentValues cv = new ContentValues();
             cv.put(DatabaseContract.AccountEntry.COLUMN_NAME_NAME, description);
             cv.put(DatabaseContract.AccountEntry.COLUMN_NAME_TYPE, type);
-            cv.put(DatabaseContract.AccountEntry.COLUMN_NAME_BALANCE, balance);
-            cv.put(DatabaseContract.AccountEntry.COLUMN_NAME_CURRENCY, currency);
             return db.insert(DatabaseContract.AccountEntry.TABLE_NAME, null, cv);
         } else {
             return -1;
@@ -55,7 +58,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public int deleteAccount(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         if (db != null) {
-            return db.delete(DatabaseContract.AccountEntry.TABLE_NAME, DatabaseContract.AccountEntry._ID + " = ?s", new String[]{Integer.toString(id)});
+            return db.delete(
+                    DatabaseContract.AccountEntry.TABLE_NAME,
+                    DatabaseContract.AccountEntry._ID + " = ?s",
+                    new String[]{Integer.toString(id)});
         } else return -1;
     }
 
