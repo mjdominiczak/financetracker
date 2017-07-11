@@ -23,7 +23,7 @@ public final class DatabaseContract {
                 "CREATE TABLE %s" +
                         "(%s INTEGER PRIMARY KEY," +
                         "%s %s," +
-                        "%s %s,",
+                        "%s %s)",
                 TABLE_NAME,
                 _ID,
                 COLUMN_NAME_NAME, TEXT_TYPE,
@@ -74,8 +74,8 @@ public final class DatabaseContract {
                         "%s %s," +
                         "%s %s," +
                         "%s %s," +
-                        "%s %s REFERENCES %s(%s))," +
-                        "%s %s REFERENCES %s(%s))," +
+                        "%s %s REFERENCES %s(%s)," +
+                        "%s %s REFERENCES %s(%s)," +
                         "%s %s REFERENCES %s(%s))",
                 TABLE_NAME,
                 _ID,

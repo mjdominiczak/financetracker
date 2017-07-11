@@ -7,21 +7,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mancode.financetracker.AccountFragment.OnListFragmentInteractionListener;
-import com.mancode.financetracker.dummy.Accounts;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link Accounts.AccountItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link DatabaseHelper.AccountItem} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Accounts.AccountItem> mValues;
+    private final List<DatabaseHelper.AccountItem> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public AccountRecyclerViewAdapter(List<Accounts.AccountItem> items, OnListFragmentInteractionListener listener) {
+    public AccountRecyclerViewAdapter(List<DatabaseHelper.AccountItem> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -60,7 +59,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public Accounts.AccountItem mItem;
+        public DatabaseHelper.AccountItem mItem;
 
         public ViewHolder(View view) {
             super(view);

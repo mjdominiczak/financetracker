@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Manveru on 07.05.2017.
@@ -43,13 +46,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public long addAccount(String description, String type, double balance, String currency) {
+    public long addAccount(String name, String type) {
         SQLiteDatabase db = this.getWritableDatabase();
         if (db != null) {
             ContentValues cv = new ContentValues();
-            cv.put(DatabaseContract.AccountEntry.COLUMN_NAME_NAME, description);
+            cv.put(DatabaseContract.AccountEntry.COLUMN_NAME_NAME, name);
             cv.put(DatabaseContract.AccountEntry.COLUMN_NAME_TYPE, type);
-            return db.insert(DatabaseContract.AccountEntry.TABLE_NAME, null, cv);
+            long result = db.insert(DatabaseContract.AccountEntry.TABLE_NAME, null, cv);
+            if (result != -1) {
+                int id = (int)result;
+                new AccountItem(id, name, type);
+            }
+            return result;
         } else {
             return -1;
         }
@@ -58,27 +66,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public int deleteAccount(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         if (db != null) {
-            return db.delete(
+            int result = db.delete(
                     DatabaseContract.AccountEntry.TABLE_NAME,
                     DatabaseContract.AccountEntry._ID + " = ?s",
                     new String[]{Integer.toString(id)});
+            if (result != -1) {
+                AccountItem.ITEMS.remove(AccountItem.ITEM_MAP.get(id));
+                AccountItem.ITEM_MAP.remove(id);
+            }
+            return result;
         } else return -1;
     }
 
-    public ArrayList<String> getAllAccounts() {
-        ArrayList<String> accountsList = new ArrayList<>();
+    public Map<Integer, AccountItem> getAllAccountsFromDB() {
+        AccountItem.ITEM_MAP.clear();
         SQLiteDatabase db = this.getReadableDatabase();
         if (db != null) {
             Cursor result = db.rawQuery("SELECT * FROM " + DatabaseContract.AccountEntry.TABLE_NAME, null);
             result.moveToFirst();
             while (!result.isAfterLast()) {
-                accountsList.add(result.getString(result.getColumnIndex(DatabaseContract.AccountEntry.COLUMN_NAME_NAME)));
+                new AccountItem(
+                        result.getInt(result.getColumnIndex(DatabaseContract.AccountEntry._ID)),
+                        result.getString(result.getColumnIndex(DatabaseContract.AccountEntry.COLUMN_NAME_NAME)),
+                        result.getString(result.getColumnIndex(DatabaseContract.AccountEntry.COLUMN_NAME_TYPE))
+                );
                 result.moveToNext();
             }
             result.close();
-            return accountsList;
+            return AccountItem.ITEM_MAP;
         } else {
             return null;
+        }
+    }
+
+    public static class AccountItem {
+
+        public static final List<AccountItem> ITEMS = new ArrayList<>();
+        public static final Map<Integer, AccountItem> ITEM_MAP = new HashMap<>();
+
+        public final int id;
+        public final String name;
+        public final String type;
+
+        public AccountItem(int id, String name, String type) {
+            this.id = id;
+            this.name = name;
+            this.type = type;
+            ITEMS.add(this);
+            ITEM_MAP.put(id, this);
+        }
+
+        @Override
+        public String toString() {
+            return name + " - " + type;
         }
     }
 }

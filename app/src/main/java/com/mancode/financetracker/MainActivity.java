@@ -1,7 +1,5 @@
 package com.mancode.financetracker;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -9,8 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.Toolbar;
-
-import com.mancode.financetracker.dummy.Accounts;
 
 public class MainActivity extends AppCompatActivity implements AccountFragment.OnListFragmentInteractionListener {
 
@@ -67,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements AccountFragment.O
     }
 
     @Override
-    public void onListFragmentInteraction(Accounts.AccountItem item) {
+    public void onListFragmentInteraction(DatabaseHelper.AccountItem item) {
         // TODO
     }
 }

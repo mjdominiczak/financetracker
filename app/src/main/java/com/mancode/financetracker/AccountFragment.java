@@ -13,9 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mancode.financetracker.dummy.Accounts;
-import com.mancode.financetracker.dummy.Accounts.AccountItem;
-
 /**
  * A fragment representing a list of Items.
  * <p/>
@@ -72,7 +69,7 @@ public class AccountFragment extends Fragment {
             } else {
                 rView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            rView.setAdapter(new AccountRecyclerViewAdapter(Accounts.ITEMS, mListener));
+            rView.setAdapter(new AccountRecyclerViewAdapter(DatabaseHelper.AccountItem.ITEMS, mListener));
         }
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
@@ -80,11 +77,6 @@ public class AccountFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 showAddAccountDialog();
-
-//                // TODO app context?
-//                DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
-//                dbHelper.getWritableDatabase();
-
             }
         });
         return view;
@@ -120,7 +112,7 @@ public class AccountFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(AccountItem item);
+        void onListFragmentInteraction(DatabaseHelper.AccountItem item);
     }
 
     public void showAddAccountDialog() {

@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.EditText;
 
 
 public class AddAccountFragment extends DialogFragment {
@@ -30,7 +31,17 @@ public class AddAccountFragment extends DialogFragment {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                // TODO
+                // TODO: app context?
+                if (item.getItemId() == R.id.action_menu_save) {
+                    String name = ((EditText)getView().findViewById(R.id.tf_account_name)).getText().toString();
+                    String type = ((EditText)getView().findViewById(R.id.tf_account_type)).getText().toString();
+
+                    DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity().getApplicationContext());
+                    if (validateAccount(name, type)) {
+                        dbHelper.addAccount(name, type);
+                        dismiss();
+                    }
+                }
                 return false;
             }
         });
@@ -45,4 +56,9 @@ public class AddAccountFragment extends DialogFragment {
 
         return view;
     }
+
+    private boolean validateAccount(String name, String type) {
+        return !name.isEmpty() && !type.isEmpty();
+    }
+
 }
