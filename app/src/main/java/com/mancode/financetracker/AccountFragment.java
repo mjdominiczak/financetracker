@@ -69,7 +69,9 @@ public class AccountFragment extends Fragment {
             } else {
                 rView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            rView.setAdapter(new AccountRecyclerViewAdapter(DatabaseHelper.AccountItem.ITEMS, mListener));
+            rView.setAdapter(new AccountRecyclerViewAdapter(
+                    DatabaseHelper.getInstance(getActivity().getApplicationContext()).getAllAccountsFromDB(),
+                    mListener));
         }
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);

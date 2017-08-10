@@ -78,25 +78,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } else return -1;
     }
 
-    public Map<Integer, AccountItem> getAllAccountsFromDB() {
-        AccountItem.ITEM_MAP.clear();
-        SQLiteDatabase db = this.getReadableDatabase();
-        if (db != null) {
-            Cursor result = db.rawQuery("SELECT * FROM " + DatabaseContract.AccountEntry.TABLE_NAME, null);
-            result.moveToFirst();
-            while (!result.isAfterLast()) {
-                new AccountItem(
-                        result.getInt(result.getColumnIndex(DatabaseContract.AccountEntry._ID)),
-                        result.getString(result.getColumnIndex(DatabaseContract.AccountEntry.COLUMN_NAME_NAME)),
-                        result.getString(result.getColumnIndex(DatabaseContract.AccountEntry.COLUMN_NAME_TYPE))
-                );
-                result.moveToNext();
+    public List<AccountItem> getAllAccountsFromDB() {
+        if (AccountItem.ITEMS.isEmpty()) {
+            SQLiteDatabase db = this.getReadableDatabase();
+            if (db != null) {
+                Cursor result = db.rawQuery("SELECT * FROM " + DatabaseContract.AccountEntry.TABLE_NAME, null);
+                result.moveToFirst();
+                while (!result.isAfterLast()) {
+                    new AccountItem(
+                            result.getInt(result.getColumnIndex(DatabaseContract.AccountEntry._ID)),
+                            result.getString(result.getColumnIndex(DatabaseContract.AccountEntry.COLUMN_NAME_NAME)),
+                            result.getString(result.getColumnIndex(DatabaseContract.AccountEntry.COLUMN_NAME_TYPE))
+                    );
+                    result.moveToNext();
+                }
+                result.close();
             }
-            result.close();
-            return AccountItem.ITEM_MAP;
-        } else {
-            return null;
         }
+        return AccountItem.ITEMS;
     }
 
     public static class AccountItem {
