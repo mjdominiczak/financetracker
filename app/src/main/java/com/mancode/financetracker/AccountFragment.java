@@ -121,10 +121,14 @@ public class AccountFragment extends Fragment {
         FragmentManager fragmentManager = getFragmentManager();
         AddAccountFragment addAccountFragment = new AddAccountFragment();
 
+//        FragmentTransaction transaction = fragmentManager.beginTransaction();
+//        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+//        transaction.addToBackStack(null);
+//        addAccountFragment.show(transaction, "addAccountFragment");
+//
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        transaction.add(android.R.id.content, addAccountFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+//        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out, android.R.animator.fade_in, android.R.animator.fade_out);
+        transaction.add(android.R.id.content, addAccountFragment).addToBackStack(null).commit();
     }
 }

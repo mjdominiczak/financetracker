@@ -29,13 +29,20 @@ public class AddAccountFragment extends DialogFragment {
     }
 
     @Override
-    public void onDismiss(DialogInterface dialog) {
-        View view = ((Dialog) dialog).getCurrentFocus();
+    public void dismiss() {
+        hideKeyboard();
+        super.dismiss();
+    }
+
+    private void hideKeyboard() {
+        View view = null;
+        if (this.getView() != null) {
+            view = this.getView().findFocus();
+        }
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-        super.onDismiss(dialog);
     }
 
     @Override
@@ -49,15 +56,15 @@ public class AddAccountFragment extends DialogFragment {
         }
     }
 
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog = super.onCreateDialog(savedInstanceState);
-        if (dialog != null && dialog.getWindow() != null) {
-            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        }
-        return dialog;
-    }
-
+//    @Override
+//    public Dialog onCreateDialog(Bundle savedInstanceState) {
+//        Dialog dialog = super.onCreateDialog(savedInstanceState);
+//        if (dialog != null && dialog.getWindow() != null) {
+//            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+//        }
+//        return dialog;
+//    }
+//
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
