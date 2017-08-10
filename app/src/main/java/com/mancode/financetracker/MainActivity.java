@@ -1,5 +1,6 @@
 package com.mancode.financetracker;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -7,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements AccountFragment.OnListFragmentInteractionListener {
 
@@ -56,6 +58,22 @@ public class MainActivity extends AppCompatActivity implements AccountFragment.O
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            return true;
+        } else if (id == R.id.action_clearDB) {
+            new AsyncTask<Void, Void, Void>() {
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    Toast.makeText(getApplicationContext(), "Database cleared", Toast.LENGTH_SHORT).show();
+                    super.onPostExecute(aVoid);
+                }
+
+                @Override
+                protected Void doInBackground(Void... params) {
+                    DatabaseHelper.getInstance(getApplicationContext()).clearDB();
+                    return null;
+                }
+            }.execute();
             return true;
         }
 

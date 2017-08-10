@@ -41,8 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(DatabaseContract.AccountEntry.DELETE_TABLE);
-        db.execSQL(DatabaseContract.TransactionEntry.DELETE_TABLE);
+        clearDB(db);
         onCreate(db);
     }
 
@@ -61,6 +60,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } else {
             return -1;
         }
+    }
+
+    private void clearDB(SQLiteDatabase db) {
+        db.execSQL(DatabaseContract.AccountEntry.DELETE_TABLE);
+        db.execSQL(DatabaseContract.TransactionEntry.DELETE_TABLE);
+        AccountItem.ITEMS.clear();
+        AccountItem.ITEM_MAP.clear();
+    }
+
+    void clearDB() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        clearDB(db);
+        onCreate(db);
     }
 
     public int deleteAccount(int id) {

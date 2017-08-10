@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Finance Tracker</string>
     <string name="action_settings">Settings</string>
+    <string name="action_clearDB">Clear database</string>
 
     <string name="title_add_account">Add account</string>
 
