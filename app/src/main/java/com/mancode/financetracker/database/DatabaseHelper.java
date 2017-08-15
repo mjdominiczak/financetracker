@@ -1,4 +1,4 @@
-package com.mancode.financetracker;
+package com.mancode.financetracker.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -69,7 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         AccountItem.ITEM_MAP.clear();
     }
 
-    void clearDB() {
+    public void clearDB() {
         SQLiteDatabase db = this.getWritableDatabase();
         clearDB(db);
         onCreate(db);

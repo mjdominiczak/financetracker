@@ -1,4 +1,4 @@
-package com.mancode.financetracker;
+package com.mancode.financetracker.database;
 
 import android.provider.BaseColumns;
 

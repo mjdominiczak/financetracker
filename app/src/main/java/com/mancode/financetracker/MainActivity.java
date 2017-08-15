@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
+import com.mancode.financetracker.database.DatabaseHelper;
+
 public class MainActivity extends AppCompatActivity implements AccountFragment.OnListFragmentInteractionListener {
 
     @Override

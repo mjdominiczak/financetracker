@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mancode.financetracker.AccountFragment.OnListFragmentInteractionListener;
+import com.mancode.financetracker.database.DatabaseHelper;
 
 import java.util.List;
 
