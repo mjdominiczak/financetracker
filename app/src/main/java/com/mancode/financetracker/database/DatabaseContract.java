@@ -1,5 +1,7 @@
 package com.mancode.financetracker.database;
 
+import android.content.ContentUris;
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
@@ -8,6 +10,15 @@ import android.provider.BaseColumns;
 
 public final class DatabaseContract {
 
+    public static final String CONTENT_AUTHORITY = "com.mancode.financetracker.database";
+    private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+
+    public static final String PATH_ACCOUNT     = "account";
+    public static final String PATH_BALANCE     = "balance";
+    public static final String PATH_CATEGORY    = "category";
+    public static final String PATH_CURRENCY    = "currency";
+    public static final String PATH_TRANSACTION = "transaction";
+
     private static final String TEXT_TYPE   = " TEXT";
     private static final String REAL_TYPE   = " REAL";
     private static final String INT_TYPE    = " INTEGER";
@@ -15,9 +26,16 @@ public final class DatabaseContract {
     private DatabaseContract() {}
 
     public static abstract class AccountEntry implements BaseColumns {
-        public static final String TABLE_NAME               = "accounts";
-        public static final String COLUMN_NAME_NAME         = "name";
-        public static final String COLUMN_NAME_TYPE         = "type";
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_ACCOUNT).build();
+        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/" + CONTENT_URI + "/" + PATH_ACCOUNT;
+        public static final String CONTENT_ITEM_TYPE =
+                "vnd.android.cursor.item/" + CONTENT_URI + "/" + PATH_ACCOUNT;
+
+        public static final String TABLE_NAME       = "accounts";
+        public static final String COLUMN_NAME_NAME = "name";
+        public static final String COLUMN_NAME_TYPE = "type";
 
         public static final String CREATE_TABLE = String.format(
                 "CREATE TABLE %s" +
@@ -29,9 +47,20 @@ public final class DatabaseContract {
                 COLUMN_NAME_NAME, TEXT_TYPE,
                 COLUMN_NAME_TYPE, TEXT_TYPE);
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+
+        public static Uri buildAccountUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
     }
 
     public static abstract class BalanceEntry implements BaseColumns {
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_BALANCE).build();
+        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/" + CONTENT_URI + "/" + PATH_BALANCE;
+        public static final String CONTENT_ITEM_TYPE =
+                "vnd.android.cursor.item/" + CONTENT_URI + "/" + PATH_BALANCE;
+
         public static final String TABLE_NAME               = "balances";
         public static final String COLUMN_NAME_CHECK_DATE   = "check_date";
         public static final String COLUMN_NAME_ACCOUNT      = "account";
@@ -55,9 +84,20 @@ public final class DatabaseContract {
                 COLUMN_NAME_CURRENCY, INT_TYPE, CurrencyEntry.TABLE_NAME, CurrencyEntry._ID,
                 COLUMN_NAME_FIXED, TEXT_TYPE);
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+
+        public static Uri buildBalanceUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
     }
 
     public static abstract class TransactionEntry implements BaseColumns {
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_TRANSACTION).build();
+        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/" + CONTENT_URI + "/" + PATH_TRANSACTION;
+        public static final String CONTENT_ITEM_TYPE =
+                "vnd.android.cursor.item/" + CONTENT_URI + "/" + PATH_TRANSACTION;
+
         public static final String TABLE_NAME               = "transactions";
         public static final String COLUMN_NAME_DATE         = "date";
         public static final String COLUMN_NAME_TYPE         = "type";
@@ -87,9 +127,20 @@ public final class DatabaseContract {
                 COLUMN_NAME_ACCOUNT, INT_TYPE, AccountEntry.TABLE_NAME, AccountEntry.COLUMN_NAME_NAME,
                 COLUMN_NAME_CATEGORY, INT_TYPE, CategoryEntry.TABLE_NAME, CategoryEntry.COLUMN_NAME_CATEGORY);
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+
+        public static Uri buildTransactionUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
     }
 
     public static abstract class CurrencyEntry implements BaseColumns {
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_CURRENCY).build();
+        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/" + CONTENT_URI + "/" + PATH_CURRENCY;
+        public static final String CONTENT_ITEM_TYPE =
+                "vnd.android.cursor.item/" + CONTENT_URI + "/" + PATH_CURRENCY;
+
         public static final String TABLE_NAME               = "currencies";
         public static final String COLUMN_NAME_CURRENCY     = "currency";
         public static final String COLUMN_NAME_EXCHANGE_RATE= "exchange_rate";
@@ -104,9 +155,20 @@ public final class DatabaseContract {
                 COLUMN_NAME_CURRENCY, TEXT_TYPE,
                 COLUMN_NAME_EXCHANGE_RATE, TEXT_TYPE);
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+
+        public static Uri buildCurrencyUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
     }
 
     public static abstract class CategoryEntry implements BaseColumns {
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_CATEGORY).build();
+        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/" + CONTENT_URI + "/" + PATH_CATEGORY;
+        public static final String CONTENT_ITEM_TYPE =
+                "vnd.android.cursor.item/" + CONTENT_URI + "/" + PATH_CATEGORY;
+
         public static final String TABLE_NAME               = "categories";
         public static final String COLUMN_NAME_CATEGORY     = "category";
 
@@ -118,6 +180,10 @@ public final class DatabaseContract {
                 _ID,
                 COLUMN_NAME_CATEGORY, TEXT_TYPE);
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+
+        public static Uri buildCategoryUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
     }
 
 }

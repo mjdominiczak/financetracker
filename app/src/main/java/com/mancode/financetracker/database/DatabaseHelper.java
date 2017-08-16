@@ -37,6 +37,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DatabaseContract.AccountEntry.CREATE_TABLE);
         db.execSQL(DatabaseContract.TransactionEntry.CREATE_TABLE);
+        db.execSQL(DatabaseContract.BalanceEntry.CREATE_TABLE);
+        db.execSQL(DatabaseContract.CategoryEntry.CREATE_TABLE);
+        db.execSQL(DatabaseContract.CurrencyEntry.CREATE_TABLE);
     }
 
     @Override
