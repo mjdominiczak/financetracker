@@ -3,6 +3,7 @@ package com.mancode.financetracker;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -17,6 +18,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.mancode.financetracker.database.DatabaseContract;
 import com.mancode.financetracker.database.DatabaseHelper;
 
 
@@ -77,9 +79,11 @@ public class AddAccountFragment extends DialogFragment {
                     String name = ((EditText)getView().findViewById(R.id.tf_account_name)).getText().toString();
                     String type = ((EditText)getView().findViewById(R.id.tf_account_type)).getText().toString();
 
-                    DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity().getApplicationContext());
                     if (validateAccount(name, type)) {
-                        dbHelper.addAccount(name, type);
+                        ContentValues cv = new ContentValues();
+                        cv.put(DatabaseContract.AccountEntry.COLUMN_NAME_NAME, name);
+                        cv.put(DatabaseContract.AccountEntry.COLUMN_NAME_TYPE, type);
+                        getActivity().getContentResolver().insert(DatabaseContract.AccountEntry.CONTENT_URI, cv);
                         dismiss();
                     }
                 }

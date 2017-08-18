@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
+import com.mancode.financetracker.database.DatabaseContract;
 import com.mancode.financetracker.database.DatabaseHelper;
 
 public class MainActivity extends AppCompatActivity implements AccountFragment.OnListFragmentInteractionListener {
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements AccountFragment.O
 
                 @Override
                 protected Void doInBackground(Void... params) {
-                    DatabaseHelper.getInstance(getApplicationContext()).clearDB();
+                    getContentResolver().delete(DatabaseContract.AccountEntry.CONTENT_URI, null, null);
                     return null;
                 }
             }.execute();
