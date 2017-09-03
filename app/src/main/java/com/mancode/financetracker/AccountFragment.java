@@ -28,15 +28,13 @@ import com.mancode.financetracker.database.DatabaseHelper;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class AccountFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class AccountFragment extends LoaderFragment {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
-
-    private AccountRecyclerViewAdapter mAdapter;
+//    // TODO: Customize parameter argument names
+//    private static final String ARG_COLUMN_COUNT = "column-count";
+//    // TODO: Customize parameters
+//    private int mColumnCount = 1;
+//    private OnListFragmentInteractionListener mListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -45,30 +43,8 @@ public class AccountFragment extends Fragment implements LoaderManager.LoaderCal
     public AccountFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    public static AccountFragment newInstance(int columnCount) {
-        AccountFragment fragment = new AccountFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
-
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        getLoaderManager().initLoader(0, null, this);
+    public static AccountFragment newInstance() {
+        return new AccountFragment();
     }
 
     @Override
@@ -81,12 +57,8 @@ public class AccountFragment extends Fragment implements LoaderManager.LoaderCal
         if (recyclerView instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView rView = (RecyclerView) recyclerView;
-            if (mColumnCount <= 1) {
-                rView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                rView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            mAdapter = new AccountRecyclerViewAdapter(getActivity(), null); // TODO check null
+            rView.setLayoutManager(new LinearLayoutManager(context));
+            mAdapter = new AccountRecyclerViewAdapter(getActivity(), null);
             rView.setAdapter(mAdapter);
         }
 
@@ -101,30 +73,12 @@ public class AccountFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
     static final String[] ACCOUNTS_PROJECTION = new String[]{
             DatabaseContract.AccountEntry._ID,
             DatabaseContract.AccountEntry.COLUMN_NAME_NAME,
             DatabaseContract.AccountEntry.COLUMN_NAME_TYPE
     };
 
-    // TODO
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri uri = DatabaseContract.AccountEntry.CONTENT_URI;
@@ -136,16 +90,6 @@ public class AccountFragment extends Fragment implements LoaderManager.LoaderCal
                 select,
                 null,
                 DatabaseContract.AccountEntry._ID);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mAdapter.swapCursor(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
     }
 
     /**
