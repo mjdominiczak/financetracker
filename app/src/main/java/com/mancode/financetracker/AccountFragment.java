@@ -2,9 +2,15 @@ package com.mancode.financetracker;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.LoaderManager;
 import android.content.Context;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mancode.financetracker.database.DatabaseContract;
 import com.mancode.financetracker.database.DatabaseHelper;
 
 /**
@@ -21,13 +28,15 @@ import com.mancode.financetracker.database.DatabaseHelper;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class AccountFragment extends Fragment {
+public class AccountFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+
+    private AccountRecyclerViewAdapter mAdapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -37,7 +46,6 @@ public class AccountFragment extends Fragment {
     }
 
     // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
     public static AccountFragment newInstance(int columnCount) {
         AccountFragment fragment = new AccountFragment();
         Bundle args = new Bundle();
@@ -57,6 +65,13 @@ public class AccountFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        getLoaderManager().initLoader(0, null, this);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_account_list, container, false);
@@ -71,9 +86,8 @@ public class AccountFragment extends Fragment {
             } else {
                 rView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            rView.setAdapter(new AccountRecyclerViewAdapter(
-                    DatabaseHelper.getInstance(getActivity().getApplicationContext()).getAllAccountsFromDB(),
-                    mListener));
+            mAdapter = new AccountRecyclerViewAdapter(getActivity(), null); // TODO check null
+            rView.setAdapter(mAdapter);
         }
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
@@ -102,6 +116,36 @@ public class AccountFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    static final String[] ACCOUNTS_PROJECTION = new String[]{
+            DatabaseContract.AccountEntry._ID,
+            DatabaseContract.AccountEntry.COLUMN_NAME_NAME,
+            DatabaseContract.AccountEntry.COLUMN_NAME_TYPE
+    };
+
+    // TODO
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Uri uri = DatabaseContract.AccountEntry.CONTENT_URI;
+        String select = "(" + DatabaseContract.AccountEntry.COLUMN_NAME_NAME + " NOTNULL)";
+        return new CursorLoader(
+                getActivity(),
+                uri,
+                ACCOUNTS_PROJECTION,
+                select,
+                null,
+                DatabaseContract.AccountEntry._ID);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mAdapter.swapCursor(null);
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.mancode.financetracker;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +18,10 @@ import java.util.List;
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecyclerViewAdapter.ViewHolder> {
+public class AccountRecyclerViewAdapter extends CursorRecyclerViewAdapter<AccountRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DatabaseHelper.AccountItem> mValues;
-    private final OnListFragmentInteractionListener mListener;
-
-    public AccountRecyclerViewAdapter(List<DatabaseHelper.AccountItem> items, OnListFragmentInteractionListener listener) {
-        mValues = items;
-        mListener = listener;
+    public AccountRecyclerViewAdapter(Context context, Cursor cursor) {
+        super(context, cursor);
     }
 
     @Override
@@ -34,33 +32,25 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(Integer.toString(mValues.get(position).id));
-        holder.mContentView.setText(mValues.get(position).toString());
-
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
-                }
-            }
-        });
+    public void onBindViewHolder(final ViewHolder holder, Cursor cursor) {
+        holder.initFromCursor(cursor);
+//        holder.mView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (null != mListener) {
+//                    // Notify the active callbacks interface (the activity, if the
+//                    // fragment is attached to one) that an item has been selected.
+//                    mListener.onListFragmentInteraction(holder.mItem);
+//                }
+//            }
+//        });
     }
 
-    @Override
-    public int getItemCount() {
-        return mValues.size();
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DatabaseHelper.AccountItem mItem;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        final View mView;
+        final TextView mIdView;
+        final TextView mContentView;
+        AccountListItem mItem;
 
         public ViewHolder(View view) {
             super(view);
@@ -69,9 +59,29 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             mContentView = (TextView) view.findViewById(R.id.name);
         }
 
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+        public void initFromCursor(Cursor cursor) {
+            mItem = AccountListItem.fromCursor(cursor);
+            mIdView.setText(String.valueOf(mItem.getId()));
+            mContentView.setText(mItem.getName() + " - " + mItem.getType());
         }
     }
+
+//    public class ViewHolder extends RecyclerView.ViewHolder {
+//        public final View mView;
+//        public final TextView mIdView;
+//        public final TextView mContentView;
+//        public DatabaseHelper.AccountItem mItem;
+//
+//        public ViewHolder(View view) {
+//            super(view);
+//            mView = view;
+//            mIdView = (TextView) view.findViewById(R.id.id);
+//            mContentView = (TextView) view.findViewById(R.id.name);
+//        }
+//
+//        @Override
+//        public String toString() {
+//            return super.toString() + " '" + mContentView.getText() + "'";
+//        }
+//    }
 }
