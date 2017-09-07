@@ -1,6 +1,8 @@
 package com.mancode.financetracker;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.LoaderManager;
 import android.content.Loader;
 import android.database.Cursor;
@@ -32,5 +34,17 @@ public abstract class LoaderFragment extends Fragment implements LoaderManager.L
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
+    }
+
+    public void showFullScreenDialog(Fragment fragment) {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+//        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+//        transaction.addToBackStack(null);
+//        addAccountFragment.show(transaction, "addAccountFragment");
+//
+        transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out, android.R.animator.fade_in, android.R.animator.fade_out);
+        transaction.add(android.R.id.content, fragment).addToBackStack(null).commit();
     }
 }

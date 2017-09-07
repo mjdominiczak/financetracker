@@ -1,18 +1,12 @@
 package com.mancode.financetracker;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.app.LoaderManager;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -36,10 +30,6 @@ public class AccountFragment extends LoaderFragment {
 //    private int mColumnCount = 1;
 //    private OnListFragmentInteractionListener mListener;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public AccountFragment() {
     }
 
@@ -66,7 +56,7 @@ public class AccountFragment extends LoaderFragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showAddAccountDialog();
+                showFullScreenDialog(new AddAccountFragment());
             }
         });
         return view;
@@ -105,20 +95,5 @@ public class AccountFragment extends LoaderFragment {
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(DatabaseHelper.AccountItem item);
-    }
-
-    public void showAddAccountDialog() {
-        FragmentManager fragmentManager = getFragmentManager();
-        AddAccountFragment addAccountFragment = new AddAccountFragment();
-
-//        FragmentTransaction transaction = fragmentManager.beginTransaction();
-//        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-//        transaction.addToBackStack(null);
-//        addAccountFragment.show(transaction, "addAccountFragment");
-//
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-//        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out, android.R.animator.fade_in, android.R.animator.fade_out);
-        transaction.add(android.R.id.content, addAccountFragment).addToBackStack(null).commit();
     }
 }
