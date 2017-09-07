@@ -45,4 +45,8 @@ public class AccountListItem {
             return null;
         }
     }
+
+    public static boolean validate(String name, String type) {
+        return !name.isEmpty() && !type.isEmpty();
+    }
 }
