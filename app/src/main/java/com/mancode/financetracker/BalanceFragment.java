@@ -57,7 +57,7 @@ public class BalanceFragment extends LoaderFragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                showFullScreenDialog(new AddBalanceFragment());
+                showFullScreenDialog(new AddBalanceFragment());
             }
         });
         return view;

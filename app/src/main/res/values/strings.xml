@@ -4,6 +4,7 @@
     <string name="action_clearDB">Clear database</string>
 
     <string name="title_add_account">Add account</string>
+    <string name="title_add_balance">Add balance</string>
 
     <string name="tab1_name">Accounts</string>
     <string name="tab2_name">Transactions</string>
@@ -11,5 +12,8 @@
 
     <string name="hint_account_name">Account name</string>
     <string name="hint_account_type">Account type</string>
+    <string name="hint_balance_value">Balance value</string>
+    <string name="hint_balance_currency">Currency</string>
+    <string name="hint_balance_fixed">Balance fixed</string>
     <string name="toolbar_action_save">SAVE</string>
 </resources>

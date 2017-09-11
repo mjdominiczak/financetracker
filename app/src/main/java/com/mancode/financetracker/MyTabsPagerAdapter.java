@@ -7,6 +7,7 @@ import android.support.v13.app.FragmentStatePagerAdapter;
 public class MyTabsPagerAdapter extends FragmentStatePagerAdapter {
 
     private final int ACCOUNT_FRAGMENT = 0;
+    private final int BALANCE_FRAGMENT = 1;
 
     public MyTabsPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -20,6 +21,9 @@ public class MyTabsPagerAdapter extends FragmentStatePagerAdapter {
         switch (i) {
             case ACCOUNT_FRAGMENT:
                 fragment = AccountFragment.newInstance();
+                break;
+            case BALANCE_FRAGMENT:
+                fragment = BalanceFragment.newInstance();
                 break;
             default:
                 fragment = new AccountFragment();

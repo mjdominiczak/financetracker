@@ -70,4 +70,7 @@ public class BalanceListItem {
         }
     }
 
+    public static boolean validate(String checkDate, int account, double balance, String currency, String fixed) {
+        return !checkDate.isEmpty() && account >= 0;
+    }
 }
