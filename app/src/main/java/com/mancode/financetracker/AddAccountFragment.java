@@ -33,8 +33,8 @@ public class AddAccountFragment extends AddItemFragment {
 
                     if (AccountListItem.validate(name, type)) {
                         ContentValues cv = new ContentValues();
-                        cv.put(DatabaseContract.AccountEntry.COLUMN_NAME_NAME, name);
-                        cv.put(DatabaseContract.AccountEntry.COLUMN_NAME_TYPE, type);
+                        cv.put(DatabaseContract.AccountEntry.COL_NAME, name);
+                        cv.put(DatabaseContract.AccountEntry.COL_TYPE, type);
                         getActivity().getContentResolver().insert(DatabaseContract.AccountEntry.CONTENT_URI, cv);
                         dismiss();
                     }

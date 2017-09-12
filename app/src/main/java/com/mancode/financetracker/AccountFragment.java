@@ -65,14 +65,14 @@ public class AccountFragment extends LoaderFragment {
 
     static final String[] ACCOUNTS_PROJECTION = new String[]{
             DatabaseContract.AccountEntry._ID,
-            DatabaseContract.AccountEntry.COLUMN_NAME_NAME,
-            DatabaseContract.AccountEntry.COLUMN_NAME_TYPE
+            DatabaseContract.AccountEntry.COL_NAME,
+            DatabaseContract.AccountEntry.COL_TYPE
     };
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri uri = DatabaseContract.AccountEntry.CONTENT_URI;
-        String select = "(" + DatabaseContract.AccountEntry.COLUMN_NAME_NAME + " NOTNULL)";
+        String select = "(" + DatabaseContract.AccountEntry.COL_NAME + " NOTNULL)";
         return new CursorLoader(
                 getActivity(),
                 uri,

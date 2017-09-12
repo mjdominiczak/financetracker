@@ -28,7 +28,7 @@ public class AddBalanceFragment extends AddItemFragment implements LoaderManager
 
     private static final String[] ACCOUNTS_PROJECTION = {
             DatabaseContract.AccountEntry._ID,
-            DatabaseContract.AccountEntry.COLUMN_NAME_NAME
+            DatabaseContract.AccountEntry.COL_NAME
     };
 
     public AddBalanceFragment() {
@@ -54,7 +54,7 @@ public class AddBalanceFragment extends AddItemFragment implements LoaderManager
                 getActivity(),
                 android.R.layout.simple_spinner_item,
                 null,
-                new String[] {DatabaseContract.AccountEntry.COLUMN_NAME_NAME},
+                new String[] {DatabaseContract.AccountEntry.COL_NAME},
                 new int[] {android.R.id.text1},
                 0
         );
@@ -76,11 +76,11 @@ public class AddBalanceFragment extends AddItemFragment implements LoaderManager
 
                     if (BalanceListItem.validate(checkDate, account, balance, currency, fixed)) {
                         ContentValues cv = new ContentValues();
-                        cv.put(DatabaseContract.BalanceEntry.COLUMN_NAME_CHECK_DATE, checkDate);
-                        cv.put(DatabaseContract.BalanceEntry.COLUMN_NAME_ACCOUNT, account);
-                        cv.put(DatabaseContract.BalanceEntry.COLUMN_NAME_BALANCE, balance);
-                        cv.put(DatabaseContract.BalanceEntry.COLUMN_NAME_CURRENCY, currency);
-                        cv.put(DatabaseContract.BalanceEntry.COLUMN_NAME_FIXED, fixed);
+                        cv.put(DatabaseContract.BalanceEntry.COL_CHECK_DATE, checkDate);
+                        cv.put(DatabaseContract.BalanceEntry.COL_ACCOUNT_ID, account);
+                        cv.put(DatabaseContract.BalanceEntry.COL_BALANCE, balance);
+                        cv.put(DatabaseContract.BalanceEntry.COL_CURRENCY_ID, currency);
+                        cv.put(DatabaseContract.BalanceEntry.COL_FIXED, fixed);
                         getActivity().getContentResolver().insert(DatabaseContract.BalanceEntry.CONTENT_URI, cv);
                         dismiss();
                     }

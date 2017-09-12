@@ -52,9 +52,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         if (db != null) {
             ContentValues cv = new ContentValues();
-            cv.put(DatabaseContract.AccountEntry.COLUMN_NAME_NAME, name);
-            cv.put(DatabaseContract.AccountEntry.COLUMN_NAME_TYPE, type);
-            long result = db.insert(DatabaseContract.AccountEntry.TABLE_NAME, null, cv);
+            cv.put(DatabaseContract.AccountEntry.COL_NAME, name);
+            cv.put(DatabaseContract.AccountEntry.COL_TYPE, type);
+            long result = db.insert(DatabaseContract.AccountEntry.TBL_NAME, null, cv);
             if (result != -1) {
                 int id = (int)result;
                 new AccountItem(id, name, type);
@@ -66,8 +66,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void clearDB(SQLiteDatabase db) {
-        db.execSQL(DatabaseContract.AccountEntry.DELETE_TABLE);
-        db.execSQL(DatabaseContract.TransactionEntry.DELETE_TABLE);
+        db.execSQL(DatabaseContract.AccountEntry.DROP_TABLE);
+        db.execSQL(DatabaseContract.TransactionEntry.DROP_TABLE);
         AccountItem.ITEMS.clear();
         AccountItem.ITEM_MAP.clear();
     }
@@ -82,7 +82,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         if (db != null) {
             int result = db.delete(
-                    DatabaseContract.AccountEntry.TABLE_NAME,
+                    DatabaseContract.AccountEntry.TBL_NAME,
                     DatabaseContract.AccountEntry._ID + " = ?s",
                     new String[]{Integer.toString(id)});
             if (result != -1) {
@@ -97,13 +97,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (AccountItem.ITEMS.isEmpty()) {
             SQLiteDatabase db = this.getReadableDatabase();
             if (db != null) {
-                Cursor result = db.rawQuery("SELECT * FROM " + DatabaseContract.AccountEntry.TABLE_NAME, null);
+                Cursor result = db.rawQuery("SELECT * FROM " + DatabaseContract.AccountEntry.TBL_NAME, null);
                 result.moveToFirst();
                 while (!result.isAfterLast()) {
                     new AccountItem(
                             result.getInt(result.getColumnIndex(DatabaseContract.AccountEntry._ID)),
-                            result.getString(result.getColumnIndex(DatabaseContract.AccountEntry.COLUMN_NAME_NAME)),
-                            result.getString(result.getColumnIndex(DatabaseContract.AccountEntry.COLUMN_NAME_TYPE))
+                            result.getString(result.getColumnIndex(DatabaseContract.AccountEntry.COL_NAME)),
+                            result.getString(result.getColumnIndex(DatabaseContract.AccountEntry.COL_TYPE))
                     );
                     result.moveToNext();
                 }

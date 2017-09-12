@@ -38,8 +38,8 @@ public class AccountListItem {
         String tmpType;
         if (cursor != null) {
             tmpId = cursor.getInt(cursor.getColumnIndex(DatabaseContract.AccountEntry._ID));
-            tmpName = cursor.getString(cursor.getColumnIndex(DatabaseContract.AccountEntry.COLUMN_NAME_NAME));
-            tmpType = cursor.getString(cursor.getColumnIndex(DatabaseContract.AccountEntry.COLUMN_NAME_TYPE));
+            tmpName = cursor.getString(cursor.getColumnIndex(DatabaseContract.AccountEntry.COL_NAME));
+            tmpType = cursor.getString(cursor.getColumnIndex(DatabaseContract.AccountEntry.COL_TYPE));
             return new AccountListItem(tmpId, tmpName, tmpType);
         } else {
             return null;

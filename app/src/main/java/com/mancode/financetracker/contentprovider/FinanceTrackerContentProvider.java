@@ -26,6 +26,7 @@ public class FinanceTrackerContentProvider extends ContentProvider {
     private static final int TRANSACTION_ID = 201;
     private static final int BALANCE = 300;
     private static final int BALANCE_ID = 301;
+    private static final int BALANCE_JOIN = 302;
     private static final int CATEGORY = 400;
     private static final int CATEGORY_ID = 401;
     private static final int CURRENCY = 500;
@@ -44,11 +45,13 @@ public class FinanceTrackerContentProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         final SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        boolean useAuthorityUri = false;
         Cursor returnCursor;
         switch (sUriMatcher.match(uri)) {
             case ACCOUNT:
                 returnCursor = db.query(
-                        DatabaseContract.AccountEntry.TABLE_NAME,
+                        DatabaseContract.AccountEntry.TBL_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -59,7 +62,7 @@ public class FinanceTrackerContentProvider extends ContentProvider {
             case ACCOUNT_ID:
                 long _id = ContentUris.parseId(uri);
                 returnCursor = db.query(
-                        DatabaseContract.AccountEntry.TABLE_NAME,
+                        DatabaseContract.AccountEntry.TBL_NAME,
                         projection,
                         DatabaseContract.AccountEntry._ID + " = ?",
                         new String[]{String.valueOf(_id)},
@@ -69,7 +72,7 @@ public class FinanceTrackerContentProvider extends ContentProvider {
                 break;
             case TRANSACTION:
                 returnCursor = db.query(
-                        DatabaseContract.TransactionEntry.TABLE_NAME,
+                        DatabaseContract.TransactionEntry.TBL_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -80,7 +83,7 @@ public class FinanceTrackerContentProvider extends ContentProvider {
             case TRANSACTION_ID:
                 _id = ContentUris.parseId(uri);
                 returnCursor = db.query(
-                        DatabaseContract.TransactionEntry.TABLE_NAME,
+                        DatabaseContract.TransactionEntry.TBL_NAME,
                         projection,
                         DatabaseContract.TransactionEntry._ID + " = ?",
                         new String[]{String.valueOf(_id)},
@@ -90,7 +93,7 @@ public class FinanceTrackerContentProvider extends ContentProvider {
                 break;
             case BALANCE:
                 returnCursor = db.query(
-                        DatabaseContract.BalanceEntry.TABLE_NAME,
+                        DatabaseContract.BalanceEntry.TBL_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -101,7 +104,7 @@ public class FinanceTrackerContentProvider extends ContentProvider {
             case BALANCE_ID:
                 _id = ContentUris.parseId(uri);
                 returnCursor = db.query(
-                        DatabaseContract.BalanceEntry.TABLE_NAME,
+                        DatabaseContract.BalanceEntry.TBL_NAME,
                         projection,
                         DatabaseContract.BalanceEntry._ID + " = ?",
                         new String[]{String.valueOf(_id)},
@@ -109,9 +112,13 @@ public class FinanceTrackerContentProvider extends ContentProvider {
                         null,
                         sortOrder);
                 break;
+            case BALANCE_JOIN:
+                builder.setTables(DatabaseContract.BalanceEntryJoined.INNER_JOIN_STATEMENT);
+                useAuthorityUri = true;
+                break;
             case CATEGORY:
                 returnCursor = db.query(
-                        DatabaseContract.CategoryEntry.TABLE_NAME,
+                        DatabaseContract.CategoryEntry.TBL_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -122,7 +129,7 @@ public class FinanceTrackerContentProvider extends ContentProvider {
             case CATEGORY_ID:
                 _id = ContentUris.parseId(uri);
                 returnCursor = db.query(
-                        DatabaseContract.CategoryEntry.TABLE_NAME,
+                        DatabaseContract.CategoryEntry.TBL_NAME,
                         projection,
                         DatabaseContract.CategoryEntry._ID + " = ?",
                         new String[]{String.valueOf(_id)},
@@ -132,7 +139,7 @@ public class FinanceTrackerContentProvider extends ContentProvider {
                 break;
             case CURRENCY:
                 returnCursor = db.query(
-                        DatabaseContract.CurrencyEntry.TABLE_NAME,
+                        DatabaseContract.CurrencyEntry.TBL_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -143,7 +150,7 @@ public class FinanceTrackerContentProvider extends ContentProvider {
             case CURRENCY_ID:
                 _id = ContentUris.parseId(uri);
                 returnCursor = db.query(
-                        DatabaseContract.CurrencyEntry.TABLE_NAME,
+                        DatabaseContract.CurrencyEntry.TBL_NAME,
                         projection,
                         DatabaseContract.CurrencyEntry._ID + " = ?",
                         new String[]{String.valueOf(_id)},
@@ -154,8 +161,13 @@ public class FinanceTrackerContentProvider extends ContentProvider {
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
         }
+        returnCursor = builder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
 
-        returnCursor.setNotificationUri(getContext().getContentResolver(), uri);
+        if (useAuthorityUri) {
+            returnCursor.setNotificationUri(getContext().getContentResolver(), DatabaseContract.BASE_CONTENT_URI);
+        } else {
+            returnCursor.setNotificationUri(getContext().getContentResolver(), uri);
+        }
         return returnCursor;
     }
 
@@ -196,7 +208,7 @@ public class FinanceTrackerContentProvider extends ContentProvider {
         Uri returnUri;
         switch (sUriMatcher.match(uri)) {
             case ACCOUNT:
-                _id = db.insert(DatabaseContract.AccountEntry.TABLE_NAME, null, values);
+                _id = db.insert(DatabaseContract.AccountEntry.TBL_NAME, null, values);
                 if (_id > 0) {
                     returnUri = DatabaseContract.AccountEntry.buildAccountUri(_id);
                 } else {
@@ -204,7 +216,7 @@ public class FinanceTrackerContentProvider extends ContentProvider {
                 }
                 break;
             case TRANSACTION:
-                _id = db.insert(DatabaseContract.TransactionEntry.TABLE_NAME, null, values);
+                _id = db.insert(DatabaseContract.TransactionEntry.TBL_NAME, null, values);
                 if (_id > 0) {
                     returnUri = DatabaseContract.TransactionEntry.buildTransactionUri(_id);
                 } else {
@@ -212,7 +224,7 @@ public class FinanceTrackerContentProvider extends ContentProvider {
                 }
                 break;
             case BALANCE:
-                _id = db.insert(DatabaseContract.BalanceEntry.TABLE_NAME, null, values);
+                _id = db.insert(DatabaseContract.BalanceEntry.TBL_NAME, null, values);
                 if (_id > 0) {
                     returnUri = DatabaseContract.BalanceEntry.buildBalanceUri(_id);
                 } else {
@@ -220,7 +232,7 @@ public class FinanceTrackerContentProvider extends ContentProvider {
                 }
                 break;
             case CATEGORY:
-                _id = db.insert(DatabaseContract.CategoryEntry.TABLE_NAME, null, values);
+                _id = db.insert(DatabaseContract.CategoryEntry.TBL_NAME, null, values);
                 if (_id > 0) {
                     returnUri = DatabaseContract.CategoryEntry.buildCategoryUri(_id);
                 } else {
@@ -228,7 +240,7 @@ public class FinanceTrackerContentProvider extends ContentProvider {
                 }
                 break;
             case CURRENCY:
-                _id = db.insert(DatabaseContract.CurrencyEntry.TABLE_NAME, null, values);
+                _id = db.insert(DatabaseContract.CurrencyEntry.TBL_NAME, null, values);
                 if (_id > 0) {
                     returnUri = DatabaseContract.CurrencyEntry.buildCurrencyUri(_id);
                 } else {
@@ -248,19 +260,19 @@ public class FinanceTrackerContentProvider extends ContentProvider {
         int rows;
         switch (sUriMatcher.match(uri)) {
             case ACCOUNT:
-                rows = db.delete(DatabaseContract.AccountEntry.TABLE_NAME, selection, selectionArgs);
+                rows = db.delete(DatabaseContract.AccountEntry.TBL_NAME, selection, selectionArgs);
                 break;
             case TRANSACTION:
-                rows = db.delete(DatabaseContract.TransactionEntry.TABLE_NAME, selection, selectionArgs);
+                rows = db.delete(DatabaseContract.TransactionEntry.TBL_NAME, selection, selectionArgs);
                 break;
             case BALANCE:
-                rows = db.delete(DatabaseContract.BalanceEntry.TABLE_NAME, selection, selectionArgs);
+                rows = db.delete(DatabaseContract.BalanceEntry.TBL_NAME, selection, selectionArgs);
                 break;
             case CATEGORY:
-                rows = db.delete(DatabaseContract.CategoryEntry.TABLE_NAME, selection, selectionArgs);
+                rows = db.delete(DatabaseContract.CategoryEntry.TBL_NAME, selection, selectionArgs);
                 break;
             case CURRENCY:
-                rows = db.delete(DatabaseContract.CurrencyEntry.TABLE_NAME, selection, selectionArgs);
+                rows = db.delete(DatabaseContract.CurrencyEntry.TBL_NAME, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
@@ -278,19 +290,19 @@ public class FinanceTrackerContentProvider extends ContentProvider {
         int rows;
         switch (sUriMatcher.match(uri)) {
             case ACCOUNT:
-                rows = db.update(DatabaseContract.AccountEntry.TABLE_NAME, values, selection, selectionArgs);
+                rows = db.update(DatabaseContract.AccountEntry.TBL_NAME, values, selection, selectionArgs);
                 break;
             case TRANSACTION:
-                rows = db.update(DatabaseContract.TransactionEntry.TABLE_NAME, values, selection, selectionArgs);
+                rows = db.update(DatabaseContract.TransactionEntry.TBL_NAME, values, selection, selectionArgs);
                 break;
             case BALANCE:
-                rows = db.update(DatabaseContract.BalanceEntry.TABLE_NAME, values, selection, selectionArgs);
+                rows = db.update(DatabaseContract.BalanceEntry.TBL_NAME, values, selection, selectionArgs);
                 break;
             case CATEGORY:
-                rows = db.update(DatabaseContract.CategoryEntry.TABLE_NAME, values, selection, selectionArgs);
+                rows = db.update(DatabaseContract.CategoryEntry.TBL_NAME, values, selection, selectionArgs);
                 break;
             case CURRENCY:
-                rows = db.update(DatabaseContract.CurrencyEntry.TABLE_NAME, values, selection, selectionArgs);
+                rows = db.update(DatabaseContract.CurrencyEntry.TBL_NAME, values, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);

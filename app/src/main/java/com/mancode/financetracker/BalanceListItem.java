@@ -59,11 +59,11 @@ public class BalanceListItem {
         String tmpFixed;
         if (cursor != null) {
             tmpId = cursor.getInt(cursor.getColumnIndex(DatabaseContract.BalanceEntry._ID));
-            tmpCheckDate = cursor.getString(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COLUMN_NAME_CHECK_DATE));
-            tmpAccount = cursor.getString(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COLUMN_NAME_ACCOUNT));
-            tmpBalance = cursor.getDouble(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COLUMN_NAME_BALANCE));
-            tmpCurrency = cursor.getString(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COLUMN_NAME_CURRENCY));
-            tmpFixed = cursor.getString(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COLUMN_NAME_FIXED));
+            tmpCheckDate = cursor.getString(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COL_CHECK_DATE));
+            tmpAccount = cursor.getString(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COL_ACCOUNT_ID));
+            tmpBalance = cursor.getDouble(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COL_BALANCE));
+            tmpCurrency = cursor.getString(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COL_CURRENCY_ID));
+            tmpFixed = cursor.getString(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COL_FIXED));
             return new BalanceListItem(tmpId, tmpCheckDate, tmpAccount, tmpBalance, tmpCurrency, tmpFixed);
         } else {
             return null;

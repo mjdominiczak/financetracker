@@ -31,11 +31,11 @@ public class BalanceFragment extends LoaderFragment {
 
     static final String[] BALANCES_PROJECTION = new String[]{
             DatabaseContract.BalanceEntry._ID,
-            DatabaseContract.BalanceEntry.COLUMN_NAME_ACCOUNT,
-            DatabaseContract.BalanceEntry.COLUMN_NAME_BALANCE,
-            DatabaseContract.BalanceEntry.COLUMN_NAME_CHECK_DATE,
-            DatabaseContract.BalanceEntry.COLUMN_NAME_CURRENCY,
-            DatabaseContract.BalanceEntry.COLUMN_NAME_FIXED
+            DatabaseContract.BalanceEntry.COL_ACCOUNT_ID,
+            DatabaseContract.BalanceEntry.COL_BALANCE,
+            DatabaseContract.BalanceEntry.COL_CHECK_DATE,
+            DatabaseContract.BalanceEntry.COL_CURRENCY_ID,
+            DatabaseContract.BalanceEntry.COL_FIXED
     };
 
     @Nullable
@@ -66,7 +66,7 @@ public class BalanceFragment extends LoaderFragment {
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri uri = DatabaseContract.BalanceEntry.CONTENT_URI;
-        String select = "(" + DatabaseContract.BalanceEntry.COLUMN_NAME_BALANCE + " NOTNULL)";
+        String select = "(" + DatabaseContract.BalanceEntry.COL_BALANCE + " NOTNULL)";
         return new CursorLoader(
                 getActivity(),
                 uri,
