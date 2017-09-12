@@ -1,7 +1,6 @@
 package com.mancode.financetracker.contentprovider;
 
 import android.content.ContentProvider;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -26,7 +25,8 @@ public class FinanceTrackerContentProvider extends ContentProvider {
     private static final int TRANSACTION_ID = 201;
     private static final int BALANCE = 300;
     private static final int BALANCE_ID = 301;
-    private static final int BALANCE_JOIN = 302;
+    private static final int BALANCE_JOINED = 350;
+    private static final int BALANCE_JOINED_ID = 351;
     private static final int CATEGORY = 400;
     private static final int CATEGORY_ID = 401;
     private static final int CURRENCY = 500;
@@ -50,113 +50,54 @@ public class FinanceTrackerContentProvider extends ContentProvider {
         Cursor returnCursor;
         switch (sUriMatcher.match(uri)) {
             case ACCOUNT:
-                returnCursor = db.query(
-                        DatabaseContract.AccountEntry.TBL_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
+                builder.setTables(DatabaseContract.AccountEntry.TBL_NAME);
                 break;
             case ACCOUNT_ID:
-                long _id = ContentUris.parseId(uri);
-                returnCursor = db.query(
-                        DatabaseContract.AccountEntry.TBL_NAME,
-                        projection,
-                        DatabaseContract.AccountEntry._ID + " = ?",
-                        new String[]{String.valueOf(_id)},
-                        null,
-                        null,
-                        sortOrder);
+                builder.setTables(DatabaseContract.AccountEntry.TBL_NAME);
+                builder.appendWhere(
+                        DatabaseContract.AccountEntry._ID + " = " + uri.getLastPathSegment());
                 break;
             case TRANSACTION:
-                returnCursor = db.query(
-                        DatabaseContract.TransactionEntry.TBL_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
+                builder.setTables(DatabaseContract.TransactionEntry.TBL_NAME);
                 break;
             case TRANSACTION_ID:
-                _id = ContentUris.parseId(uri);
-                returnCursor = db.query(
-                        DatabaseContract.TransactionEntry.TBL_NAME,
-                        projection,
-                        DatabaseContract.TransactionEntry._ID + " = ?",
-                        new String[]{String.valueOf(_id)},
-                        null,
-                        null,
-                        sortOrder);
+                builder.setTables(DatabaseContract.TransactionEntry.TBL_NAME);
+                builder.appendWhere(
+                        DatabaseContract.TransactionEntry._ID + " = " + uri.getLastPathSegment());
                 break;
             case BALANCE:
-                returnCursor = db.query(
-                        DatabaseContract.BalanceEntry.TBL_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
+                builder.setTables(DatabaseContract.BalanceEntry.TBL_NAME);
                 break;
             case BALANCE_ID:
-                _id = ContentUris.parseId(uri);
-                returnCursor = db.query(
-                        DatabaseContract.BalanceEntry.TBL_NAME,
-                        projection,
-                        DatabaseContract.BalanceEntry._ID + " = ?",
-                        new String[]{String.valueOf(_id)},
-                        null,
-                        null,
-                        sortOrder);
+                builder.setTables(DatabaseContract.BalanceEntry.TBL_NAME);
+                builder.appendWhere(
+                        DatabaseContract.BalanceEntry._ID + " = " + uri.getLastPathSegment());
                 break;
-            case BALANCE_JOIN:
+            case BALANCE_JOINED:
                 builder.setTables(DatabaseContract.BalanceEntryJoined.INNER_JOIN_STATEMENT);
                 useAuthorityUri = true;
                 break;
+            case BALANCE_JOINED_ID:
+                builder.setTables(DatabaseContract.BalanceEntryJoined.INNER_JOIN_STATEMENT);
+                builder.appendWhere(
+                        DatabaseContract.BalanceEntryJoined._ID + " = " + uri.getLastPathSegment());
+                useAuthorityUri = true;
+                break;
             case CATEGORY:
-                returnCursor = db.query(
-                        DatabaseContract.CategoryEntry.TBL_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
+                builder.setTables(DatabaseContract.CategoryEntry.TBL_NAME);
                 break;
             case CATEGORY_ID:
-                _id = ContentUris.parseId(uri);
-                returnCursor = db.query(
-                        DatabaseContract.CategoryEntry.TBL_NAME,
-                        projection,
-                        DatabaseContract.CategoryEntry._ID + " = ?",
-                        new String[]{String.valueOf(_id)},
-                        null,
-                        null,
-                        sortOrder);
+                builder.setTables(DatabaseContract.CategoryEntry.TBL_NAME);
+                builder.appendWhere(
+                        DatabaseContract.CategoryEntry._ID + " = " + uri.getLastPathSegment());
                 break;
             case CURRENCY:
-                returnCursor = db.query(
-                        DatabaseContract.CurrencyEntry.TBL_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
+                builder.setTables(DatabaseContract.CurrencyEntry.TBL_NAME);
                 break;
             case CURRENCY_ID:
-                _id = ContentUris.parseId(uri);
-                returnCursor = db.query(
-                        DatabaseContract.CurrencyEntry.TBL_NAME,
-                        projection,
-                        DatabaseContract.CurrencyEntry._ID + " = ?",
-                        new String[]{String.valueOf(_id)},
-                        null,
-                        null,
-                        sortOrder);
+                builder.setTables(DatabaseContract.CurrencyEntry.TBL_NAME);
+                builder.appendWhere(
+                        DatabaseContract.CurrencyEntry._ID + " = " + uri.getLastPathSegment());
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown URI: " + uri);
