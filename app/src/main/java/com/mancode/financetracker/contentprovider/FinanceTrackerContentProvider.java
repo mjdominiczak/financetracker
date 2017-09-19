@@ -128,6 +128,10 @@ public class FinanceTrackerContentProvider extends ContentProvider {
                 return DatabaseContract.BalanceEntry.CONTENT_TYPE;
             case BALANCE_ID:
                 return DatabaseContract.BalanceEntry.CONTENT_ITEM_TYPE;
+            case BALANCE_JOINED:
+                return DatabaseContract.BalanceEntryJoined.CONTENT_TYPE;
+            case BALANCE_JOINED_ID:
+                return DatabaseContract.BalanceEntryJoined.CONTENT_ITEM_TYPE;
             case CATEGORY:
                 return DatabaseContract.CategoryEntry.CONTENT_TYPE;
             case CATEGORY_ID:
@@ -262,6 +266,8 @@ public class FinanceTrackerContentProvider extends ContentProvider {
         matcher.addURI(content, DatabaseContract.PATH_ACCOUNT + "/#", ACCOUNT_ID);
         matcher.addURI(content, DatabaseContract.PATH_BALANCE, BALANCE);
         matcher.addURI(content, DatabaseContract.PATH_BALANCE + "/#", BALANCE_ID);
+        matcher.addURI(content, DatabaseContract.PATH_BALANCE_JOINED, BALANCE_JOINED);
+        matcher.addURI(content, DatabaseContract.PATH_BALANCE_JOINED + "/#", BALANCE_JOINED_ID);
         matcher.addURI(content, DatabaseContract.PATH_CATEGORY, CATEGORY);
         matcher.addURI(content, DatabaseContract.PATH_CATEGORY + "/#", CATEGORY_ID);
         matcher.addURI(content, DatabaseContract.PATH_CURRENCY, CURRENCY);

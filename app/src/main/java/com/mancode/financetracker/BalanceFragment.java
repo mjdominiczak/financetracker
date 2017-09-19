@@ -30,8 +30,8 @@ public class BalanceFragment extends LoaderFragment {
     }
 
     static final String[] BALANCES_PROJECTION = new String[]{
-            DatabaseContract.BalanceEntry._ID,
-            DatabaseContract.BalanceEntry.COL_ACCOUNT_ID,
+            DatabaseContract.BalanceEntry.TBL_NAME + "." + DatabaseContract.BalanceEntry._ID,
+            DatabaseContract.AccountEntry.COL_NAME,
             DatabaseContract.BalanceEntry.COL_BALANCE,
             DatabaseContract.BalanceEntry.COL_CHECK_DATE,
             DatabaseContract.BalanceEntry.COL_CURRENCY_ID,
@@ -65,7 +65,7 @@ public class BalanceFragment extends LoaderFragment {
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri uri = DatabaseContract.BalanceEntry.CONTENT_URI;
+        Uri uri = DatabaseContract.BalanceEntryJoined.CONTENT_URI;
         String select = "(" + DatabaseContract.BalanceEntry.COL_BALANCE + " NOTNULL)";
         return new CursorLoader(
                 getActivity(),
@@ -73,6 +73,6 @@ public class BalanceFragment extends LoaderFragment {
                 BALANCES_PROJECTION,
                 select,
                 null,
-                DatabaseContract.BalanceEntry._ID);
+                DatabaseContract.BalanceEntry.TBL_NAME + "." + DatabaseContract.BalanceEntry._ID);
     }
 }
