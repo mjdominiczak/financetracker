@@ -1,10 +1,15 @@
 package com.mancode.financetracker;
 
+import android.content.ContentProviderOperation;
+import android.content.OperationApplicationException;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.Toolbar;
@@ -13,7 +18,11 @@ import android.widget.Toast;
 import com.mancode.financetracker.database.DatabaseContract;
 import com.mancode.financetracker.database.DatabaseHelper;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity implements AccountFragment.OnListFragmentInteractionListener {
+
+    public static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,24 +72,43 @@ public class MainActivity extends AppCompatActivity implements AccountFragment.O
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_clearDB) {
-            new AsyncTask<Void, Void, Void>() {
-
-                @Override
-                protected void onPostExecute(Void aVoid) {
-                    Toast.makeText(getApplicationContext(), "Database cleared", Toast.LENGTH_SHORT).show();
-                    super.onPostExecute(aVoid);
-                }
-
-                @Override
-                protected Void doInBackground(Void... params) {
-                    getContentResolver().delete(DatabaseContract.AccountEntry.CONTENT_URI, null, null);
-                    return null;
-                }
-            }.execute();
+            clearUri(
+                    DatabaseContract.AccountEntry.CONTENT_URI,
+                    DatabaseContract.BalanceEntry.CONTENT_URI,
+                    DatabaseContract.CategoryEntry.CONTENT_URI,
+                    DatabaseContract.CurrencyEntry.CONTENT_URI,
+                    DatabaseContract.TransactionEntry.CONTENT_URI
+            );
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void clearUri(final Uri... contentUris) {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                Toast.makeText(getApplicationContext(), "Database cleared", Toast.LENGTH_SHORT).show();
+                super.onPostExecute(aVoid);
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                ArrayList<ContentProviderOperation> ops = new ArrayList<>();
+                for (Uri uri : contentUris) {
+                    ops.add(ContentProviderOperation.newDelete(uri).build());
+                }
+                try {
+                    getContentResolver().applyBatch(DatabaseContract.CONTENT_AUTHORITY, ops);
+                } catch (RemoteException | OperationApplicationException e) {
+                    Log.e(TAG, e.getMessage());
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }.execute();
     }
 
     @Override
