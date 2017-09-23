@@ -25,6 +25,8 @@ public final class DatabaseContract {
     private static final String REAL_TYPE   = " REAL";
     private static final String INT_TYPE    = " INTEGER";
 
+    public static final String dateFormatString = "dd-MM-yyyy";
+
     private DatabaseContract() {}
 
     public static abstract class AccountEntry implements BaseColumns {

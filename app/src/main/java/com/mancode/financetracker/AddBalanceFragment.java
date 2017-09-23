@@ -21,8 +21,10 @@ import android.widget.Spinner;
 import com.mancode.financetracker.database.DatabaseContract;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Manveru on 07.09.2017.
@@ -99,7 +101,7 @@ public class AddBalanceFragment extends AddItemFragment implements LoaderManager
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.action_menu_save) {
-                    String checkDate = ((EditText) getView().findViewById(R.id.tf_balance_check_date)).getText().toString();
+                    String checkDate = new SimpleDateFormat(DatabaseContract.dateFormatString, Locale.US).format(mDate);
                     int accountPos = ((Spinner) getView().findViewById(R.id.spinner_balance_account)).getSelectedItemPosition();
                     Cursor cursor = mAdapter.getCursor();
                     cursor.moveToPosition(accountPos);

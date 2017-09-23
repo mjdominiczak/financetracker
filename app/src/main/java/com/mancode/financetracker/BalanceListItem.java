@@ -1,14 +1,23 @@
 package com.mancode.financetracker;
 
 import android.database.Cursor;
+import android.util.Log;
 
 import com.mancode.financetracker.database.DatabaseContract;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Manveru on 06.09.2017.
  */
 
 public class BalanceListItem {
+
+    private static final String TAG = BalanceListItem.class.getSimpleName();
 
     private int id;
     private final String checkDate;
@@ -22,7 +31,15 @@ public class BalanceListItem {
     }
 
     public String getCheckDate() {
-        return checkDate;
+        DateFormat formatter = new SimpleDateFormat(DatabaseContract.dateFormatString, Locale.US);
+        Date parsed = null;
+        try {
+            parsed = formatter.parse(checkDate);
+        } catch (ParseException e) {
+            Log.e(TAG, "String could not be parsed to a Date object");
+            e.printStackTrace();
+        }
+        return parsed != null ? DateFormat.getDateInstance().format(parsed) : checkDate;
     }
 
     public String getAccount() {
