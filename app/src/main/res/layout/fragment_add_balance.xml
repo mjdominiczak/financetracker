@@ -24,26 +24,31 @@
         android:orientation="vertical"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:padding="16dp"
         android:theme="@style/AppTheme.Dialog">
 
         <EditText
             android:id="@+id/tf_balance_check_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Check date TODO"
+            android:clickable="true"
+            android:focusable="false"
+            android:hint="@string/check_date"
             android:inputType="date" />
 
         <Spinner
             android:id="@+id/spinner_balance_account"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            style="@style/Widget.AppCompat.Spinner.Underlined" />
 
         <EditText
             android:id="@+id/tf_balance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_balance_value"
-            android:inputType="number" />
+            android:inputType="numberDecimal" />
 
         <Spinner
             android:id="@+id/spinner"

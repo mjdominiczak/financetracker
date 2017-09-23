@@ -1,5 +1,6 @@
 package com.mancode.financetracker;
 
+import android.app.DatePickerDialog;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
@@ -12,11 +13,16 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
 import com.mancode.financetracker.database.DatabaseContract;
+
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Manveru on 07.09.2017.
@@ -25,6 +31,8 @@ import com.mancode.financetracker.database.DatabaseContract;
 public class AddBalanceFragment extends AddItemFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private SimpleCursorAdapter mAdapter;
+
+    private Date mDate;
 
     private static final String[] ACCOUNTS_PROJECTION = {
             DatabaseContract.AccountEntry._ID,
@@ -49,10 +57,36 @@ public class AddBalanceFragment extends AddItemFragment implements LoaderManager
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_balance, container, false);
 
+        EditText dateText = (EditText) view.findViewById(R.id.tf_balance_check_date);
+        updateDate(dateText, Calendar.getInstance().getTime());
+        final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                EditText dateText = (EditText) view.findViewById(R.id.tf_balance_check_date);
+                Calendar c = Calendar.getInstance();
+                c.set(year, month, dayOfMonth);
+                updateDate(dateText, c.getTime());
+            }
+        };
+        dateText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar c = Calendar.getInstance();
+                new DatePickerDialog(
+                        getActivity(),
+                        // R.style.AppTheme, TODO - style datepicker
+                        dateSetListener,
+                        c.get(Calendar.YEAR),
+                        c.get(Calendar.MONTH),
+                        c.get(Calendar.DAY_OF_MONTH))
+                        .show();
+            }
+        });
+
         Spinner accountSpinner = (Spinner) view.findViewById(R.id.spinner_balance_account);
         mAdapter = new SimpleCursorAdapter(
                 getActivity(),
-                android.R.layout.simple_spinner_item,
+                android.R.layout.simple_spinner_dropdown_item,
                 null,
                 new String[] {DatabaseContract.AccountEntry.COL_NAME},
                 new int[] {android.R.id.text1},
@@ -122,5 +156,13 @@ public class AddBalanceFragment extends AddItemFragment implements LoaderManager
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
+    }
+
+    private void updateDate(EditText dateText, Date date) {
+        mDate = date;
+        DateFormat df = DateFormat.getDateInstance();
+        if (dateText != null) {
+            dateText.setText(df.format(mDate));
+        }
     }
 }
