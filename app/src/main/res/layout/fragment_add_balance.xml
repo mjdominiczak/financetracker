@@ -59,12 +59,10 @@
                     android:inputType="numberDecimal" />
             </android.support.design.widget.TextInputLayout>
 
-            <EditText
-                android:id="@+id/tf_balance_currency"
+            <Spinner
+                android:id="@+id/spinner_balance_currency"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_balance_currency"
-                android:inputType="text" />
+                android:layout_height="wrap_content" />
 
             <EditText
                 android:id="@+id/tf_balance_fixed"

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
@@ -96,6 +97,10 @@ public class AddBalanceFragment extends AddItemFragment implements LoaderManager
         );
         accountSpinner.setAdapter(mAdapter);
 
+        Spinner currencySpinner = (Spinner) view.findViewById(R.id.spinner_balance_currency);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.currencies, android.R.layout.simple_spinner_dropdown_item);
+        currencySpinner.setAdapter(adapter);
+
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.add_balance_toolbar);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -107,7 +112,7 @@ public class AddBalanceFragment extends AddItemFragment implements LoaderManager
                     cursor.moveToPosition(accountPos);
                     int account = cursor.getInt(cursor.getColumnIndex(DatabaseContract.AccountEntry._ID));
                     double balance = Double.parseDouble(((EditText) getView().findViewById(R.id.tf_balance)).getText().toString());
-                    String currency = ((EditText) getView().findViewById(R.id.tf_balance_currency)).getText().toString();
+                    String currency = ((Spinner) getView().findViewById(R.id.spinner_balance_currency)).getSelectedItem().toString();
                     String fixed = ((EditText) getView().findViewById(R.id.tf_balance_fixed)).getText().toString();
 
                     if (BalanceListItem.validate(checkDate, account, balance, currency, fixed)) {
