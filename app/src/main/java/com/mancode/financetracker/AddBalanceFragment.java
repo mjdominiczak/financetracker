@@ -97,30 +97,24 @@ public class AddBalanceFragment extends AddItemFragment implements LoaderManager
         );
         accountSpinner.setAdapter(mAdapter);
 
-        Spinner currencySpinner = (Spinner) view.findViewById(R.id.spinner_balance_currency);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.currencies, android.R.layout.simple_spinner_dropdown_item);
-        currencySpinner.setAdapter(adapter);
-
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.add_balance_toolbar);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.action_menu_save) {
-                    String checkDate = new SimpleDateFormat(DatabaseContract.dateFormatString, Locale.US).format(mDate);
+                    String checkDate = new SimpleDateFormat(DatabaseContract.DATE_FORMAT_STRING, Locale.US).format(mDate);
                     int accountPos = ((Spinner) getView().findViewById(R.id.spinner_balance_account)).getSelectedItemPosition();
                     Cursor cursor = mAdapter.getCursor();
                     cursor.moveToPosition(accountPos);
                     int account = cursor.getInt(cursor.getColumnIndex(DatabaseContract.AccountEntry._ID));
                     double balance = Double.parseDouble(((EditText) getView().findViewById(R.id.tf_balance)).getText().toString());
-                    String currency = ((Spinner) getView().findViewById(R.id.spinner_balance_currency)).getSelectedItem().toString();
                     String fixed = ((EditText) getView().findViewById(R.id.tf_balance_fixed)).getText().toString();
 
-                    if (BalanceListItem.validate(checkDate, account, balance, currency, fixed)) {
+                    if (BalanceListItem.validate(checkDate, account, balance, fixed)) {
                         ContentValues cv = new ContentValues();
                         cv.put(DatabaseContract.BalanceEntry.COL_CHECK_DATE, checkDate);
                         cv.put(DatabaseContract.BalanceEntry.COL_ACCOUNT_ID, account);
                         cv.put(DatabaseContract.BalanceEntry.COL_BALANCE, balance);
-                        cv.put(DatabaseContract.BalanceEntry.COL_CURRENCY_ID, currency);
                         cv.put(DatabaseContract.BalanceEntry.COL_FIXED, fixed);
                         getActivity().getContentResolver().insert(DatabaseContract.BalanceEntry.CONTENT_URI, cv);
                         dismiss();

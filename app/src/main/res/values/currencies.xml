@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="currencies">
-        <item>PLN</item>
-        <item>EUR</item>
-        <item>USD</item>
-        <item>HUF</item>
-    </string-array>
-</resources>

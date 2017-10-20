@@ -23,7 +23,6 @@ public class BalanceListItem {
     private final String checkDate;
     private final String account;
     private final double balance;
-    private final String currency;
     private final String fixed;
 
     public int getId() {
@@ -31,7 +30,7 @@ public class BalanceListItem {
     }
 
     public String getCheckDate() {
-        DateFormat formatter = new SimpleDateFormat(DatabaseContract.dateFormatString, Locale.US);
+        DateFormat formatter = new SimpleDateFormat(DatabaseContract.DATE_FORMAT_STRING, Locale.US);
         Date parsed = null;
         try {
             parsed = formatter.parse(checkDate);
@@ -50,20 +49,15 @@ public class BalanceListItem {
         return balance;
     }
 
-    public String getCurrency() {
-        return currency;
-    }
-
     public String getFixed() {
         return fixed;
     }
 
-    public BalanceListItem(int id, String checkDate, String account, double balance, String currency, String fixed) {
+    public BalanceListItem(int id, String checkDate, String account, double balance, String fixed) {
         this.id = id;
         this.checkDate = checkDate;
         this.account = account;
         this.balance = balance;
-        this.currency = currency;
         this.fixed = fixed;
     }
 
@@ -72,22 +66,20 @@ public class BalanceListItem {
         String tmpAccount;
         String tmpCheckDate;
         double tmpBalance;
-        String tmpCurrency;
         String tmpFixed;
         if (cursor != null) {
             tmpId = cursor.getInt(cursor.getColumnIndex(DatabaseContract.BalanceEntry._ID));
             tmpCheckDate = cursor.getString(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COL_CHECK_DATE));
             tmpAccount = cursor.getString(cursor.getColumnIndex(DatabaseContract.AccountEntry.COL_NAME));
             tmpBalance = cursor.getDouble(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COL_BALANCE));
-            tmpCurrency = cursor.getString(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COL_CURRENCY_ID));
             tmpFixed = cursor.getString(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COL_FIXED));
-            return new BalanceListItem(tmpId, tmpCheckDate, tmpAccount, tmpBalance, tmpCurrency, tmpFixed);
+            return new BalanceListItem(tmpId, tmpCheckDate, tmpAccount, tmpBalance, tmpFixed);
         } else {
             return null;
         }
     }
 
-    public static boolean validate(String checkDate, int account, double balance, String currency, String fixed) {
+    public static boolean validate(String checkDate, int account, double balance, String fixed) {
         return !checkDate.isEmpty() && account >= 0;
     }
 }

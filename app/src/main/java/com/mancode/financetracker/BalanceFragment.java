@@ -34,7 +34,6 @@ public class BalanceFragment extends LoaderFragment {
             DatabaseContract.AccountEntry.COL_NAME,
             DatabaseContract.BalanceEntry.COL_BALANCE,
             DatabaseContract.BalanceEntry.COL_CHECK_DATE,
-            DatabaseContract.BalanceEntry.COL_CURRENCY_ID,
             DatabaseContract.BalanceEntry.COL_FIXED
     };
 
