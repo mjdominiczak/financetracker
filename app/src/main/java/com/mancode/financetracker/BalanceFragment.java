@@ -31,11 +31,16 @@ public class BalanceFragment extends LoaderFragment {
 
     static final String[] BALANCES_PROJECTION = new String[]{
             DatabaseContract.BalanceEntry.TBL_NAME + "." + DatabaseContract.BalanceEntry._ID,
+            DatabaseContract.AccountEntry.TBL_NAME + "." + DatabaseContract.AccountEntry._ID,
             DatabaseContract.AccountEntry.COL_NAME,
             DatabaseContract.BalanceEntry.COL_BALANCE,
             DatabaseContract.BalanceEntry.COL_CHECK_DATE,
             DatabaseContract.BalanceEntry.COL_FIXED
     };
+
+    static final String BALANCES_SORT_ORDER =
+            "date(" + DatabaseContract.BalanceEntry.COL_CHECK_DATE + ") DESC, " +
+            DatabaseContract.AccountEntry.TBL_NAME + "." + DatabaseContract.AccountEntry._ID + " ASC";
 
     @Nullable
     @Override
@@ -72,6 +77,6 @@ public class BalanceFragment extends LoaderFragment {
                 BALANCES_PROJECTION,
                 select,
                 null,
-                DatabaseContract.BalanceEntry.TBL_NAME + "." + DatabaseContract.BalanceEntry._ID);
+                BALANCES_SORT_ORDER);
     }
 }
