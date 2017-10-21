@@ -11,7 +11,7 @@ import android.provider.BaseColumns;
 
 public final class DatabaseContract {
 
-    public static final String DATE_FORMAT_STRING = "dd-MM-yyyy";
+    public static final String DATE_FORMAT_STRING = "yyyy-MM-dd";
 
     public static final String CONTENT_AUTHORITY = "com.mancode.financetracker.database";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
