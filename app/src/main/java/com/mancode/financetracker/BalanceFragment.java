@@ -42,6 +42,14 @@ public class BalanceFragment extends LoaderFragment {
             "date(" + DatabaseContract.BalanceEntry.COL_CHECK_DATE + ") DESC, " +
             DatabaseContract.AccountEntry.TBL_NAME + "." + DatabaseContract.AccountEntry._ID + " ASC";
 
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        super.onLoadFinished(loader, data);
+        if (mAdapter instanceof BalanceRecyclerViewAdapter) {
+            ((BalanceRecyclerViewAdapter) mAdapter).initDataFromCursor();
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
