@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -22,6 +23,7 @@ public class BalanceListItem {
     private int id;
     private final String checkDate;
     private final String account;
+    private final int accountType;
     private final double balance;
     private final String fixed;
 
@@ -45,6 +47,10 @@ public class BalanceListItem {
         return account;
     }
 
+    public int getAccountType() {
+        return accountType;
+    }
+
     public double getBalance() {
         return balance;
     }
@@ -53,10 +59,11 @@ public class BalanceListItem {
         return fixed;
     }
 
-    public BalanceListItem(int id, String checkDate, String account, double balance, String fixed) {
+    public BalanceListItem(int id, String checkDate, String account, int accountType, double balance, String fixed) {
         this.id = id;
         this.checkDate = checkDate;
         this.account = account;
+        this.accountType = accountType;
         this.balance = balance;
         this.fixed = fixed;
     }
@@ -65,18 +72,28 @@ public class BalanceListItem {
         int tmpId;
         String tmpAccount;
         String tmpCheckDate;
+        int tmpAccountType;
         double tmpBalance;
         String tmpFixed;
         if (cursor != null) {
             tmpId = cursor.getInt(cursor.getColumnIndex(DatabaseContract.BalanceEntry._ID));
             tmpCheckDate = cursor.getString(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COL_CHECK_DATE));
             tmpAccount = cursor.getString(cursor.getColumnIndex(DatabaseContract.AccountEntry.COL_NAME));
+            tmpAccountType = cursor.getString(cursor.getColumnIndex(DatabaseContract.AccountEntry.COL_TYPE)).equals("+") ? 1 : -1;
             tmpBalance = cursor.getDouble(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COL_BALANCE));
             tmpFixed = cursor.getString(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COL_FIXED));
-            return new BalanceListItem(tmpId, tmpCheckDate, tmpAccount, tmpBalance, tmpFixed);
+            return new BalanceListItem(tmpId, tmpCheckDate, tmpAccount, tmpAccountType, tmpBalance, tmpFixed);
         } else {
             return null;
         }
+    }
+
+    static double calculateDailyBalance(List<BalanceListItem> itemList) {
+        double result = 0.0;
+        for (BalanceListItem item : itemList) {
+            result += ((double) item.getAccountType()) * item.getBalance();
+        }
+        return result;
     }
 
     public static boolean validate(String checkDate, int account, double balance, String fixed) {

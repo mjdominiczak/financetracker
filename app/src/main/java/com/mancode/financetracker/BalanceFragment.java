@@ -33,6 +33,7 @@ public class BalanceFragment extends LoaderFragment {
             DatabaseContract.BalanceEntry.TBL_NAME + "." + DatabaseContract.BalanceEntry._ID,
             DatabaseContract.AccountEntry.TBL_NAME + "." + DatabaseContract.AccountEntry._ID,
             DatabaseContract.AccountEntry.COL_NAME,
+            DatabaseContract.AccountEntry.COL_TYPE,
             DatabaseContract.BalanceEntry.COL_BALANCE,
             DatabaseContract.BalanceEntry.COL_CHECK_DATE,
             DatabaseContract.BalanceEntry.COL_FIXED

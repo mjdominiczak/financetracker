@@ -37,11 +37,7 @@ class BalanceRecyclerViewAdapter extends CursorRecyclerViewAdapter<BalanceRecycl
         Cursor cursor = getCursor();
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                int id = cursor.getInt(cursor.getColumnIndex(DatabaseContract.BalanceEntry._ID));
                 String date = cursor.getString(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COL_CHECK_DATE));
-                String account = cursor.getString(cursor.getColumnIndex(DatabaseContract.AccountEntry.COL_NAME));
-                double balance = cursor.getDouble(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COL_BALANCE));
-                String fixed = cursor.getString(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COL_FIXED));
                 List<BalanceListItem> list;
                 if (mBalancesMap.containsKey(date)) {
                     list = mBalancesMap.get(date);
@@ -49,7 +45,7 @@ class BalanceRecyclerViewAdapter extends CursorRecyclerViewAdapter<BalanceRecycl
                     list = new ArrayList<>();
                     mBalancesMap.put(date, list);
                 }
-                list.add(new BalanceListItem(id, date, account, balance, fixed));
+                list.add(BalanceListItem.fromCursor(cursor));
             } while (cursor.moveToNext());
         }
     }
@@ -101,6 +97,8 @@ class BalanceRecyclerViewAdapter extends CursorRecyclerViewAdapter<BalanceRecycl
         void initFromList(String key, List<BalanceListItem> itemList) {
             TextView balanceDate = (TextView) mView.findViewById(R.id.balance_date);
             balanceDate.setText(key);
+            TextView balanceDaily = (TextView) mView.findViewById(R.id.balance_daily);
+            balanceDaily.setText(String.format(Locale.getDefault(), "%.2f", BalanceListItem.calculateDailyBalance(itemList)));
             for (BalanceListItem item : itemList) {
                 LinearLayout innerLayout = (LinearLayout) LayoutInflater.from(mView.getContext())
                         .inflate(R.layout.single_balance, mLayout, false);
