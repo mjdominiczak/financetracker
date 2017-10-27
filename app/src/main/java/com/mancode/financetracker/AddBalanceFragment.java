@@ -108,7 +108,7 @@ public class AddBalanceFragment extends AddItemFragment implements LoaderManager
                     cursor.moveToPosition(accountPos);
                     int account = cursor.getInt(cursor.getColumnIndex(DatabaseContract.AccountEntry._ID));
                     double balance = Double.parseDouble(((EditText) getView().findViewById(R.id.tf_balance)).getText().toString());
-                    String fixed = ((EditText) getView().findViewById(R.id.tf_balance_fixed)).getText().toString();
+                    String fixed = "true";
 
                     if (BalanceListItem.validate(checkDate, account, balance, fixed)) {
                         ContentValues cv = new ContentValues();

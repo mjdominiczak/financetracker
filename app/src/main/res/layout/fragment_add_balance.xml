@@ -59,13 +59,6 @@
                     android:inputType="numberDecimal" />
             </android.support.design.widget.TextInputLayout>
 
-            <EditText
-                android:id="@+id/tf_balance_fixed"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_balance_fixed"
-                android:inputType="text" />
-
         </LinearLayout>
 
     </ScrollView>

@@ -14,7 +14,6 @@
     <string name="hint_account_type">Account type</string>
     <string name="hint_balance_value">Balance value</string>
     <string name="hint_balance_currency">Currency</string>
-    <string name="hint_balance_fixed">Balance fixed</string>
     <string name="toolbar_action_save">SAVE</string>
     <string name="check_date">Balance check date</string>
 </resources>
