@@ -1,6 +1,7 @@
 package com.mancode.financetracker;
 
 import android.content.ContentProviderOperation;
+import android.content.Context;
 import android.content.OperationApplicationException;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -68,51 +69,55 @@ public class MainActivity extends AppCompatActivity implements AccountFragment.O
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        } else if (id == R.id.action_clearDB) {
-            clearUri(
-                    DatabaseContract.AccountEntry.CONTENT_URI,
-                    DatabaseContract.BalanceEntry.CONTENT_URI,
-                    DatabaseContract.CategoryEntry.CONTENT_URI,
-                    DatabaseContract.CurrencyEntry.CONTENT_URI,
-                    DatabaseContract.TransactionEntry.CONTENT_URI
-            );
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_clearDB:
+                new ClearUriTask(getApplicationContext()).execute(
+                        DatabaseContract.AccountEntry.CONTENT_URI,
+                        DatabaseContract.BalanceEntry.CONTENT_URI,
+                        DatabaseContract.CategoryEntry.CONTENT_URI,
+                        DatabaseContract.CurrencyEntry.CONTENT_URI,
+                        DatabaseContract.TransactionEntry.CONTENT_URI
+                );
+                return true;
         }
-
         return super.onOptionsItemSelected(item);
-    }
-
-    private void clearUri(final Uri... contentUris) {
-        new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                Toast.makeText(getApplicationContext(), "Database cleared", Toast.LENGTH_SHORT).show();
-                super.onPostExecute(aVoid);
-            }
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                ArrayList<ContentProviderOperation> ops = new ArrayList<>();
-                for (Uri uri : contentUris) {
-                    ops.add(ContentProviderOperation.newDelete(uri).build());
-                }
-                try {
-                    getContentResolver().applyBatch(DatabaseContract.CONTENT_AUTHORITY, ops);
-                } catch (RemoteException | OperationApplicationException e) {
-                    Log.e(TAG, e.getMessage());
-                    e.printStackTrace();
-                }
-                return null;
-            }
-        }.execute();
     }
 
     @Override
     public void onListFragmentInteraction(DatabaseHelper.AccountItem item) {
         // TODO
     }
+
+    private static class ClearUriTask extends AsyncTask<Uri, Void, Void> {
+
+        private Context mContext;
+
+        ClearUriTask(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            Toast.makeText(mContext, "Uris cleared", Toast.LENGTH_SHORT).show();
+            super.onPostExecute(aVoid);
+        }
+
+        @Override
+        protected Void doInBackground(Uri... params) {
+            ArrayList<ContentProviderOperation> ops = new ArrayList<>();
+            for (Uri uri : params) {
+                ops.add(ContentProviderOperation.newDelete(uri).build());
+            }
+            try {
+                mContext.getContentResolver().applyBatch(DatabaseContract.CONTENT_AUTHORITY, ops);
+            } catch (RemoteException | OperationApplicationException e) {
+                Log.e(TAG, e.getMessage());
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
 }
