@@ -95,6 +95,7 @@ class BalanceRecyclerViewAdapter extends CursorRecyclerViewAdapter<BalanceRecycl
         }
 
         void initFromList(String key, List<BalanceListItem> itemList) {
+            mLayout.removeAllViews();
             TextView balanceDate = (TextView) mView.findViewById(R.id.balance_date);
             balanceDate.setText(key);
             TextView balanceDaily = (TextView) mView.findViewById(R.id.balance_daily);
