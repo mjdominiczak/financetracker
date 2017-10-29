@@ -1,8 +1,11 @@
 package com.mancode.financetracker;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.content.OperationApplicationException;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements AccountFragment.O
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
+    private ViewPager viewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements AccountFragment.O
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab3_name));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager = (ViewPager) findViewById(R.id.pager);
         final MyTabsPagerAdapter adapter = new MyTabsPagerAdapter(
                 (getFragmentManager()));
         viewPager.setAdapter(adapter);
@@ -80,6 +85,31 @@ public class MainActivity extends AppCompatActivity implements AccountFragment.O
                         DatabaseContract.CurrencyEntry.CONTENT_URI,
                         DatabaseContract.TransactionEntry.CONTENT_URI
                 );
+                return true;
+            case R.id.action_clearLastBalance:
+                Cursor cursor = getContentResolver().query(
+                        DatabaseContract.BalanceEntry.CONTENT_URI,
+                        new String[]{DatabaseContract.BalanceEntry._ID, DatabaseContract.BalanceEntry.COL_CHECK_DATE},
+                        null,
+                        null,
+                        DatabaseContract.BalanceEntry._ID + " DESC LIMIT 1"
+                );
+                if (cursor != null) {
+                    if (cursor.moveToFirst()) {
+                        int id = cursor.getInt(cursor.getColumnIndex(DatabaseContract.BalanceEntry._ID));
+                        getContentResolver().delete(
+                                DatabaseContract.BalanceEntry.CONTENT_URI,
+                                DatabaseContract.BalanceEntry._ID + " =?",
+                                new String[]{Integer.toString(id)}
+                        );
+                        BalanceFragment fragment = (BalanceFragment) ((MyTabsPagerAdapter) viewPager.getAdapter()).getRegisteredFragment(viewPager.getCurrentItem());
+                        if (fragment != null) {
+                            fragment.syncAdapterWithCursor();
+                        }
+                        Toast.makeText(getApplicationContext(), "Balance of id " + id + " removed", Toast.LENGTH_SHORT).show();
+                    }
+                    cursor.close();
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);

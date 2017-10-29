@@ -46,6 +46,10 @@ public class BalanceFragment extends LoaderFragment {
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         super.onLoadFinished(loader, data);
+        syncAdapterWithCursor();
+    }
+
+    public void syncAdapterWithCursor() {
         if (mAdapter instanceof BalanceRecyclerViewAdapter) {
             ((BalanceRecyclerViewAdapter) mAdapter).initDataFromCursor();
         }
