@@ -73,6 +73,14 @@ class BalanceRecyclerViewAdapter extends CursorRecyclerViewAdapter<BalanceRecycl
         if (!(position >= 0 && position < mBalancesMap.size())) {
             throw new IllegalStateException("Position invalid: " + position);
         }
+        if (position == 0) {
+            if (viewHolder.mView.getLayoutParams() instanceof RecyclerView.LayoutParams) {
+                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) viewHolder.mView.getLayoutParams();
+                int value = (int) viewHolder.mView.getResources().getDimension(R.dimen.card_margin);
+                params.setMargins(0, value, 0, value);
+                viewHolder.mView.setLayoutParams(params);
+            }
+        }
         if (mBalancesMap != null) {
             int i = 0;
             for (Map.Entry<String, List<BalanceListItem>> entry : mBalancesMap.entrySet()){
