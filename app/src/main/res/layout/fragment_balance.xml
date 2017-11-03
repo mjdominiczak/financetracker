@@ -8,6 +8,9 @@
     android:layout_marginStart="@dimen/card_margin"
     android:layout_marginEnd="@dimen/card_margin"
     android:layout_marginBottom="@dimen/card_margin"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?android:attr/selectableItemBackground"
     card_view:cardCornerRadius="@dimen/cardview_default_radius" >
 
     <LinearLayout
@@ -37,12 +40,13 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/balances_list"
+            android:id="@+id/balances_list_expandable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/text_margin"
             android:layout_marginStart="@dimen/balance_margin"
-            android:orientation="vertical" />
+            android:orientation="vertical"
+            android:visibility="gone" />
 
     </LinearLayout>
 

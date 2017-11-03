@@ -3,6 +3,7 @@ package com.mancode.financetracker;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +24,19 @@ import java.util.Map;
 
 class BalanceRecyclerViewAdapter extends CursorRecyclerViewAdapter<BalanceRecyclerViewAdapter.ViewHolder> {
 
+    private RecyclerView mRecyclerView;
     private LinkedHashMap<String, List<BalanceListItem>> mBalancesMap;
+
+    private int mExpandedPosition = -1;
 
     BalanceRecyclerViewAdapter(Context context, Cursor cursor) {
         super(context, cursor);
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        mRecyclerView = recyclerView;
     }
 
     void initDataFromCursor() {
@@ -69,10 +79,11 @@ class BalanceRecyclerViewAdapter extends CursorRecyclerViewAdapter<BalanceRecycl
     public void onBindViewHolder(ViewHolder viewHolder, Cursor cursor) {}
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
         if (!(position >= 0 && position < mBalancesMap.size())) {
             throw new IllegalStateException("Position invalid: " + position);
         }
+
         if (position == 0) {
             if (viewHolder.mView.getLayoutParams() instanceof RecyclerView.LayoutParams) {
                 RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) viewHolder.mView.getLayoutParams();
@@ -81,6 +92,19 @@ class BalanceRecyclerViewAdapter extends CursorRecyclerViewAdapter<BalanceRecycl
                 viewHolder.mView.setLayoutParams(params);
             }
         }
+
+        final boolean isExpanded = position == mExpandedPosition;
+        viewHolder.mLayout.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+        viewHolder.mView.setActivated(isExpanded);
+        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mExpandedPosition = isExpanded ? -1 : position;
+                TransitionManager.beginDelayedTransition(mRecyclerView);
+                notifyDataSetChanged();
+            }
+        });
+
         if (mBalancesMap != null) {
             int i = 0;
             for (Map.Entry<String, List<BalanceListItem>> entry : mBalancesMap.entrySet()){
@@ -99,7 +123,7 @@ class BalanceRecyclerViewAdapter extends CursorRecyclerViewAdapter<BalanceRecycl
         ViewHolder(View view) {
             super(view);
             mView = view;
-            mLayout = (LinearLayout) view.findViewById(R.id.balances_list);
+            mLayout = (LinearLayout) view.findViewById(R.id.balances_list_expandable);
         }
 
         void initFromList(String key, List<BalanceListItem> itemList) {
