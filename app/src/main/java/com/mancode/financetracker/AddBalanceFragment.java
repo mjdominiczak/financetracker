@@ -77,7 +77,7 @@ public class AddBalanceFragment extends AddItemFragment implements LoaderManager
                 Calendar c = Calendar.getInstance();
                 new DatePickerDialog(
                         getActivity(),
-                        // R.style.AppTheme, TODO - style datepicker
+                        R.style.AppTheme_DatePicker,
                         dateSetListener,
                         c.get(Calendar.YEAR),
                         c.get(Calendar.MONTH),
