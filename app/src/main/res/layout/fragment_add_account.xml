@@ -24,7 +24,7 @@
         android:orientation="vertical"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:theme="@style/AppTheme.Dialog">
+        style="@style/AppTheme.Dialog">
 
         <EditText
             android:id="@+id/tf_account_name"

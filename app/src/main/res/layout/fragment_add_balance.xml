@@ -23,7 +23,7 @@
         android:layout_below="@id/add_balance_toolbar"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:theme="@style/AppTheme.Dialog">
+        style="@style/AppTheme.Dialog">
 
         <LinearLayout
             android:orientation="vertical"
@@ -31,14 +31,12 @@
             android:layout_width="match_parent"
             android:padding="16dp">
 
-            <EditText
+            <com.mancode.financetracker.ui.SetDateView
                 android:id="@+id/tf_balance_check_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="false"
-                android:hint="@string/check_date"
-                android:inputType="date" />
+                style="@style/Widget.AppCompat.Spinner.Underlined"
+                android:hint="@string/check_date" />
 
             <Spinner
                 android:id="@+id/spinner_balance_account"
