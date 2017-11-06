@@ -35,7 +35,6 @@
                 android:id="@+id/tf_balance_check_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Widget.AppCompat.Spinner.Underlined"
                 android:hint="@string/check_date" />
 
             <Spinner

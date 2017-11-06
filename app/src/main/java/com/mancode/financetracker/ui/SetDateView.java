@@ -27,7 +27,7 @@ public class SetDateView extends AppCompatButton {
     }
 
     public SetDateView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        super(context, attrs, R.attr.setDateViewStyle);
         mCalendar = Calendar.getInstance();
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
