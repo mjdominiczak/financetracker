@@ -40,6 +40,18 @@
             android:hint="@string/hint_account_type"
             android:inputType="text" />
 
+        <com.mancode.financetracker.ui.SetDateView
+            android:id="@+id/sd_account_open_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_account_open_date" />
+
+        <com.mancode.financetracker.ui.SetDateView
+            android:id="@+id/sd_account_close_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_account_close_date" />
+
     </LinearLayout>
 
 </RelativeLayout>
