@@ -1,7 +1,5 @@
 package com.mancode.financetracker;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.content.OperationApplicationException;
@@ -13,14 +11,13 @@ import android.os.RemoteException;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.mancode.financetracker.database.DatabaseContract;
-import com.mancode.financetracker.database.DatabaseHelper;
 
 import java.util.ArrayList;
 
@@ -40,7 +37,6 @@ public class MainActivity extends AppCompatActivity implements AccountFragment.O
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab1_name));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab2_name));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab3_name));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         viewPager = (ViewPager) findViewById(R.id.pager);
@@ -116,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements AccountFragment.O
     }
 
     @Override
-    public void onListFragmentInteraction(DatabaseHelper.AccountItem item) {
+    public void onListFragmentInteraction() {
         // TODO
     }
 

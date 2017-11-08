@@ -19,6 +19,7 @@ import java.util.Date;
 
 public class SetDateView extends AppCompatButton {
 
+    private boolean mDateSet = false;
     private Calendar mCalendar;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
@@ -33,6 +34,7 @@ public class SetDateView extends AppCompatButton {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 mCalendar.set(year, month, dayOfMonth);
+                mDateSet = true;
                 updateText();
             }
         };
@@ -52,7 +54,7 @@ public class SetDateView extends AppCompatButton {
     }
 
     public Date getDate() {
-        return mCalendar != null ? mCalendar.getTime() : null;
+        return mDateSet ? mCalendar.getTime() : null;
     }
 
     private void updateText() {

@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mancode.financetracker.database.DatabaseContract;
-import com.mancode.financetracker.database.DatabaseHelper;
 
 /**
  * A fragment representing a list of Items.
@@ -94,6 +93,6 @@ public class AccountFragment extends LoaderFragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DatabaseHelper.AccountItem item);
+        void onListFragmentInteraction();
     }
 }

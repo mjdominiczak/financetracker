@@ -30,7 +30,7 @@ public class MyTabsPagerAdapter extends FragmentStatePagerAdapter {
                 fragment = BalanceFragment.newInstance();
                 break;
             default:
-                fragment = new AccountFragment();
+                fragment = null;
                 break;
         }
 
@@ -52,7 +52,7 @@ public class MyTabsPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 2;
     }
 
     public Fragment getRegisteredFragment(int position) {
