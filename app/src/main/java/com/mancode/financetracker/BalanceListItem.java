@@ -79,7 +79,7 @@ public class BalanceListItem {
             tmpId = cursor.getInt(cursor.getColumnIndex(DatabaseContract.BalanceEntry._ID));
             tmpCheckDate = cursor.getString(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COL_CHECK_DATE));
             tmpAccount = cursor.getString(cursor.getColumnIndex(DatabaseContract.AccountEntry.COL_NAME));
-            tmpAccountType = cursor.getString(cursor.getColumnIndex(DatabaseContract.AccountEntry.COL_TYPE)).equals("+") ? 1 : -1;
+            tmpAccountType = cursor.getString(cursor.getColumnIndex(DatabaseContract.AccountEntry.COL_TYPE)).equals("+") ? 1 : -1; // TODO to change with DB column definition
             tmpBalance = cursor.getDouble(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COL_BALANCE));
             tmpFixed = cursor.getString(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COL_FIXED));
             return new BalanceListItem(tmpId, tmpCheckDate, tmpAccount, tmpAccountType, tmpBalance, tmpFixed);
