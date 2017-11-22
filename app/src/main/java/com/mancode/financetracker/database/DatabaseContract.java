@@ -55,7 +55,7 @@ public final class DatabaseContract {
                 TBL_NAME,
                 _ID,
                 COL_NAME, TEXT_TYPE,
-                COL_TYPE, TEXT_TYPE,
+                COL_TYPE, INT_TYPE,
                 COL_CURRENCY_ID, INT_TYPE, CurrencyEntry.TBL_NAME, CurrencyEntry._ID,
                 COL_OPEN_DATE, TEXT_TYPE,
                 COL_CLOSE_DATE, TEXT_TYPE);

@@ -25,7 +25,7 @@ public class BalanceListItem {
     private final String account;
     private final int accountType;
     private final double balance;
-    private final String fixed;
+    private final boolean fixed;
 
     public int getId() {
         return id;
@@ -55,11 +55,11 @@ public class BalanceListItem {
         return balance;
     }
 
-    public String getFixed() {
+    public boolean isFixed() {
         return fixed;
     }
 
-    public BalanceListItem(int id, String checkDate, String account, int accountType, double balance, String fixed) {
+    public BalanceListItem(int id, String checkDate, String account, int accountType, double balance, boolean fixed) {
         this.id = id;
         this.checkDate = checkDate;
         this.account = account;
@@ -74,14 +74,14 @@ public class BalanceListItem {
         String tmpCheckDate;
         int tmpAccountType;
         double tmpBalance;
-        String tmpFixed;
+        boolean tmpFixed;
         if (cursor != null) {
             tmpId = cursor.getInt(cursor.getColumnIndex(DatabaseContract.BalanceEntry._ID));
             tmpCheckDate = cursor.getString(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COL_CHECK_DATE));
             tmpAccount = cursor.getString(cursor.getColumnIndex(DatabaseContract.AccountEntry.COL_NAME));
-            tmpAccountType = cursor.getString(cursor.getColumnIndex(DatabaseContract.AccountEntry.COL_TYPE)).equals("+") ? 1 : -1; // TODO to change with DB column definition
+            tmpAccountType = cursor.getInt(cursor.getColumnIndex(DatabaseContract.AccountEntry.COL_TYPE));
             tmpBalance = cursor.getDouble(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COL_BALANCE));
-            tmpFixed = cursor.getString(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COL_FIXED));
+            tmpFixed = cursor.getInt(cursor.getColumnIndex(DatabaseContract.BalanceEntry.COL_FIXED)) != 0;
             return new BalanceListItem(tmpId, tmpCheckDate, tmpAccount, tmpAccountType, tmpBalance, tmpFixed);
         } else {
             return null;
@@ -96,7 +96,7 @@ public class BalanceListItem {
         return result;
     }
 
-    public static boolean validate(String checkDate, int account, double balance, String fixed) {
+    public static boolean validate(String checkDate, int account, double balance) {
         return !checkDate.isEmpty() && account >= 0;
     }
 }

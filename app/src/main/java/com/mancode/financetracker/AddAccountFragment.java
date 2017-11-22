@@ -53,11 +53,11 @@ public class AddAccountFragment extends AddItemFragment {
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.action_menu_save) {
                     String name = mNameField.getText().toString();
-                    String type = mRadioGroupType.getCheckedRadioButtonId() == R.id.rb_assets ?
-                            "+" : "-";
+                    int type = mRadioGroupType.getCheckedRadioButtonId() == R.id.rb_assets ?
+                            1 : -1;
                     String openDate = DBUtils.formatDate(mOpenDate.getDate());
                     String closeDate = DBUtils.formatDate(mCloseDate.getDate());
-                    String currency = "1";
+                    int currency = 1;
 
                     if (AccountListItem.validate(name, type)) {
                         ContentValues cv = new ContentValues();
