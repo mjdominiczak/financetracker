@@ -23,6 +23,8 @@ public class FinanceTrackerContentProvider extends ContentProvider {
     private static final int ACCOUNT_ID = 101;
     private static final int TRANSACTION = 200;
     private static final int TRANSACTION_ID = 201;
+    private static final int TRANSACTION_JOINED = 250;
+    private static final int TRANSACTION_JOINED_ID = 251;
     private static final int BALANCE = 300;
     private static final int BALANCE_ID = 301;
     private static final int BALANCE_JOINED = 350;
@@ -64,6 +66,16 @@ public class FinanceTrackerContentProvider extends ContentProvider {
                 builder.setTables(DatabaseContract.TransactionEntry.TBL_NAME);
                 builder.appendWhere(
                         DatabaseContract.TransactionEntry._ID + " = " + uri.getLastPathSegment());
+                break;
+            case TRANSACTION_JOINED:
+                builder.setTables(DatabaseContract.TransactionEntryJoined.INNER_JOIN_STATEMENT);
+                useAuthorityUri = true;
+                break;
+            case TRANSACTION_JOINED_ID:
+                builder.setTables(DatabaseContract.TransactionEntryJoined.INNER_JOIN_STATEMENT);
+                builder.appendWhere(
+                        DatabaseContract.TransactionEntryJoined._ID + " = " + uri.getLastPathSegment());
+                useAuthorityUri = true;
                 break;
             case BALANCE:
                 builder.setTables(DatabaseContract.BalanceEntry.TBL_NAME);
@@ -124,6 +136,10 @@ public class FinanceTrackerContentProvider extends ContentProvider {
                 return DatabaseContract.TransactionEntry.CONTENT_TYPE;
             case TRANSACTION_ID:
                 return DatabaseContract.TransactionEntry.CONTENT_ITEM_TYPE;
+            case TRANSACTION_JOINED:
+                return DatabaseContract.TransactionEntryJoined.CONTENT_TYPE;
+            case TRANSACTION_JOINED_ID:
+                return DatabaseContract.TransactionEntryJoined.CONTENT_ITEM_TYPE;
             case BALANCE:
                 return DatabaseContract.BalanceEntry.CONTENT_TYPE;
             case BALANCE_ID:
@@ -274,6 +290,8 @@ public class FinanceTrackerContentProvider extends ContentProvider {
         matcher.addURI(content, DatabaseContract.PATH_CURRENCY + "/#", CURRENCY_ID);
         matcher.addURI(content, DatabaseContract.PATH_TRANSACTION, TRANSACTION);
         matcher.addURI(content, DatabaseContract.PATH_TRANSACTION + "/#", TRANSACTION_ID);
+        matcher.addURI(content, DatabaseContract.PATH_TRANSACTION_JOINED, TRANSACTION_JOINED);
+        matcher.addURI(content, DatabaseContract.PATH_TRANSACTION_JOINED + "/#", TRANSACTION_JOINED_ID);
 
         return matcher;
     }

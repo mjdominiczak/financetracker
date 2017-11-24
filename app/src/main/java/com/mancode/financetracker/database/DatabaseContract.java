@@ -16,12 +16,13 @@ public final class DatabaseContract {
     public static final String CONTENT_AUTHORITY = "com.mancode.financetracker.database";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
-    public static final String PATH_ACCOUNT         = "account";
-    public static final String PATH_BALANCE         = "balance";
-    public static final String PATH_BALANCE_JOINED  = "balance_joined";
-    public static final String PATH_CATEGORY        = "category";
-    public static final String PATH_CURRENCY        = "currency";
-    public static final String PATH_TRANSACTION     = "transaction";
+    public static final String PATH_ACCOUNT             = "account";
+    public static final String PATH_BALANCE             = "balance";
+    public static final String PATH_BALANCE_JOINED      = "balance_joined";
+    public static final String PATH_CATEGORY            = "category";
+    public static final String PATH_CURRENCY            = "currency";
+    public static final String PATH_TRANSACTION         = "transaction";
+    public static final String PATH_TRANSACTION_JOINED  = "transaction_joined";
 
     private static final String TEXT_TYPE   = " TEXT";
     private static final String REAL_TYPE   = " REAL";
@@ -128,7 +129,6 @@ public final class DatabaseContract {
         public static final String COL_TYPE = "transaction_type";
         public static final String COL_DESCRIPTION = "transaction_description";
         public static final String COL_VALUE = "transaction_value";
-        public static final String COL_CURRENCY_ID = "transaction_currency";
         public static final String COL_ACCOUNT_ID = "transaction_account";
         public static final String COL_CATEGORY_ID = "transaction_category";
 
@@ -140,7 +140,6 @@ public final class DatabaseContract {
                         "%s %s," +
                         "%s %s," +
                         "%s %s REFERENCES %s(%s)," +
-                        "%s %s REFERENCES %s(%s)," +
                         "%s %s REFERENCES %s(%s))",
                 TBL_NAME,
                 _ID,
@@ -148,7 +147,6 @@ public final class DatabaseContract {
                 COL_TYPE, TEXT_TYPE,
                 COL_DESCRIPTION, TEXT_TYPE,
                 COL_VALUE, REAL_TYPE,
-                COL_CURRENCY_ID, INT_TYPE, CurrencyEntry.TBL_NAME, CurrencyEntry.COL_CURRENCY,
                 COL_ACCOUNT_ID, INT_TYPE, AccountEntry.TBL_NAME, AccountEntry.COL_NAME,
                 COL_CATEGORY_ID, INT_TYPE, CategoryEntry.TBL_NAME, CategoryEntry.COL_CATEGORY);
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TBL_NAME;
@@ -156,6 +154,24 @@ public final class DatabaseContract {
         public static Uri buildTransactionUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
+    }
+
+    public static abstract class TransactionEntryJoined implements BaseColumns {
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_TRANSACTION_JOINED).build();
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + CONTENT_URI + "/" + PATH_TRANSACTION_JOINED;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + CONTENT_URI + "/" + PATH_TRANSACTION_JOINED;
+
+        public static final String INNER_JOIN_STATEMENT =
+                TransactionEntry.TBL_NAME +
+                        " INNER JOIN " + AccountEntry.TBL_NAME +
+                        " ON (" + TransactionEntry.COL_ACCOUNT_ID +
+                        "=" + AccountEntry.TBL_NAME + "." + AccountEntry._ID + ")" +
+                        " INNER JOIN " + CategoryEntry.TBL_NAME +
+                        " ON (" + TransactionEntry.COL_CATEGORY_ID +
+                        "=" + CategoryEntry.TBL_NAME + "." + CategoryEntry._ID + ")";
     }
 
     public static abstract class CurrencyEntry implements BaseColumns {
