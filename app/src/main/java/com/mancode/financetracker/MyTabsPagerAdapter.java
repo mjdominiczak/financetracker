@@ -10,6 +10,7 @@ public class MyTabsPagerAdapter extends FragmentStatePagerAdapter {
 
     private final int ACCOUNT_FRAGMENT = 0;
     private final int BALANCE_FRAGMENT = 1;
+    private final int TRANSACTION_FRAGMENT = 2;
 
     private SparseArray<Fragment> registeredFragments = new SparseArray<>();
 
@@ -28,6 +29,9 @@ public class MyTabsPagerAdapter extends FragmentStatePagerAdapter {
                 break;
             case BALANCE_FRAGMENT:
                 fragment = BalanceFragment.newInstance();
+                break;
+            case TRANSACTION_FRAGMENT:
+                fragment = TransactionFragment.newInstance();
                 break;
             default:
                 fragment = null;
@@ -52,7 +56,7 @@ public class MyTabsPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 
     public Fragment getRegisteredFragment(int position) {

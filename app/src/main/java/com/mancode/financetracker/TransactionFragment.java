@@ -46,18 +46,6 @@ public class TransactionFragment extends LoaderFragment {
             "date(" + DatabaseContract.TransactionEntry.COL_DATE + ") DESC, " +
             DatabaseContract.TransactionEntry.TBL_NAME + "." + DatabaseContract.TransactionEntry._ID + " DESC";
 
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        super.onLoadFinished(loader, data);
-        syncAdapterWithCursor();
-    }
-
-    public void syncAdapterWithCursor() {
-        if (mAdapter instanceof BalanceRecyclerViewAdapter) {
-            ((BalanceRecyclerViewAdapter) mAdapter).initDataFromCursor();
-        }
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -69,7 +57,7 @@ public class TransactionFragment extends LoaderFragment {
             Context context = view.getContext();
             RecyclerView rView = (RecyclerView) recyclerView;
             rView.setLayoutManager(new LinearLayoutManager(context));
-            mAdapter = new BalanceRecyclerViewAdapter(getActivity(), null);
+            mAdapter = new TransactionRecyclerViewAdapter(getActivity(), null);
             rView.setAdapter(mAdapter);
         }
 
@@ -77,7 +65,7 @@ public class TransactionFragment extends LoaderFragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showFullScreenDialog(new AddBalanceFragment());
+                showFullScreenDialog(new AddTransactionFragment());
             }
         });
         return view;

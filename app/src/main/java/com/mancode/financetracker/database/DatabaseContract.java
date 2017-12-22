@@ -144,11 +144,11 @@ public final class DatabaseContract {
                 TBL_NAME,
                 _ID,
                 COL_DATE, TEXT_TYPE,
-                COL_TYPE, TEXT_TYPE,
+                COL_TYPE, INT_TYPE,
                 COL_DESCRIPTION, TEXT_TYPE,
                 COL_VALUE, REAL_TYPE,
-                COL_ACCOUNT_ID, INT_TYPE, AccountEntry.TBL_NAME, AccountEntry.COL_NAME,
-                COL_CATEGORY_ID, INT_TYPE, CategoryEntry.TBL_NAME, CategoryEntry.COL_CATEGORY);
+                COL_ACCOUNT_ID, INT_TYPE, AccountEntry.TBL_NAME, AccountEntry._ID,
+                COL_CATEGORY_ID, INT_TYPE, CategoryEntry.TBL_NAME, CategoryEntry._ID);
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TBL_NAME;
 
         public static Uri buildTransactionUri(long id) {
@@ -194,7 +194,7 @@ public final class DatabaseContract {
                 TBL_NAME,
                 _ID,
                 COL_CURRENCY, TEXT_TYPE,
-                COL_EXCHANGE_RATE, TEXT_TYPE);
+                COL_EXCHANGE_RATE, REAL_TYPE);
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TBL_NAME;
 
         public static Uri buildCurrencyUri(long id) {

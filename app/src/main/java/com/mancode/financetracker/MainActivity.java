@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements AccountFragment.O
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab1_name));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab2_name));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab3_name));
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         viewPager = (ViewPager) findViewById(R.id.pager);
