@@ -2,6 +2,7 @@ package com.mancode.financetracker;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,23 +37,28 @@ public class AccountRecyclerViewAdapter extends CursorRecyclerViewAdapter<Accoun
 //        });
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        final View mView;
+    public class ViewHolder extends RecyclerView.ViewHolder {
         final TextView mIdView;
         final TextView mContentView;
+        final TextView mBalanceView;
         AccountListItem mItem;
 
         public ViewHolder(View view) {
             super(view);
-            mView = view;
             mIdView = (TextView) view.findViewById(R.id.id);
             mContentView = (TextView) view.findViewById(R.id.name);
+            mBalanceView = (TextView) view.findViewById(R.id.account_balance);
         }
 
         public void initFromCursor(Cursor cursor) {
             mItem = AccountListItem.fromCursor(cursor);
             mIdView.setText(String.valueOf(mItem.getId()));
-            mContentView.setText(mItem.getName() + " - " + mItem.getType());
+            mContentView.setText(mItem.getName());
+            mBalanceView.setText("TODO"); // TODO
+            int color = mItem.getType() == 1 ?
+                    ContextCompat.getColor(mContext, R.color.colorPositiveValue) :
+                    ContextCompat.getColor(mContext, R.color.colorNegativeValue);
+            mBalanceView.setTextColor(color);
         }
     }
 
