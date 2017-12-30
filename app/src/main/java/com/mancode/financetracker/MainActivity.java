@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.mancode.financetracker.database.DBBackupRestore;
 import com.mancode.financetracker.database.DatabaseContract;
 
 import java.util.ArrayList;
@@ -73,17 +74,38 @@ public class MainActivity extends AppCompatActivity implements AccountFragment.O
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
+            case R.id.action_exportDB:
+                if (DBBackupRestore.export()) {
+                    Toast.makeText(this,
+                            "Database exported to " + DBBackupRestore.EXPORT_DATABASE_FILE.getPath(),
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this,
+                            "Database export failed",
+                            Toast.LENGTH_SHORT).show();
+                }
                 return true;
-            case R.id.action_clearDB:
-                new ClearUriTask(getApplicationContext()).execute(
-                        DatabaseContract.AccountEntry.CONTENT_URI,
-                        DatabaseContract.BalanceEntry.CONTENT_URI,
-                        DatabaseContract.CategoryEntry.CONTENT_URI,
-                        DatabaseContract.CurrencyEntry.CONTENT_URI,
-                        DatabaseContract.TransactionEntry.CONTENT_URI
-                );
+            case R.id.action_restoreDB:
+                if (DBBackupRestore.restore()) {
+                    Toast.makeText(this,
+                            "Database restored from " + DBBackupRestore.EXPORT_DATABASE_FILE.getPath(),
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this,
+                            "Database restore failed",
+                            Toast.LENGTH_SHORT).show();
+                }
                 return true;
+//            case R.id.action_clearDB:
+//                new ClearUriTask(getApplicationContext()).execute(
+//                        DatabaseContract.AccountEntry.CONTENT_URI,
+//                        DatabaseContract.BalanceEntry.CONTENT_URI,
+//                        DatabaseContract.CategoryEntry.CONTENT_URI,
+//                        DatabaseContract.CurrencyEntry.CONTENT_URI,
+//                        DatabaseContract.TransactionEntry.CONTENT_URI
+//                );
+//                return true;
+
             case R.id.action_clearLastBalance:
                 Cursor cursor = getContentResolver().query(
                         DatabaseContract.BalanceEntry.CONTENT_URI,

@@ -12,8 +12,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static DatabaseHelper sInstance;
 
-    private static final int     DATABASE_VERSION    = 1;
-    private static final String  DATABASE_NAME       = "database.db";
+    private static final int    DATABASE_VERSION    = 1;
+    static final String         DATABASE_NAME       = "database.db";
 
     private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
