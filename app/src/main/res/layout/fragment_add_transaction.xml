@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        app:title="@string/title_add_balance"
+        app:title="@string/title_add_transaction"
         android:navigationIcon="@drawable/ic_close_white_24dp"
         android:background="?attr/colorPrimary"
         android:elevation="6dp"
