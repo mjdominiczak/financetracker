@@ -30,12 +30,13 @@ public class SetDateView extends AppCompatButton {
     public SetDateView(Context context, AttributeSet attrs) {
         super(context, attrs, R.attr.setDateViewStyle);
         mCalendar = Calendar.getInstance();
+        setDate(mCalendar.get(Calendar.YEAR),
+                mCalendar.get(Calendar.MONTH),
+                mCalendar.get(Calendar.DAY_OF_MONTH));
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                mCalendar.set(year, month, dayOfMonth);
-                mDateSet = true;
-                updateText();
+                setDate(year, month, dayOfMonth);
             }
         };
         this.setOnClickListener(new OnClickListener() {
@@ -55,6 +56,12 @@ public class SetDateView extends AppCompatButton {
 
     public Date getDate() {
         return mDateSet ? mCalendar.getTime() : null;
+    }
+
+    private void setDate(int year, int month, int dayOfMonth) {
+        mCalendar.set(year, month, dayOfMonth);
+        mDateSet = true;
+        updateText();
     }
 
     private void updateText() {
