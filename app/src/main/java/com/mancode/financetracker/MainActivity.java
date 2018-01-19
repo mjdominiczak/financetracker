@@ -1,8 +1,11 @@
 package com.mancode.financetracker;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ContentProviderOperation;
 import android.content.Context;
+import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -24,8 +27,10 @@ import android.widget.Toast;
 
 import com.mancode.financetracker.database.DBBackupRestore;
 import com.mancode.financetracker.database.DatabaseContract;
+import com.mancode.financetracker.notifications.AlarmReceiver;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements AccountFragment.OnListFragmentInteractionListener {
 
@@ -71,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements AccountFragment.O
 
             }
         });
+
+        setAlarmForNotification();
     }
 
     @Override
@@ -200,6 +207,23 @@ public class MainActivity extends AppCompatActivity implements AccountFragment.O
     @Override
     public void onListFragmentInteraction() {
         // TODO
+    }
+
+    private void setAlarmForNotification() {
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast
+                (this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 8);
+        if (alarmManager != null) {
+            alarmManager.setInexactRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    AlarmManager.INTERVAL_HALF_DAY,
+                    pendingIntent);
+        }
     }
 
     private static class ClearUriTask extends AsyncTask<Uri, Void, Void> {
