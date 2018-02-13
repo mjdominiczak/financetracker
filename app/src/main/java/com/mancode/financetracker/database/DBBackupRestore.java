@@ -32,7 +32,7 @@ public class DBBackupRestore {
     private static final File DATA_DATABASE_FILE =
             new File(Environment.getDataDirectory() +
                     "/data/" + PACKAGE_NAME +
-                    "/databases/" + DatabaseHelper.DATABASE_NAME);
+                    "/databases/" + FTDatabase.DATABASE_NAME);
 
     public static boolean export() {
         if (!sdMounted()) return false;

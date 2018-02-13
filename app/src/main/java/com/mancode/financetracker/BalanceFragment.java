@@ -1,63 +1,47 @@
 package com.mancode.financetracker;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mancode.financetracker.database.DatabaseContract;
+import com.mancode.financetracker.database.viewmodel.BalanceViewModel;
+import com.mancode.financetracker.ui.UIUtils;
 
 /**
  * Created by Manveru on 03.09.2017.
  */
 
-public class BalanceFragment extends LoaderFragment {
+public class BalanceFragment extends Fragment {
 
-    public BalanceFragment() {
-    }
+    public BalanceRecyclerViewAdapter mAdapter;
+
+    public BalanceFragment() { }
 
     public static BalanceFragment newInstance() {
         return new BalanceFragment();
     }
 
-    static final String[] BALANCES_PROJECTION = new String[]{
-            DatabaseContract.BalanceEntry.TBL_NAME + "." + DatabaseContract.BalanceEntry._ID,
-            DatabaseContract.AccountEntry.TBL_NAME + "." + DatabaseContract.AccountEntry._ID,
-            DatabaseContract.AccountEntry.COL_NAME,
-            DatabaseContract.AccountEntry.COL_TYPE,
-            DatabaseContract.BalanceEntry.COL_BALANCE,
-            DatabaseContract.BalanceEntry.COL_CHECK_DATE,
-            DatabaseContract.BalanceEntry.COL_FIXED
-    };
-
-    static final String BALANCES_SORT_ORDER =
-            "date(" + DatabaseContract.BalanceEntry.COL_CHECK_DATE + ") DESC, " +
-            DatabaseContract.AccountEntry.TBL_NAME + "." + DatabaseContract.AccountEntry._ID + " ASC";
-
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        super.onLoadFinished(loader, data);
-        syncAdapterWithCursor();
-    }
-
-    public void syncAdapterWithCursor() {
-        if (mAdapter instanceof BalanceRecyclerViewAdapter) {
-            ((BalanceRecyclerViewAdapter) mAdapter).initDataFromCursor();
-        }
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        BalanceViewModel balanceViewModel =
+                ViewModelProviders.of(getActivity()).get(BalanceViewModel.class);
+        balanceViewModel.getAllBalances().observe(this,
+                balances -> mAdapter.setBalances(balances));
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_account_list, container, false); // TODO layout to change?
         View recyclerView = view.findViewById(R.id.list);
 
@@ -66,30 +50,13 @@ public class BalanceFragment extends LoaderFragment {
             Context context = view.getContext();
             RecyclerView rView = (RecyclerView) recyclerView;
             rView.setLayoutManager(new LinearLayoutManager(context));
-            mAdapter = new BalanceRecyclerViewAdapter(getActivity(), null);
+            mAdapter = new BalanceRecyclerViewAdapter();
             rView.setAdapter(mAdapter);
         }
 
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showFullScreenDialog(new AddBalanceFragment());
-            }
-        });
+        FloatingActionButton fab = view.findViewById(R.id.fab);
+        fab.setOnClickListener(view1 -> UIUtils.showFullScreenDialog(
+                getFragmentManager(), AddBalanceFragment.newInstance()));
         return view;
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri uri = DatabaseContract.BalanceEntryJoined.CONTENT_URI;
-        String select = "(" + DatabaseContract.BalanceEntry.COL_BALANCE + " NOTNULL)";
-        return new CursorLoader(
-                getActivity(),
-                uri,
-                BALANCES_PROJECTION,
-                select,
-                null,
-                BALANCES_SORT_ORDER);
     }
 }

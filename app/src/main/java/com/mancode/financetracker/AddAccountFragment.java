@@ -1,20 +1,22 @@
 package com.mancode.financetracker;
 
 
-import android.content.ContentValues;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
-import com.mancode.financetracker.database.DBUtils;
-import com.mancode.financetracker.database.DatabaseContract;
+import com.mancode.financetracker.database.entity.AccountEntity;
+import com.mancode.financetracker.database.viewmodel.AccountViewModel;
 import com.mancode.financetracker.ui.SetDateView;
+
+import java.util.Date;
 
 
 public class AddAccountFragment extends AddItemFragment {
@@ -25,8 +27,18 @@ public class AddAccountFragment extends AddItemFragment {
     private SetDateView mCloseDate;
     private CheckBox mCheckBoxClosed;
 
-    public AddAccountFragment() {
-        // Required empty public constructor
+    private AccountViewModel mAccountViewModel;
+
+    public AddAccountFragment() { }
+
+    public static AddAccountFragment newInstance() {
+        return new AddAccountFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mAccountViewModel = ViewModelProviders.of(getActivity()).get(AccountViewModel.class);
     }
 
     @Override
@@ -34,52 +46,41 @@ public class AddAccountFragment extends AddItemFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_account, container, false);
 
-        mNameField = (EditText) view.findViewById(R.id.tf_account_name);
-        mRadioGroupType = (RadioGroup) view.findViewById(R.id.rg_account_type);
-        mOpenDate = (SetDateView) view.findViewById(R.id.sd_account_open_date);
-        mCloseDate = (SetDateView) view.findViewById(R.id.sd_account_close_date);
-        mCheckBoxClosed = (CheckBox) view.findViewById(R.id.cb_account_closed);
+        mNameField = view.findViewById(R.id.tf_account_name);
+        mRadioGroupType = view.findViewById(R.id.rg_account_type);
+        mOpenDate = view.findViewById(R.id.sd_account_open_date);
+        mCloseDate = view.findViewById(R.id.sd_account_close_date);
+        mCheckBoxClosed = view.findViewById(R.id.cb_account_closed);
 
-        mCheckBoxClosed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCloseDate.setEnabled(mCheckBoxClosed.isChecked());
-            }
-        });
+        mCheckBoxClosed.setOnClickListener(v -> mCloseDate.setEnabled(mCheckBoxClosed.isChecked()));
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.add_account_toolbar);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.action_menu_save) {
-                    String name = mNameField.getText().toString();
-                    int type = mRadioGroupType.getCheckedRadioButtonId() == R.id.rb_assets ?
-                            1 : -1;
-                    String openDate = DBUtils.formatDate(mOpenDate.getDate());
-                    String closeDate = DBUtils.formatDate(mCloseDate.getDate());
-                    int currency = 1;
+        Toolbar toolbar = view.findViewById(R.id.add_account_toolbar);
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.action_menu_save) {
+                String name = mNameField.getText().toString();
+                int type = mRadioGroupType.getCheckedRadioButtonId() == R.id.rb_assets ?
+                        1 : -1;
+                Date openDate = mOpenDate.getDate();
+                Date closeDate = mCloseDate.getDate();
+                int currency = 1; // TODO hard-coded currency
+                AccountEntity account = new AccountEntity(
+                        0, // not set
+                        name,
+                        type,
+                        currency,
+                        openDate,
+                        closeDate
+                );
 
-                    if (AccountListItem.validate(name, type)) {
-                        ContentValues cv = new ContentValues();
-                        cv.put(DatabaseContract.AccountEntry.COL_NAME, name);
-                        cv.put(DatabaseContract.AccountEntry.COL_TYPE, type);
-                        cv.put(DatabaseContract.AccountEntry.COL_CURRENCY_ID, currency);
-                        cv.put(DatabaseContract.AccountEntry.COL_OPEN_DATE, openDate);
-                        cv.put(DatabaseContract.AccountEntry.COL_CLOSE_DATE, closeDate);
-                        getActivity().getContentResolver().insert(DatabaseContract.AccountEntry.CONTENT_URI, cv);
-                        dismiss();
-                    }
+                if (true) { // TODO validate
+                    mAccountViewModel.insert(account);
+                    dismiss();
                 }
-                return false;
             }
+            return false;
         });
         toolbar.inflateMenu(R.menu.menu_dialog);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> dismiss());
         toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
 
         return view;

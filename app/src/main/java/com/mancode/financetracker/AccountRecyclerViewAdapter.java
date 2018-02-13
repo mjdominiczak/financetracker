@@ -1,7 +1,6 @@
 package com.mancode.financetracker;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,10 +8,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class AccountRecyclerViewAdapter extends CursorRecyclerViewAdapter<AccountRecyclerViewAdapter.ViewHolder> {
+import com.mancode.financetracker.database.entity.AccountEntity;
 
-    public AccountRecyclerViewAdapter(Context context, Cursor cursor) {
-        super(context, cursor);
+import java.util.List;
+
+public class AccountRecyclerViewAdapter
+        extends RecyclerView.Adapter<AccountRecyclerViewAdapter.ViewHolder> {
+
+    private List<AccountEntity> mAllAccounts;
+    private Context mContext;
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        mContext = null;
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        mContext = recyclerView.getContext();
     }
 
     @Override
@@ -23,43 +38,49 @@ public class AccountRecyclerViewAdapter extends CursorRecyclerViewAdapter<Accoun
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, Cursor cursor) {
-        holder.initFromCursor(cursor);
-//        holder.mView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (null != mListener) {
-//                    // Notify the active callbacks interface (the activity, if the
-//                    // fragment is attached to one) that an item has been selected.
-//                    mListener.onListFragmentInteraction(holder.mItem);
-//                }
-//            }
-//        });
+    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+        if (mAllAccounts != null) {
+            AccountEntity account = mAllAccounts.get(position);
+            viewHolder.init(account);
+        } else {
+            viewHolder.mContentView.setText("No account yet!");
+        }
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public int getItemCount() {
+        if (mAllAccounts != null) {
+            return mAllAccounts.size();
+        } else return 0;
+    }
+
+    public void setAccounts(List<AccountEntity> accounts) {
+        mAllAccounts = accounts;
+        notifyDataSetChanged();
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
         final TextView mIdView;
         final TextView mContentView;
         final TextView mBalanceView;
-        AccountListItem mItem;
+        AccountEntity mAccount;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.name);
-            mBalanceView = (TextView) view.findViewById(R.id.account_balance);
+            mIdView = view.findViewById(R.id.id);
+            mContentView = view.findViewById(R.id.name);
+            mBalanceView = view.findViewById(R.id.account_balance);
         }
 
-        public void initFromCursor(Cursor cursor) {
-            mItem = AccountListItem.fromCursor(cursor);
-            mIdView.setText(String.valueOf(mItem.getId()));
-            mContentView.setText(mItem.getName());
+        void init(AccountEntity account) {
+            mAccount = account;
+            mIdView.setText(String.valueOf(mAccount.getId()));
+            mContentView.setText(mAccount.getAccountName());
             mBalanceView.setText("TODO"); // TODO
-            int color = mItem.getType() == 1 ?
+            int color = mAccount.getAccountType() == 1 ?
                     ContextCompat.getColor(mContext, R.color.colorPositiveValue) :
                     ContextCompat.getColor(mContext, R.color.colorNegativeValue);
             mBalanceView.setTextColor(color);
         }
     }
-
 }

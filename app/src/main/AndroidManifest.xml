@@ -23,12 +23,6 @@
             </intent-filter>
         </activity>
 
-        <provider
-            android:name=".contentprovider.FinanceTrackerContentProvider"
-            android:authorities="com.mancode.financetracker.database"
-            android:exported="false"
-            android:syncable="true" />
-
         <receiver
             android:name=".notifications.AlarmReceiver"
             android:enabled="true"
