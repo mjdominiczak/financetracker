@@ -55,7 +55,7 @@ public class AddTransactionFragment extends AddItemFragment {
                         1 : -1;
                 String description = mDescriptionField.getText().toString();
                 double value = Double.parseDouble(mValueField.getText().toString());
-                int account = 7; // TODO hard-coded account
+                int account = 1; // TODO hard-coded account
                 int category = 1; // TODO hard-coded category
                 TransactionEntity transaction = new TransactionEntity(
                         0, // not set
