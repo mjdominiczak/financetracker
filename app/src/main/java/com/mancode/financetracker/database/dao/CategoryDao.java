@@ -1,5 +1,6 @@
 package com.mancode.financetracker.database.dao;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
@@ -16,7 +17,7 @@ import java.util.List;
 public interface CategoryDao {
 
     @Query("SELECT * FROM categories")
-    List<CategoryEntity> getAllCategories();
+    LiveData<List<CategoryEntity>> getAllCategories();
 
     @Query("SELECT * FROM categories WHERE _id = :id")
     CategoryEntity getCategoryById(int id);
