@@ -1,4 +1,4 @@
-package com.mancode.financetracker;
+package com.mancode.financetracker.ui.accounts;
 
 
 import android.arch.lifecycle.ViewModelProviders;
@@ -12,6 +12,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
+import com.mancode.financetracker.AddItemFragment;
+import com.mancode.financetracker.R;
 import com.mancode.financetracker.database.entity.AccountEntity;
 import com.mancode.financetracker.database.viewmodel.AccountViewModel;
 import com.mancode.financetracker.ui.SetDateView;

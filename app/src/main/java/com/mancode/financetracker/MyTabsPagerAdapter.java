@@ -6,6 +6,10 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
+import com.mancode.financetracker.ui.accounts.AccountFragment;
+import com.mancode.financetracker.ui.balances.BalanceFragment;
+import com.mancode.financetracker.ui.transactions.TransactionFragment;
+
 public class MyTabsPagerAdapter extends FragmentStatePagerAdapter {
 
     private final int ACCOUNT_FRAGMENT = 0;

@@ -1,16 +1,22 @@
-package com.mancode.financetracker;
+package com.mancode.financetracker.ui.transactions;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
+import com.mancode.financetracker.R;
 import com.mancode.financetracker.database.converter.DateConverter;
 import com.mancode.financetracker.database.entity.TransactionEntity;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -19,9 +25,15 @@ import java.util.Locale;
  */
 
 class TransactionRecyclerViewAdapter
-        extends RecyclerView.Adapter<TransactionRecyclerViewAdapter.ViewHolder> {
+        extends RecyclerView.Adapter<TransactionRecyclerViewAdapter.ViewHolder>
+        implements Filterable {
+
+    public static final String TAG = TransactionRecyclerViewAdapter.class.getSimpleName();
 
     private List<TransactionEntity> mAllTransactions;
+    private List<TransactionEntity> mFilteredTransactions;
+    private boolean mIsFiltered = false;
+    private FilterQuery mFilterQuery;
     private Context mContext;
 
     @Override
@@ -45,24 +57,39 @@ class TransactionRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
-        if (mAllTransactions != null) {
-            TransactionEntity transaction = mAllTransactions.get(position);
+        if (mFilteredTransactions != null && mFilteredTransactions.size() > position) {
+            TransactionEntity transaction = mFilteredTransactions.get(position);
             viewHolder.init(transaction);
         } else {
-            viewHolder.tvDescription.setText("No transactions entered!");
+            Log.e(TAG, "");
         }
     }
 
     @Override
     public int getItemCount() {
-        if (mAllTransactions != null) {
-            return mAllTransactions.size();
+        if (mFilteredTransactions != null) {
+            return mFilteredTransactions.size();
         } else return 0;
     }
 
     public void setTransactions(List<TransactionEntity> transactions) {
-        this.mAllTransactions = transactions;
+        mAllTransactions = transactions;
+        mFilteredTransactions = transactions;  // TODO think through
         notifyDataSetChanged();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new TransactionFilter();
+    }
+
+    public String buildFilterQuery(int type, Date from, Date to) {
+        mFilterQuery = new FilterQuery(type, from, to);
+        return mFilterQuery.getQuery();
+    }
+
+    public FilterQuery getFilterQuery() {
+        return mFilterQuery;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -88,6 +115,35 @@ class TransactionRecyclerViewAdapter
                     ContextCompat.getColor(mContext, R.color.colorNegativeValue);
             tvValue.setTextColor(color);
             tvDescription.setText(mTransaction.getDescription());
+        }
+    }
+
+    private class TransactionFilter extends Filter {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            String query = charSequence.toString();
+            List<TransactionEntity> filteredList = new ArrayList<>();
+            if (query.isEmpty()) {
+                mIsFiltered = false;
+                filteredList = mAllTransactions;
+            } else {
+                mIsFiltered = true;
+                mFilterQuery = new FilterQuery(query);
+                for (TransactionEntity transaction : mAllTransactions) {
+                    if (mFilterQuery.isMatch(transaction)) {
+                        filteredList.add(transaction);
+                    }
+                }
+            }
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filteredList;
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            mFilteredTransactions = (ArrayList<TransactionEntity>) filterResults.values;
+            notifyDataSetChanged();
         }
     }
 }

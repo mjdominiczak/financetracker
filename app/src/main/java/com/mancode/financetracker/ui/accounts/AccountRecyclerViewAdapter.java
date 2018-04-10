@@ -1,4 +1,4 @@
-package com.mancode.financetracker;
+package com.mancode.financetracker.ui.accounts;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.mancode.financetracker.R;
 import com.mancode.financetracker.database.entity.AccountEntity;
 
 import java.util.List;

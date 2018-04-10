@@ -21,7 +21,7 @@ public class DateConverter {
 
     @TypeConverter
     public static Date toDate(String string) {
-        if (string == null) return null;
+        if (string == null || string.isEmpty()) return null;
         Date result = null;
         try {
             DateFormat df = new SimpleDateFormat(DATE_FORMAT_STRING, Locale.getDefault());

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    tools:context="com.mancode.financetracker.AddAccountFragment">
+    tools:context="com.mancode.financetracker.ui.accounts.AddAccountFragment">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/add_account_toolbar"

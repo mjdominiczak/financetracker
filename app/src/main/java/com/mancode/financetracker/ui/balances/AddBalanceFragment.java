@@ -1,4 +1,4 @@
-package com.mancode.financetracker;
+package com.mancode.financetracker.ui.balances;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -11,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.mancode.financetracker.AddItemFragment;
+import com.mancode.financetracker.R;
 import com.mancode.financetracker.database.entity.AccountEntity;
 import com.mancode.financetracker.database.entity.BalanceEntity;
 import com.mancode.financetracker.database.viewmodel.AccountViewModel;

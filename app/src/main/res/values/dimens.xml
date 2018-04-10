@@ -4,6 +4,6 @@
     <dimen name="card_margin">8dp</dimen>
     <dimen name="balance_margin">40dp</dimen>
     <dimen name="list_id_width">40dp</dimen>
-    <dimen name="list_date_width">80dp</dimen>
+    <dimen name="list_date_width">100dp</dimen>
     <dimen name="balance_value_width">80dp</dimen>
 </resources>

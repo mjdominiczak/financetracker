@@ -4,8 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
-import android.view.View;
-import android.widget.DatePicker;
 
 import com.mancode.financetracker.R;
 
@@ -33,25 +31,15 @@ public class SetDateView extends AppCompatButton {
         setDate(mCalendar.get(Calendar.YEAR),
                 mCalendar.get(Calendar.MONTH),
                 mCalendar.get(Calendar.DAY_OF_MONTH));
-        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                setDate(year, month, dayOfMonth);
-            }
-        };
-        this.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(
-                        getContext(),
-                        R.style.AppTheme_DatePicker,
-                        mDateSetListener,
-                        mCalendar.get(Calendar.YEAR),
-                        mCalendar.get(Calendar.MONTH),
-                        mCalendar.get(Calendar.DAY_OF_MONTH))
-                        .show();
-            }
-        });
+        mDateSetListener = (view, year, month, dayOfMonth) -> setDate(year, month, dayOfMonth);
+        this.setOnClickListener(v -> new DatePickerDialog(
+                getContext(),
+                R.style.AppTheme_DatePicker,
+                mDateSetListener,
+                mCalendar.get(Calendar.YEAR),
+                mCalendar.get(Calendar.MONTH),
+                mCalendar.get(Calendar.DAY_OF_MONTH))
+                .show());
     }
 
     public Date getDate() {
@@ -60,6 +48,12 @@ public class SetDateView extends AppCompatButton {
 
     private void setDate(int year, int month, int dayOfMonth) {
         mCalendar.set(year, month, dayOfMonth);
+        mDateSet = true;
+        updateText();
+    }
+
+    public void setDate(Date date) {
+        mCalendar.setTime(date);
         mDateSet = true;
         updateText();
     }

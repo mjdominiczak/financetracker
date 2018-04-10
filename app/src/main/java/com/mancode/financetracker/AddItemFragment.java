@@ -9,7 +9,7 @@ import android.view.inputmethod.InputMethodManager;
  * Created by Manveru on 07.09.2017.
  */
 
-abstract class AddItemFragment extends DialogFragment {
+public abstract class AddItemFragment extends DialogFragment {
 
     @Override
     public void dismiss() {

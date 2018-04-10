@@ -1,4 +1,4 @@
-package com.mancode.financetracker;
+package com.mancode.financetracker.ui.balances;
 
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.mancode.financetracker.R;
 import com.mancode.financetracker.database.converter.DateConverter;
 import com.mancode.financetracker.database.entity.BalanceExtended;
 

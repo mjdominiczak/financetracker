@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager"
-        tools:context="com.mancode.financetracker.AccountFragment"
+        tools:context="com.mancode.financetracker.ui.accounts.AccountFragment"
         tools:listitem="@layout/fragment_account" />
 
     <android.support.design.widget.FloatingActionButton

@@ -39,6 +39,8 @@ local.properties
 Thumbs.db
 
 # Intellij IDEA (see https://intellij-support.jetbrains.com/entries/23393067)
+.idea/caches
+.idea/codeStyles
 .idea/libraries
 .idea/workspace.xml
 .idea/tasks.xml
