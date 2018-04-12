@@ -42,4 +42,14 @@
         <item>Income</item>
         <item>Outcome</item>
     </string-array>
+
+    <string-array name="transaction_filter_timespan">
+        <item>Unconstrained</item>
+        <item>Last week</item>
+        <item>Last month</item>
+        <item>This month</item>
+        <item>Previous month</item>
+        <item>This year</item>
+        <item>Custom</item>
+    </string-array>
 </resources>

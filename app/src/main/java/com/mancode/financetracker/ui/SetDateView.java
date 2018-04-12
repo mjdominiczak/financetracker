@@ -58,9 +58,18 @@ public class SetDateView extends AppCompatButton {
         updateText();
     }
 
+    public void resetDate() {
+        mDateSet = false;
+        updateText();
+    }
+
     private void updateText() {
-        Date date = mCalendar.getTime();
-        DateFormat df = DateFormat.getDateInstance();
-        this.setText(df.format(date));
+        if (mDateSet) {
+            Date date = mCalendar.getTime();
+            DateFormat df = DateFormat.getDateInstance();
+            this.setText(df.format(date));
+        } else {
+            this.setText("");
+        }
     }
 }

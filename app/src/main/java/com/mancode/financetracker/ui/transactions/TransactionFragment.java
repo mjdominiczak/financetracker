@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Spinner;
 
 import com.mancode.financetracker.R;
@@ -22,6 +23,7 @@ import com.mancode.financetracker.database.viewmodel.TransactionViewModel;
 import com.mancode.financetracker.ui.SetDateView;
 import com.mancode.financetracker.ui.UIUtils;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import static com.mancode.financetracker.ui.transactions.FilterQuery.TYPE_ALL;
@@ -98,6 +100,7 @@ public class TransactionFragment extends Fragment {
     private class FilterDialog {
 
         private Spinner mTransactionTypeSpinner;
+        private Spinner mTransactionTimespanSpinner;
         private SetDateView mFromDate;
         private SetDateView mToDate;
         private AlertDialog.Builder mBuilder;
@@ -106,6 +109,18 @@ public class TransactionFragment extends Fragment {
             mBuilder = new AlertDialog.Builder(getContext());
             View dialogView = getLayoutInflater().inflate(R.layout.fragment_transaction_filter, null);
             mTransactionTypeSpinner = dialogView.findViewById(R.id.sp_transaction_filter_type);
+            mTransactionTimespanSpinner = dialogView.findViewById(R.id.sp_transaction_filter_timespan);
+            mTransactionTimespanSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    handleTimespan(position);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
             mFromDate = dialogView.findViewById(R.id.sd_transaction_filter_from);
             mToDate = dialogView.findViewById(R.id.sd_transaction_filter_to);
             FilterQuery query = mAdapter.getFilterQuery();
@@ -153,7 +168,48 @@ public class TransactionFragment extends Fragment {
             }
         }
 
-        // TODO additional spinner for predefined timespan selection
+        private void handleTimespan(int position) {
+            Calendar calendar = Calendar.getInstance();
+            switch (position) {
+                case 0: // UNCONSTRAINED
+                    mToDate.resetDate();
+                    mFromDate.resetDate();
+                    break;
+                case 1: // LAST WEEK
+                    mToDate.setDate(calendar.getTime());
+                    calendar.add(Calendar.DAY_OF_YEAR, -7);
+                    mFromDate.setDate(calendar.getTime());
+                    break;
+                case 2: // LAST MONTH
+                    mToDate.setDate(calendar.getTime());
+                    calendar.add(Calendar.MONTH, -1);
+                    mFromDate.setDate(calendar.getTime());
+                    break;
+                case 3: // THIS MONTH
+                    mToDate.setDate(calendar.getTime());
+                    calendar.set(Calendar.DAY_OF_MONTH, 1);
+                    mFromDate.setDate(calendar.getTime());
+                    break;
+                case 4: // PREVIOUS MONTH
+                    calendar.set(Calendar.DAY_OF_MONTH, 1);
+                    calendar.add(Calendar.DAY_OF_MONTH, -1);
+                    mToDate.setDate(calendar.getTime());
+                    calendar.set(Calendar.DAY_OF_MONTH, 1);
+                    mFromDate.setDate(calendar.getTime());
+                    break;
+                case 5: // THIS YEAR
+                    mToDate.setDate(calendar.getTime());
+                    calendar.set(Calendar.DAY_OF_YEAR, 1);
+                    mFromDate.setDate(calendar.getTime());
+                    break;
+                case 6: // CUSTOM
+                    mToDate.setEnabled(true);
+                    mFromDate.setEnabled(true);
+                    return;
+            }
+            mToDate.setEnabled(false);
+            mFromDate.setEnabled(false);
+        }
 
         private Date getFromDate() {
             return mFromDate.getDate();
