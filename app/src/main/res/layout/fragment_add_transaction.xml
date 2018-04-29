@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    tools:context="com.mancode.financetracker.ui.balances.AddBalanceFragment">
+    android:focusable="true"
+    tools:context="com.mancode.financetracker.ui.balances.AddBalanceFragment"
+    >
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/add_transaction_toolbar"
@@ -13,9 +15,9 @@
         android:layout_alignParentTop="true"
         app:title="@string/title_add_transaction"
         android:navigationIcon="@drawable/ic_close_white_24dp"
-        android:background="?attr/colorPrimary"
+        android:background="?android:attr/colorPrimary"
         android:elevation="6dp"
-        android:minHeight="?attr/actionBarSize"
+        android:minHeight="?android:attr/actionBarSize"
         android:theme="@style/AppTheme.AppBarOverlay"
         app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
@@ -86,15 +88,14 @@
                 android:id="@+id/spinner_transaction_account"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:spinnerMode="dropdown"
-                style="@style/Widget.AppCompat.Spinner.Underlined" />
+                android:spinnerMode="dropdown"/>
 
             <Spinner
                 android:id="@+id/spinner_transaction_category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:spinnerMode="dropdown"
-                style="@style/Widget.AppCompat.Spinner.Underlined" />
+                android:spinnerMode="dropdown" />
+                <!--style="@style/Widget.AppCompat.Spinner.Underlined" />-->
 
         </LinearLayout>
 

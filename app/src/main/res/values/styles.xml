@@ -6,20 +6,12 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
+        <item name="android:spinnerStyle">@style/Spinner</item>
         <item name="setDateViewStyle">@style/SetDateView</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="AppTheme.Dialog">
         <item name="android:background">@android:color/background_light</item>
-        <!--<item name="android:windowNoTitle">true</item>-->
-        <!--<item name="android:windowFullscreen">true</item>-->
-        <!--<item name="android:windowContentOverlay">@null</item>-->
-        <!--<item name="android:windowIsFloating">false</item>-->
     </style>
 
     <style name="AppTheme.DatePicker" parent="Theme.AppCompat.Light.Dialog">
@@ -32,6 +24,8 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="SetDateView" parent="Widget.AppCompat.Spinner.Underlined" />
+    <style name="SetDateView" parent="@style/Widget.AppCompat.Spinner.Underlined"/>
+
+    <style name="Spinner" parent="@style/Widget.AppCompat.Spinner.Underlined"/>
 
 </resources>

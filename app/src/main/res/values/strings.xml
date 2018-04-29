@@ -36,6 +36,11 @@
     <string name="income">Income</string>
     <string name="outcome">Outcome</string>
     <string name="filter">Filter</string>
+    <string name="transactions_type">Transactions type</string>
+    <string name="timespan">Timespan</string>
+    <string name="from_date">From date</string>
+    <string name="to_date">To date</string>
+    <string name="categories">Categories</string>
 
     <string-array name="transaction_filter_type">
         <item>All</item>

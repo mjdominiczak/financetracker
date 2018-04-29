@@ -1,7 +1,8 @@
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
-    <dimen name="text_margin">16dp</dimen>
-    <dimen name="card_margin">8dp</dimen>
+    <dimen name="spacing_micro">4dp</dimen>
+    <dimen name="spacing_normal">8dp</dimen>
+    <dimen name="spacing_double">16dp</dimen>
+
     <dimen name="balance_margin">40dp</dimen>
     <dimen name="list_id_width">40dp</dimen>
     <dimen name="list_date_width">100dp</dimen>

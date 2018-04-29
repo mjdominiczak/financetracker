@@ -6,9 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_marginStart="@dimen/card_margin"
-    android:layout_marginEnd="@dimen/card_margin"
-    android:layout_marginTop="@dimen/card_margin"
+    android:layout_marginStart="@dimen/spacing_normal"
+    android:layout_marginEnd="@dimen/spacing_normal"
+    android:layout_marginTop="@dimen/spacing_normal"
     android:clickable="true"
     android:focusable="true"
     android:background="?android:attr/selectableItemBackground"
@@ -22,21 +22,21 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin">
+            android:layout_margin="@dimen/spacing_double">
 
             <TextView
                 android:id="@+id/balance_date"
                 android:layout_width="@dimen/list_date_width"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:textAppearance="?attr/textAppearanceListItem" />
+                android:textAppearance="?android:attr/textAppearanceListItem" />
 
             <TextView
                 android:id="@+id/balance_daily"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:textAppearance="?attr/textAppearanceListItem" />
+                android:textAppearance="?android:attr/textAppearanceListItem" />
 
         </RelativeLayout>
 
@@ -51,7 +51,7 @@
                 android:id="@+id/balances_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/text_margin"
+                android:layout_marginBottom="@dimen/spacing_double"
                 android:layout_marginStart="@dimen/balance_margin"
                 android:orientation="vertical"/>
         </net.cachapa.expandablelayout.ExpandableLayout>
