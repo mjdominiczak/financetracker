@@ -1,6 +1,6 @@
 package com.mancode.financetracker.database.converter;
 
-import android.arch.persistence.room.TypeConverter;
+import androidx.room.TypeConverter;
 import android.util.Log;
 
 import java.text.DateFormat;

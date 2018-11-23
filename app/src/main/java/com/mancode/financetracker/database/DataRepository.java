@@ -1,7 +1,7 @@
 package com.mancode.financetracker.database;
 
 import android.app.Application;
-import android.arch.lifecycle.LiveData;
+import androidx.lifecycle.LiveData;
 import android.os.AsyncTask;
 
 import com.mancode.financetracker.database.dao.AccountDao;

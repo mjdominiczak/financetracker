@@ -1,7 +1,7 @@
 package com.mancode.financetracker.database.entity;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.TypeConverters;
+import androidx.room.ColumnInfo;
+import androidx.room.TypeConverters;
 
 import com.mancode.financetracker.database.converter.DateConverter;
 
