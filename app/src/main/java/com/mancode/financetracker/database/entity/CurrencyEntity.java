@@ -2,40 +2,53 @@ package com.mancode.financetracker.database.entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 /**
  * Created by Manveru on 23.01.2018.
  */
 
-@Entity(tableName = "currencies")
+@Entity(tableName = CurrencyEntity.TABLE_NAME)
 public class CurrencyEntity {
+
+    public static final String TABLE_NAME = "currencies";
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id")
-    private int mId;
+    private int id;
 
     @ColumnInfo(name = "currency_symbol")
-    private String mCurrencySymbol;
+    private String currencySymbol;
 
     @ColumnInfo(name = "currency_exchange_rate")
-    private double mExchangeRate;
+    private double exchangeRate;
+
+    @Ignore
+    public CurrencyEntity() {
+
+    }
 
     public CurrencyEntity(int id, String currencySymbol, double exchangeRate) {
-        this.mId = id;
-        this.mCurrencySymbol = currencySymbol;
-        this.mExchangeRate = exchangeRate;
+        initFromValues(id, currencySymbol, exchangeRate);
+    }
+
+    public void initFromValues(int id, String currencySymbol, double exchangeRate) {
+        this.id = id;
+        this.currencySymbol = currencySymbol;
+        this.exchangeRate = exchangeRate;
+
     }
 
     public int getId() {
-        return mId;
+        return id;
     }
 
     public String getCurrencySymbol() {
-        return mCurrencySymbol;
+        return currencySymbol;
     }
 
     public double getExchangeRate() {
-        return mExchangeRate;
+        return exchangeRate;
     }
 }

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
+    android:focusable="true"
     tools:context="com.mancode.financetracker.ui.accounts.AddAccountFragment">
 
     <androidx.appcompat.widget.Toolbar
@@ -39,6 +40,12 @@
                 android:inputType="textCapSentences" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <Spinner
+            android:id="@+id/sp_currency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
 
         <RadioGroup
             android:id="@+id/rg_account_type"

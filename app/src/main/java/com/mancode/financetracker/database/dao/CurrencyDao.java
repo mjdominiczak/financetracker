@@ -15,6 +15,9 @@ import java.util.List;
 @Dao
 public interface CurrencyDao {
 
+    @Query("SELECT COUNT(*) FROM " + CurrencyEntity.TABLE_NAME)
+    int count();
+
     @Query("SELECT * FROM currencies")
     List<CurrencyEntity> getAllCurrencies();
 

@@ -7,6 +7,9 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import android.content.Context;
+import android.os.AsyncTask;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.mancode.financetracker.database.dao.AccountDao;
@@ -83,8 +86,46 @@ public abstract class FTDatabase extends RoomDatabase {
 
     private static FTDatabase buildDatabase(final Context applicationContext) {
         return Room.databaseBuilder(applicationContext, FTDatabase.class, DATABASE_NAME)
+                .addCallback(new Callback() {
+                    @Override
+                    public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                        super.onCreate(db);
+                        new PopulateTask().execute(applicationContext);
+                    }
+                })
                 .addMigrations(MIGRATION_1_2)
                 .addMigrations(MIGRATION_2_3)
                 .build();
+    }
+
+    private static class PopulateTask extends AsyncTask<Context, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Context... c) {
+            if (c[0] != null) {
+                prepopulateDb(FTDatabase.getInstance(c[0]));
+            }
+            return null;
+        }
+
+        private void prepopulateDb(FTDatabase db) {
+            CurrencyDao currencyDao = db.currencyDao();
+            if (currencyDao.count() == 0) {
+                CurrencyEntity currency = new CurrencyEntity();
+
+                db.beginTransaction();
+                try {
+                    currency.initFromValues(1, "PLN", 1.0);
+                    currencyDao.insertCurrency(currency);
+                    currency.initFromValues(2, "EUR", 4.2969);
+                    currencyDao.insertCurrency(currency);
+                    db.setTransactionSuccessful();
+                    Log.d("AsyncTaskPrepopulate", "Transaction successful");
+                } finally {
+                    db.endTransaction();
+                }
+
+            }
+        }
     }
 }
