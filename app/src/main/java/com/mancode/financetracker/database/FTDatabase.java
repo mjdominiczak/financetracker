@@ -32,12 +32,13 @@ import com.mancode.financetracker.database.entity.TransactionEntity;
                         CategoryEntity.class,
                         CurrencyEntity.class,
                         TransactionEntity.class},
-            version = 3)
+            version = FTDatabase.DATABASE_VERSION)
 public abstract class FTDatabase extends RoomDatabase {
 
     private static FTDatabase sInstance;
 
     public static final String DATABASE_NAME = "database.db";
+    public static final int DATABASE_VERSION = 3;
 
     public abstract AccountDao accountDao();
     public abstract BalanceDao balanceDao();

@@ -39,13 +39,13 @@ public class DataRepository {
     private DataRepository(Application application) {
         mDatabase = FTDatabase.getInstance(application);
         mAccountDao = mDatabase.accountDao();
-        mAllAccounts = mAccountDao.getAllAccounts();
+        mAllAccounts = mAccountDao.getAllAccountsLive();
         mBalanceDao = mDatabase.balanceDao();
         mAllBalances = mBalanceDao.getBalancesForDisplay();
         mCategoryDao = mDatabase.categoryDao();
-        mAllCategories = mCategoryDao.getAllCategories();
+        mAllCategories = mCategoryDao.getAllCategoriesLive();
         mTransactionDao = mDatabase.transactionDao();
-        mAllTransactions = mTransactionDao.getAllTransactions();
+        mAllTransactions = mTransactionDao.getAllTransactionsLive();
     }
 
     public static DataRepository getInstance(final Application application) {

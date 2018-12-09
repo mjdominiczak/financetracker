@@ -3,6 +3,7 @@ package com.mancode.financetracker.database.dao;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.mancode.financetracker.database.entity.AccountEntity;
@@ -17,11 +18,17 @@ import java.util.List;
 public interface AccountDao {
 
     @Query("SELECT * FROM accounts")
-    LiveData<List<AccountEntity>> getAllAccounts();
+    LiveData<List<AccountEntity>> getAllAccountsLive();
+
+    @Query("SELECT * FROM accounts")
+    List<AccountEntity> getAllAccounts();
 
     @Query("SELECT * FROM accounts WHERE _id = :id")
     AccountEntity getAccountById(int id);
 
     @Insert
     void insertAccount(AccountEntity account);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAll(List<AccountEntity> accountList);
 }

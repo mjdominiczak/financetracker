@@ -3,26 +3,27 @@ package com.mancode.financetracker;
 import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.tabs.TabLayout;
-import androidx.legacy.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.mancode.financetracker.database.DBBackupRestore;
+import com.google.android.material.tabs.TabLayout;
+import com.mancode.financetracker.database.DatabaseJson;
 import com.mancode.financetracker.database.viewmodel.BalanceViewModel;
 import com.mancode.financetracker.notifications.AlarmReceiver;
 
 import java.util.Calendar;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.legacy.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -123,9 +124,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void restoreDbWithToasts() {
-        if (DBBackupRestore.restore()) {
+        if (DatabaseJson.importJson()) {
             Toast.makeText(this,
-                    "Database restored from " + DBBackupRestore.EXPORT_DATABASE_FILE.getPath(),
+                    "Import started with " + DatabaseJson.JSON_FILE.getPath(),
                     Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this,
@@ -135,9 +136,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void exportDbWithToasts() {
-        if (DBBackupRestore.export()) {
+        if (DatabaseJson.exportJson()) {
             Toast.makeText(this,
-                    "Database exported to " + DBBackupRestore.EXPORT_DATABASE_FILE.getPath(),
+                    "Database exported to " + DatabaseJson.JSON_FILE.getPath(),
                     Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this,
