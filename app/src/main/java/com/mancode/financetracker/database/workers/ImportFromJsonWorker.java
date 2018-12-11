@@ -4,7 +4,9 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mancode.financetracker.database.FTDatabase;
+import com.mancode.financetracker.database.converter.DateConverter;
 import com.mancode.financetracker.database.json.DatabaseObject;
 
 import java.io.FileNotFoundException;
@@ -29,7 +31,9 @@ public class ImportFromJsonWorker extends Worker {
     @Override
     public Result doWork() {
 
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .setDateFormat(DateConverter.DATE_FORMAT_STRING)
+                .create();
         String json;
 
         try {
