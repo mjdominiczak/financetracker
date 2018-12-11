@@ -1,0 +1,102 @@
+{
+  "accounts": [
+    {
+      "accountName": "Gotówka",
+      "accountType": 1,
+      "currency": 1,
+      "id": 1,
+      "openDate": "1900-01-01"
+    }
+  ],
+  "balances": [
+    {
+      "accountId": 1,
+      "checkDate": "1900-01-01",
+      "fixed": true,
+      "id": 1,
+      "value": 0.0
+    }
+  ],
+  "categories": [
+    {
+      "category": "Jedzenie",
+      "id": 1
+    },
+    {
+      "category": "Dom",
+      "id": 2
+    },
+    {
+      "category": "Transport",
+      "id": 3
+    },
+    {
+      "category": "Telekomunikacja",
+      "id": 4
+    },
+    {
+      "category": "Opieka zdrowotna",
+      "id": 5
+    },
+    {
+      "category": "Ubranie",
+      "id": 6
+    },
+    {
+      "category": "Higiena",
+      "id": 7
+    },
+    {
+      "category": "Dzieci",
+      "id": 8
+    },
+    {
+      "category": "Rozrywka",
+      "id": 9
+    },
+    {
+      "category": "Inne wydatki",
+      "id": 10
+    },
+    {
+      "category": "Pensja",
+      "id": 11
+    },
+    {
+      "category": "Odsetki",
+      "id": 12
+    },
+    {
+      "category": "Prezenty",
+      "id": 13
+    },
+    {
+      "category": "Inne przychody",
+      "id": 14
+    }
+  ],
+  "currencies": [
+    {
+      "currencySymbol": "PLN",
+      "exchangeRate": 1.0,
+      "id": 1
+    },
+    {
+      "currencySymbol": "EUR",
+      "exchangeRate": 4.2047,
+      "id": 2
+    }
+  ],
+  "transactions": [
+    {
+      "accountId": 1,
+      "categoryId": 11,
+      "date": "1900-01-01",
+      "description": "test",
+      "id": 1,
+      "type": 1,
+      "value": 0.0
+    }
+  ],
+  "version": 3
+}

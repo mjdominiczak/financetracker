@@ -1,16 +1,6 @@
 package com.mancode.financetracker.database;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.sqlite.db.SupportSQLiteDatabase;
-import androidx.room.Database;
-import androidx.room.Room;
-import androidx.room.RoomDatabase;
-import androidx.room.migration.Migration;
 import android.content.Context;
-import android.os.AsyncTask;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
 
 import com.mancode.financetracker.database.dao.AccountDao;
 import com.mancode.financetracker.database.dao.BalanceDao;
@@ -22,6 +12,17 @@ import com.mancode.financetracker.database.entity.BalanceEntity;
 import com.mancode.financetracker.database.entity.CategoryEntity;
 import com.mancode.financetracker.database.entity.CurrencyEntity;
 import com.mancode.financetracker.database.entity.TransactionEntity;
+import com.mancode.financetracker.database.workers.PrepopulateDatabaseWorker;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 /**
  * Created by Manveru on 31.01.2018.
@@ -35,19 +36,9 @@ import com.mancode.financetracker.database.entity.TransactionEntity;
             version = FTDatabase.DATABASE_VERSION)
 public abstract class FTDatabase extends RoomDatabase {
 
-    private static FTDatabase sInstance;
-
-    public static final String DATABASE_NAME = "database.db";
     public static final int DATABASE_VERSION = 3;
-
-    public abstract AccountDao accountDao();
-    public abstract BalanceDao balanceDao();
-    public abstract CategoryDao categoryDao();
-    public abstract CurrencyDao currencyDao();
-    public abstract TransactionDao transactionDao();
-
-    private final MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
-
+    private static final String DATABASE_NAME = "database.db";
+    private static FTDatabase sInstance;
     /**
      * Migration from:
      * version 1 - using SQLiteDatabase API
@@ -60,7 +51,6 @@ public abstract class FTDatabase extends RoomDatabase {
 
         }
     };
-
     /**
      * Migration from:
      * version 2
@@ -73,6 +63,7 @@ public abstract class FTDatabase extends RoomDatabase {
 
         }
     };
+    private final MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
 
     public static FTDatabase getInstance(final Context context) {
         if (sInstance == null) {
@@ -91,7 +82,9 @@ public abstract class FTDatabase extends RoomDatabase {
                     @Override
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {
                         super.onCreate(db);
-                        new PopulateTask().execute(applicationContext);
+                        OneTimeWorkRequest request =
+                                new OneTimeWorkRequest.Builder(PrepopulateDatabaseWorker.class).build();
+                        WorkManager.getInstance().enqueue(request);
                     }
                 })
                 .addMigrations(MIGRATION_1_2)
@@ -99,34 +92,13 @@ public abstract class FTDatabase extends RoomDatabase {
                 .build();
     }
 
-    private static class PopulateTask extends AsyncTask<Context, Void, Void> {
+    public abstract AccountDao accountDao();
 
-        @Override
-        protected Void doInBackground(Context... c) {
-            if (c[0] != null) {
-                prepopulateDb(FTDatabase.getInstance(c[0]));
-            }
-            return null;
-        }
+    public abstract BalanceDao balanceDao();
 
-        private void prepopulateDb(FTDatabase db) {
-            CurrencyDao currencyDao = db.currencyDao();
-            if (currencyDao.count() == 0) {
-                CurrencyEntity currency = new CurrencyEntity();
+    public abstract CategoryDao categoryDao();
 
-                db.beginTransaction();
-                try {
-                    currency.initFromValues(1, "PLN", 1.0);
-                    currencyDao.insertCurrency(currency);
-                    currency.initFromValues(2, "EUR", 4.2969);
-                    currencyDao.insertCurrency(currency);
-                    db.setTransactionSuccessful();
-                    Log.d("AsyncTaskPrepopulate", "Transaction successful");
-                } finally {
-                    db.endTransaction();
-                }
+    public abstract CurrencyDao currencyDao();
 
-            }
-        }
-    }
+    public abstract TransactionDao transactionDao();
 }
