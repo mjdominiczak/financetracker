@@ -12,6 +12,7 @@ import com.mancode.financetracker.database.entity.BalanceEntity;
 import com.mancode.financetracker.database.entity.CategoryEntity;
 import com.mancode.financetracker.database.entity.CurrencyEntity;
 import com.mancode.financetracker.database.entity.TransactionEntity;
+import com.mancode.financetracker.database.views.AccountExtended;
 import com.mancode.financetracker.database.workers.PrepopulateDatabaseWorker;
 
 import androidx.annotation.NonNull;
@@ -33,10 +34,11 @@ import androidx.work.WorkManager;
                         CategoryEntity.class,
                         CurrencyEntity.class,
                         TransactionEntity.class},
+            views = {AccountExtended.class},
             version = FTDatabase.DATABASE_VERSION)
 public abstract class FTDatabase extends RoomDatabase {
 
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "database.db";
     private static FTDatabase sInstance;
     /**
@@ -63,6 +65,19 @@ public abstract class FTDatabase extends RoomDatabase {
 
         }
     };
+    /**
+     * Migration from:
+     * version 3
+     * to
+     * version 4 - view added
+     */
+    private static Migration MIGRATION_3_4 = new Migration(3, 4) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+
+        }
+    };
+
     private final MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
 
     public static FTDatabase getInstance(final Context context) {
@@ -89,6 +104,7 @@ public abstract class FTDatabase extends RoomDatabase {
                 })
                 .addMigrations(MIGRATION_1_2)
                 .addMigrations(MIGRATION_2_3)
+                .addMigrations(MIGRATION_3_4)
                 .build();
     }
 

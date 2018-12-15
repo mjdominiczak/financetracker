@@ -1,9 +1,6 @@
 package com.mancode.financetracker.ui.transactions;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,17 +11,23 @@ import android.widget.Spinner;
 
 import com.mancode.financetracker.AddItemFragment;
 import com.mancode.financetracker.R;
-import com.mancode.financetracker.database.entity.AccountEntity;
 import com.mancode.financetracker.database.entity.CategoryEntity;
 import com.mancode.financetracker.database.entity.TransactionEntity;
 import com.mancode.financetracker.database.viewmodel.AccountViewModel;
 import com.mancode.financetracker.database.viewmodel.CategoryViewModel;
 import com.mancode.financetracker.database.viewmodel.TransactionViewModel;
+import com.mancode.financetracker.database.views.AccountExtended;
 import com.mancode.financetracker.ui.SetDateView;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 public class AddTransactionFragment extends AddItemFragment {
 
@@ -35,7 +38,7 @@ public class AddTransactionFragment extends AddItemFragment {
     private Spinner mAccountSpinner;
     private Spinner mCategorySpinner;
 
-    private ArrayAdapter<AccountEntity> mAccountSpinnerAdapter;
+    private ArrayAdapter<AccountExtended> mAccountSpinnerAdapter;
     private ArrayAdapter<CategoryEntity> mCategorySpinnerAdapter;
 
     private AccountViewModel mAccountViewModel;
@@ -44,29 +47,32 @@ public class AddTransactionFragment extends AddItemFragment {
 
     public AddTransactionFragment() { }
 
-    public static AddTransactionFragment newInstance() {
+    static AddTransactionFragment newInstance() {
         return new AddTransactionFragment();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAccountViewModel = ViewModelProviders.of(getActivity()).get(AccountViewModel.class);
-        mCategoryViewModel = ViewModelProviders.of(getActivity()).get(CategoryViewModel.class);
-        mTransactionViewModel = ViewModelProviders.of(getActivity()).get(TransactionViewModel.class);
-        mCategoryViewModel.getAllCategories().observe(this, categories -> {
-            if (mCategorySpinnerAdapter != null) {
-                mCategorySpinnerAdapter.clear();
-                List<CategoryEntity> temp = mCategoryViewModel.getAllCategories().getValue();
-                if (temp != null) {
-                    mCategorySpinnerAdapter.addAll(temp);
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            mAccountViewModel = ViewModelProviders.of(activity).get(AccountViewModel.class);
+            mCategoryViewModel = ViewModelProviders.of(activity).get(CategoryViewModel.class);
+            mTransactionViewModel = ViewModelProviders.of(activity).get(TransactionViewModel.class);
+            mCategoryViewModel.getAllCategories().observe(this, categories -> {
+                if (mCategorySpinnerAdapter != null) {
+                    mCategorySpinnerAdapter.clear();
+                    List<CategoryEntity> temp = mCategoryViewModel.getAllCategories().getValue();
+                    if (temp != null) {
+                        mCategorySpinnerAdapter.addAll(temp);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_transaction, container, false);
 
@@ -90,7 +96,7 @@ public class AddTransactionFragment extends AddItemFragment {
                 String description = mDescriptionField.getText().toString();
                 double value = Double.parseDouble(mValueField.getText().toString());
                 int account = mAccountSpinnerAdapter.getItem(
-                        mAccountSpinner.getSelectedItemPosition()).getId();
+                        mAccountSpinner.getSelectedItemPosition()).id;
                 int category = mCategorySpinnerAdapter.getItem(
                         mCategorySpinner.getSelectedItemPosition()).getId();
                 TransactionEntity transaction = new TransactionEntity(
@@ -117,17 +123,18 @@ public class AddTransactionFragment extends AddItemFragment {
         return view;
     }
 
-    private ArrayAdapter<AccountEntity> getAccountAdapter() {
-        List<AccountEntity> accountEntityList = mAccountViewModel.getAllAccounts().getValue();
-        return accountEntityList == null ? null : new ArrayAdapter<>(
-                getContext(),
-                android.R.layout.simple_spinner_dropdown_item,
-                accountEntityList
+    private ArrayAdapter<AccountExtended> getAccountAdapter() {
+        List<AccountExtended> accountEntityList = mAccountViewModel.getAllAccounts().getValue();
+        return accountEntityList == null || getContext() == null ? null :
+                new ArrayAdapter<>(
+                    getContext(),
+                    android.R.layout.simple_spinner_dropdown_item,
+                    accountEntityList
         );
     }
 
     private ArrayAdapter<CategoryEntity> getCategoryAdapter() {
-        return new ArrayAdapter<>(
+        return getContext() == null ? null : new ArrayAdapter<>(
                 getContext(),
                 android.R.layout.simple_spinner_dropdown_item,
                 new ArrayList<>()

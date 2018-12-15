@@ -1,7 +1,6 @@
 package com.mancode.financetracker.database;
 
 import android.app.Application;
-import androidx.lifecycle.LiveData;
 import android.os.AsyncTask;
 
 import com.mancode.financetracker.database.dao.AccountDao;
@@ -13,8 +12,11 @@ import com.mancode.financetracker.database.entity.BalanceEntity;
 import com.mancode.financetracker.database.entity.BalanceExtended;
 import com.mancode.financetracker.database.entity.CategoryEntity;
 import com.mancode.financetracker.database.entity.TransactionEntity;
+import com.mancode.financetracker.database.views.AccountExtended;
 
 import java.util.List;
+
+import androidx.lifecycle.LiveData;
 
 /**
  * Created by Manveru on 02.02.2018.
@@ -24,27 +26,25 @@ public class DataRepository {
 
     private static DataRepository sInstance;
 
-    private final FTDatabase mDatabase;
-
     private AccountDao mAccountDao;
     private BalanceDao mBalanceDao;
     private CategoryDao mCategoryDao;
     private TransactionDao mTransactionDao;
 
-    private LiveData<List<AccountEntity>> mAllAccounts;
+    private LiveData<List<AccountExtended>> mAllAccounts;
     private LiveData<List<BalanceExtended>> mAllBalances;
     private LiveData<List<CategoryEntity>> mAllCategories;
     private LiveData<List<TransactionEntity>> mAllTransactions;
 
     private DataRepository(Application application) {
-        mDatabase = FTDatabase.getInstance(application);
-        mAccountDao = mDatabase.accountDao();
+        FTDatabase database = FTDatabase.getInstance(application);
+        mAccountDao = database.accountDao();
         mAllAccounts = mAccountDao.getAllAccountsLive();
-        mBalanceDao = mDatabase.balanceDao();
+        mBalanceDao = database.balanceDao();
         mAllBalances = mBalanceDao.getBalancesForDisplay();
-        mCategoryDao = mDatabase.categoryDao();
+        mCategoryDao = database.categoryDao();
         mAllCategories = mCategoryDao.getAllCategoriesLive();
-        mTransactionDao = mDatabase.transactionDao();
+        mTransactionDao = database.transactionDao();
         mAllTransactions = mTransactionDao.getAllTransactionsLive();
     }
 
@@ -59,7 +59,7 @@ public class DataRepository {
         return sInstance;
     }
 
-    public LiveData<List<AccountEntity>> getAllAccounts() {
+    public LiveData<List<AccountExtended>> getAllAccounts() {
         return mAllAccounts;
     }
 

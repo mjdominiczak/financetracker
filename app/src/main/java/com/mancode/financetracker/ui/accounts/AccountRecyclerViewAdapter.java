@@ -1,47 +1,51 @@
 package com.mancode.financetracker.ui.accounts;
 
 import android.content.Context;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mancode.financetracker.R;
-import com.mancode.financetracker.database.entity.AccountEntity;
+import com.mancode.financetracker.database.views.AccountExtended;
 
 import java.util.List;
+import java.util.Locale;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class AccountRecyclerViewAdapter
         extends RecyclerView.Adapter<AccountRecyclerViewAdapter.ViewHolder> {
 
-    private List<AccountEntity> mAllAccounts;
+    private List<AccountExtended> mAllAccounts;
     private Context mContext;
 
     @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
         mContext = null;
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         mContext = recyclerView.getContext();
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_account, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         if (mAllAccounts != null) {
-            AccountEntity account = mAllAccounts.get(position);
+            AccountExtended account = mAllAccounts.get(position);
             viewHolder.init(account);
         } else {
             viewHolder.mContentView.setText("No account yet!");
@@ -55,7 +59,7 @@ public class AccountRecyclerViewAdapter
         } else return 0;
     }
 
-    public void setAccounts(List<AccountEntity> accounts) {
+    public void setAccounts(List<AccountExtended> accounts) {
         mAllAccounts = accounts;
         notifyDataSetChanged();
     }
@@ -64,7 +68,7 @@ public class AccountRecyclerViewAdapter
         final TextView mIdView;
         final TextView mContentView;
         final TextView mBalanceView;
-        AccountEntity mAccount;
+        AccountExtended mAccount;
 
         ViewHolder(View view) {
             super(view);
@@ -73,15 +77,17 @@ public class AccountRecyclerViewAdapter
             mBalanceView = view.findViewById(R.id.account_balance);
         }
 
-        void init(AccountEntity account) {
+        void init(AccountExtended account) {
             mAccount = account;
-            mIdView.setText(String.valueOf(mAccount.getId()));
-            mContentView.setText(mAccount.getAccountName());
-            mBalanceView.setText("TODO"); // TODO
-            int color = mAccount.getAccountType() == 1 ?
-                    ContextCompat.getColor(mContext, R.color.colorPositiveValue) :
-                    ContextCompat.getColor(mContext, R.color.colorNegativeValue);
-            mBalanceView.setTextColor(color);
+            mIdView.setText(String.valueOf(mAccount.id));
+            mContentView.setText(mAccount.accountName);
+            mBalanceView.setText(String.format(Locale.getDefault(), "%.2f", mAccount.balanceValue));
+            if (mAccount.balanceValue != 0) {
+                int color = mAccount.accountType == 1 ?
+                        ContextCompat.getColor(mContext, R.color.colorPositiveValue) :
+                        ContextCompat.getColor(mContext, R.color.colorNegativeValue);
+                mBalanceView.setTextColor(color);
+            }
         }
     }
 }
