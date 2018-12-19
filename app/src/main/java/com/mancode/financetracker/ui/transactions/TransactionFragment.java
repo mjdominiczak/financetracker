@@ -1,14 +1,8 @@
 package com.mancode.financetracker.ui.transactions;
 
 import android.app.AlertDialog;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,13 +12,22 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mancode.financetracker.R;
+import com.mancode.financetracker.database.entity.TransactionEntity;
 import com.mancode.financetracker.database.viewmodel.TransactionViewModel;
 import com.mancode.financetracker.ui.SetDateView;
 import com.mancode.financetracker.ui.UIUtils;
 
 import java.util.Calendar;
 import java.util.Date;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import static com.mancode.financetracker.ui.transactions.FilterQuery.TYPE_ALL;
 import static com.mancode.financetracker.ui.transactions.FilterQuery.TYPE_INCOME;
@@ -34,9 +37,10 @@ import static com.mancode.financetracker.ui.transactions.FilterQuery.TYPE_OUTCOM
  * Created by Manveru on 23.11.2017.
  */
 
-public class TransactionFragment extends Fragment {
+public class TransactionFragment extends Fragment implements TransactionRecyclerViewAdapter.DeleteRequestListener {
 
-    public TransactionRecyclerViewAdapter mAdapter;
+    private TransactionRecyclerViewAdapter mAdapter;
+    private TransactionViewModel transactionViewModel;
 
     public TransactionFragment() { }
 
@@ -47,8 +51,7 @@ public class TransactionFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        TransactionViewModel transactionViewModel =
-                ViewModelProviders.of(getActivity()).get(TransactionViewModel.class);
+        transactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
         transactionViewModel.getAllTransactions().observe(this,
                 transactions -> mAdapter.setTransactions(transactions));
     }
@@ -77,7 +80,7 @@ public class TransactionFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_account_list, container, false); // TODO layout to change?
         View recyclerView = view.findViewById(R.id.list);
@@ -87,7 +90,7 @@ public class TransactionFragment extends Fragment {
             Context context = view.getContext();
             RecyclerView rView = (RecyclerView) recyclerView;
             rView.setLayoutManager(new LinearLayoutManager(context));
-            mAdapter = new TransactionRecyclerViewAdapter();
+            mAdapter = new TransactionRecyclerViewAdapter(context, this);
             rView.setAdapter(mAdapter);
         }
 
@@ -95,6 +98,11 @@ public class TransactionFragment extends Fragment {
         fab.setOnClickListener(view1 -> UIUtils.showFullScreenDialog(
                 getFragmentManager(), AddTransactionFragment.newInstance()));
         return view;
+    }
+
+    @Override
+    public void onDeleteRequested(TransactionEntity transaction) {
+        transactionViewModel.deleteTransaction(transaction);
     }
 
     private class FilterDialog {

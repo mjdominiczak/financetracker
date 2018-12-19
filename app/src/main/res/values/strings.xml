@@ -41,6 +41,8 @@
     <string name="from_date">From date</string>
     <string name="to_date">To date</string>
     <string name="categories">Categories</string>
+    <string name="button_transaction_menu">Transaction menu button</string>
+    <string name="action_delete">Delete</string>
 
     <string-array name="transaction_filter_type">
         <item>All</item>

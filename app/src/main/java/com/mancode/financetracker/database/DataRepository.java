@@ -90,4 +90,8 @@ public class DataRepository {
     public void removeLastBalance() {
         AsyncTask.execute(() -> mBalanceDao.removeLast());
     }
+
+    public void deleteTransaction(TransactionEntity transaction) {
+        AsyncTask.execute(() -> mTransactionDao.deleteTransaction(transaction));
+    }
 }

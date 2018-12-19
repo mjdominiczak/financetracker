@@ -1,14 +1,15 @@
 package com.mancode.financetracker.database.dao;
 
-import androidx.lifecycle.LiveData;
-import androidx.room.Dao;
-import androidx.room.Insert;
-import androidx.room.OnConflictStrategy;
-import androidx.room.Query;
-
 import com.mancode.financetracker.database.entity.TransactionEntity;
 
 import java.util.List;
+
+import androidx.lifecycle.LiveData;
+import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
+import androidx.room.Query;
 
 /**
  * Created by Manveru on 25.01.2018.
@@ -31,4 +32,7 @@ public interface TransactionDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<TransactionEntity> transactionList);
+
+    @Delete
+    void deleteTransaction(TransactionEntity transaction);
 }

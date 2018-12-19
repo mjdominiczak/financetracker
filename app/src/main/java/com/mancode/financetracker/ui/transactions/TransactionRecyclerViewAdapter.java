@@ -1,14 +1,15 @@
 package com.mancode.financetracker.ui.transactions;
 
 import android.content.Context;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.mancode.financetracker.R;
@@ -20,6 +21,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 /**
  * Created by Manveru on 18.12.2017.
  */
@@ -28,37 +33,32 @@ class TransactionRecyclerViewAdapter
         extends RecyclerView.Adapter<TransactionRecyclerViewAdapter.ViewHolder>
         implements Filterable {
 
-    public static final String TAG = TransactionRecyclerViewAdapter.class.getSimpleName();
+    private static final String TAG = TransactionRecyclerViewAdapter.class.getSimpleName();
 
-    private List<TransactionEntity> mAllTransactions;
-    private List<TransactionEntity> mFilteredTransactions;
-    private boolean mIsFiltered = false;
-    private FilterQuery mFilterQuery;
-    private Context mContext;
+    private List<TransactionEntity> allTransactions;
+    private List<TransactionEntity> filteredTransactions;
+    private boolean isFiltered = false;
+    private FilterQuery filterQuery;
+    private Context context;
+    private DeleteRequestListener deleteRequestListener;
 
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        mContext = recyclerView.getContext();
+    public TransactionRecyclerViewAdapter(Context context, DeleteRequestListener deleteRequestListener) {
+        this.context = context;
+        this.deleteRequestListener = deleteRequestListener;
     }
 
+    @NonNull
     @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView);
-        mContext = null;
-    }
-
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_transaction, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
-        if (mFilteredTransactions != null && mFilteredTransactions.size() > position) {
-            TransactionEntity transaction = mFilteredTransactions.get(position);
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int position) {
+        if (filteredTransactions != null && filteredTransactions.size() > position) {
+            TransactionEntity transaction = filteredTransactions.get(position);
             viewHolder.init(transaction);
         } else {
             Log.e(TAG, "");
@@ -67,14 +67,14 @@ class TransactionRecyclerViewAdapter
 
     @Override
     public int getItemCount() {
-        if (mFilteredTransactions != null) {
-            return mFilteredTransactions.size();
+        if (filteredTransactions != null) {
+            return filteredTransactions.size();
         } else return 0;
     }
 
     public void setTransactions(List<TransactionEntity> transactions) {
-        mAllTransactions = transactions;
-        mFilteredTransactions = transactions;  // TODO think through
+        allTransactions = transactions;
+        filteredTransactions = transactions;  // TODO think through
         notifyDataSetChanged();
     }
 
@@ -83,13 +83,13 @@ class TransactionRecyclerViewAdapter
         return new TransactionFilter();
     }
 
-    public String buildFilterQuery(int type, Date from, Date to) {
-        mFilterQuery = new FilterQuery(type, from, to);
-        return mFilterQuery.getQuery();
+    String buildFilterQuery(int type, Date from, Date to) {
+        filterQuery = new FilterQuery(type, from, to);
+        return filterQuery.getQuery();
     }
 
-    public FilterQuery getFilterQuery() {
-        return mFilterQuery;
+    FilterQuery getFilterQuery() {
+        return filterQuery;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -97,6 +97,7 @@ class TransactionRecyclerViewAdapter
         private TextView tvDate;
         private TextView tvValue;
         private TextView tvDescription;
+        private ImageButton menuButton;
         private TransactionEntity mTransaction;
 
         ViewHolder(View view) {
@@ -104,6 +105,7 @@ class TransactionRecyclerViewAdapter
             tvDate = view.findViewById(R.id.transaction_date);
             tvValue = view.findViewById(R.id.transaction_value);
             tvDescription = view.findViewById(R.id.transaction_description);
+            menuButton = view.findViewById(R.id.transaction_menu_button);
         }
 
         void init(TransactionEntity transaction) {
@@ -111,10 +113,28 @@ class TransactionRecyclerViewAdapter
             tvDate.setText(DateConverter.toString(mTransaction.getDate()));
             tvValue.setText(String.format(Locale.getDefault(), "%.2f", mTransaction.getValue()));
             int color = mTransaction.getType() == 1 ?
-                    ContextCompat.getColor(mContext, R.color.colorPositiveValue) :
-                    ContextCompat.getColor(mContext, R.color.colorNegativeValue);
+                    ContextCompat.getColor(context, R.color.colorPositiveValue) :
+                    ContextCompat.getColor(context, R.color.colorNegativeValue);
             tvValue.setTextColor(color);
             tvDescription.setText(mTransaction.getDescription());
+            menuButton.setOnClickListener(this::showTransactionPopup);
+        }
+
+        void showTransactionPopup(View view) {
+            PopupMenu popup = new PopupMenu(view.getContext(), view);
+            MenuInflater inflater = popup.getMenuInflater();
+            inflater.inflate(R.menu.transaction_actions, popup.getMenu());
+            popup.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()) {
+                    case R.id.action_delete_transaction:
+                        if (deleteRequestListener != null) {
+                            deleteRequestListener.onDeleteRequested(mTransaction);
+                        }
+                        return true;
+                }
+                return false;
+            });
+            popup.show();
         }
     }
 
@@ -124,13 +144,13 @@ class TransactionRecyclerViewAdapter
             String query = charSequence.toString();
             List<TransactionEntity> filteredList = new ArrayList<>();
             if (query.isEmpty()) {
-                mIsFiltered = false;
-                filteredList = mAllTransactions;
+                isFiltered = false;
+                filteredList = allTransactions;
             } else {
-                mIsFiltered = true;
-                mFilterQuery = new FilterQuery(query);
-                for (TransactionEntity transaction : mAllTransactions) {
-                    if (mFilterQuery.isMatch(transaction)) {
+                isFiltered = true;
+                filterQuery = new FilterQuery(query);
+                for (TransactionEntity transaction : allTransactions) {
+                    if (filterQuery.isMatch(transaction)) {
                         filteredList.add(transaction);
                     }
                 }
@@ -142,8 +162,12 @@ class TransactionRecyclerViewAdapter
 
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            mFilteredTransactions = (ArrayList<TransactionEntity>) filterResults.values;
+            filteredTransactions = (ArrayList<TransactionEntity>) filterResults.values;
             notifyDataSetChanged();
         }
+    }
+
+    public interface DeleteRequestListener {
+        void onDeleteRequested(TransactionEntity transaction);
     }
 }
