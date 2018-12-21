@@ -15,7 +15,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import androidx.annotation.NonNull;
-import androidx.work.Result;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 

@@ -3,7 +3,7 @@
     {
       "accountName": "Gotówka",
       "accountType": 1,
-      "currency": 1,
+      "currency": "PLN",
       "id": 1,
       "openDate": "1900-01-01"
     }
@@ -98,5 +98,5 @@
       "value": 0.0
     }
   ],
-  "version": 4
+  "version": 5
 }

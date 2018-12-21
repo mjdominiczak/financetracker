@@ -3,13 +3,17 @@ package com.mancode.financetracker.database.entity;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 /**
  * Created by Manveru on 23.01.2018.
  */
 
-@Entity(tableName = CurrencyEntity.TABLE_NAME)
+@Entity(tableName = CurrencyEntity.TABLE_NAME,
+        indices = {
+            @Index(value="currency_symbol", unique = true)
+        })
 public class CurrencyEntity {
 
     public static final String TABLE_NAME = "currencies";
@@ -33,7 +37,7 @@ public class CurrencyEntity {
         initFromValues(id, currencySymbol, exchangeRate);
     }
 
-    public void initFromValues(int id, String currencySymbol, double exchangeRate) {
+    private void initFromValues(int id, String currencySymbol, double exchangeRate) {
         this.id = id;
         this.currencySymbol = currencySymbol;
         this.exchangeRate = exchangeRate;

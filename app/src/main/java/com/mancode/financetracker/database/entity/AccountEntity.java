@@ -1,14 +1,14 @@
 package com.mancode.financetracker.database.entity;
 
+import com.mancode.financetracker.database.converter.DateConverter;
+
+import java.util.Date;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
-
-import com.mancode.financetracker.database.converter.DateConverter;
-
-import java.util.Date;
 
 /**
  * Created by Manveru on 23.01.2018.
@@ -16,7 +16,7 @@ import java.util.Date;
 
 @Entity(tableName = "accounts",
         foreignKeys = @ForeignKey(entity = CurrencyEntity.class,
-                                  parentColumns = "_id",
+                                  parentColumns = "currency_symbol",
                                   childColumns = "account_currency"))
 @TypeConverters(DateConverter.class)
 public class AccountEntity {
@@ -32,7 +32,7 @@ public class AccountEntity {
     private int accountType;
 
     @ColumnInfo(name = "account_currency")
-    private int currency;
+    private String currency;
 
     @ColumnInfo(name = "account_open_date")
     private Date openDate;
@@ -41,7 +41,7 @@ public class AccountEntity {
     private Date closeDate;
 
     public AccountEntity(int id, String accountName,
-                         int accountType, int currency,
+                         int accountType, String currency,
                          Date openDate, Date closeDate) {
         this.id = id;
         this.accountName = accountName;
@@ -63,7 +63,7 @@ public class AccountEntity {
         return accountType;
     }
 
-    public int getCurrency() {
+    public String getCurrency() {
         return currency;
     }
 

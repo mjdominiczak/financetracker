@@ -39,17 +39,18 @@ dependencies {
     def legacy_support_version = '1.0.0'
     def recyclerview_version = '1.0.0'
     def cardview_version = '1.0.0'
-    def material_version = '1.1.0-alpha01'
+    def material_version = '1.1.0-alpha02'
     def room_version = '2.1.0-alpha03'
     def lifecycle_version = '2.0.0'
     def constraint_layout_version = '1.1.3'
     def expandable_layout_version = "2.9.2"
-    def nav_version = '1.0.0-alpha08'
-    def work_version = "1.0.0-alpha12"
+    def nav_version = '1.0.0-alpha09'
+    def work_version = "1.0.0-beta01"
 
     def gson_version = "2.8.5"
     def junit_version = "4.12"
     def espresso_version = '3.1.0-alpha4'
+    def joda_money_version = "1.0.1"
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     androidTestImplementation("androidx.test.espresso:espresso-core:$espresso_version", {
@@ -67,6 +68,7 @@ dependencies {
     implementation "android.arch.work:work-runtime:$work_version"
     implementation "com.google.code.gson:gson:$gson_version"
     implementation "net.cachapa.expandablelayout:expandablelayout:$expandable_layout_version"
+    implementation "org.joda:joda-money:$joda_money_version"
     testImplementation "junit:junit:$junit_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     androidTestImplementation "androidx.room:room-testing:$room_version"

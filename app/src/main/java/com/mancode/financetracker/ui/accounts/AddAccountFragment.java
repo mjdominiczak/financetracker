@@ -1,16 +1,15 @@
 package com.mancode.financetracker.ui.accounts;
 
 
-import androidx.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 
 import com.mancode.financetracker.AddItemFragment;
 import com.mancode.financetracker.R;
@@ -18,53 +17,85 @@ import com.mancode.financetracker.database.entity.AccountEntity;
 import com.mancode.financetracker.database.viewmodel.AccountViewModel;
 import com.mancode.financetracker.ui.SetDateView;
 
+import org.joda.money.CurrencyUnit;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
 
 
 public class AddAccountFragment extends AddItemFragment {
 
-    private EditText mNameField;
-    private RadioGroup mRadioGroupType;
-    private SetDateView mOpenDate;
-    private SetDateView mCloseDate;
-    private CheckBox mCheckBoxClosed;
+    private EditText nameField;
+    private Spinner currencySpinner;
+    private RadioGroup radioGroupType;
+    private SetDateView openDate;
+    private SetDateView closeDate;
+    private CheckBox checkBoxClosed;
 
-    private AccountViewModel mAccountViewModel;
+    private ArrayAdapter<String> currencyAdapter;
+
+    private AccountViewModel accountViewModel;
 
     public AddAccountFragment() { }
 
-    public static AddAccountFragment newInstance() {
+    static AddAccountFragment newInstance() {
         return new AddAccountFragment();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAccountViewModel = ViewModelProviders.of(getActivity()).get(AccountViewModel.class);
+        accountViewModel = ViewModelProviders.of(this).get(AccountViewModel.class);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_account, container, false);
 
-        mNameField = view.findViewById(R.id.tf_account_name);
-        mRadioGroupType = view.findViewById(R.id.rg_account_type);
-        mOpenDate = view.findViewById(R.id.sd_account_open_date);
-        mCloseDate = view.findViewById(R.id.sd_account_close_date);
-        mCheckBoxClosed = view.findViewById(R.id.cb_account_closed);
+        nameField = view.findViewById(R.id.tf_account_name);
+        currencySpinner = view.findViewById(R.id.sp_currency);
+        radioGroupType = view.findViewById(R.id.rg_account_type);
+        openDate = view.findViewById(R.id.sd_account_open_date);
+        closeDate = view.findViewById(R.id.sd_account_close_date);
+        checkBoxClosed = view.findViewById(R.id.cb_account_closed);
 
-        mCheckBoxClosed.setOnClickListener(v -> mCloseDate.setEnabled(mCheckBoxClosed.isChecked()));
+        if (getContext() != null) {
+            List<CurrencyUnit> currencies = CurrencyUnit.registeredCurrencies();
+            String[] availableCurrencyCodes;
+            List<String> currencyCodesList = new ArrayList<>();
+            for (CurrencyUnit currency : currencies) {
+                currencyCodesList.add(currency.getCode());
+            }
+            int preselectionIndex = currencyCodesList.indexOf(
+                    CurrencyUnit.of(Locale.getDefault()).getCode());
+            availableCurrencyCodes = currencyCodesList.toArray(new String[0]);
+            currencyAdapter = new ArrayAdapter<>(
+                    getContext(),
+                    android.R.layout.simple_spinner_dropdown_item,
+                    availableCurrencyCodes
+            );
+            currencySpinner.setAdapter(currencyAdapter);
+            currencySpinner.setSelection(preselectionIndex);
+        }
+        checkBoxClosed.setOnClickListener(v -> closeDate.setEnabled(checkBoxClosed.isChecked()));
 
         Toolbar toolbar = view.findViewById(R.id.add_account_toolbar);
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_menu_save) {
-                String name = mNameField.getText().toString();
-                int type = mRadioGroupType.getCheckedRadioButtonId() == R.id.rb_assets ?
+                String name = nameField.getText().toString();
+                int type = radioGroupType.getCheckedRadioButtonId() == R.id.rb_assets ?
                         1 : -1;
-                Date openDate = mOpenDate.getDate();
-                Date closeDate = mCloseDate.getDate();
-                int currency = 1; // TODO hard-coded currency
+                Date openDate = this.openDate.getDate();
+                Date closeDate = this.closeDate.getDate();
+                String currency = currencyAdapter.getItem(currencySpinner.getSelectedItemPosition());
                 AccountEntity account = new AccountEntity(
                         0, // not set
                         name,
@@ -75,7 +106,7 @@ public class AddAccountFragment extends AddItemFragment {
                 );
 
                 if (true) { // TODO validate
-                    mAccountViewModel.insert(account);
+                    accountViewModel.insert(account);
                     dismiss();
                 }
             }

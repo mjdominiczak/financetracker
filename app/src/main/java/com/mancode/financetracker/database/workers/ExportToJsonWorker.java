@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import androidx.annotation.NonNull;
-import androidx.work.Result;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 

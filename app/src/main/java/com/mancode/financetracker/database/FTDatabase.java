@@ -38,7 +38,7 @@ import androidx.work.WorkManager;
             version = FTDatabase.DATABASE_VERSION)
 public abstract class FTDatabase extends RoomDatabase {
 
-    public static final int DATABASE_VERSION = 4;
+    public static final int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "database.db";
     private static FTDatabase sInstance;
     /**
@@ -77,6 +77,18 @@ public abstract class FTDatabase extends RoomDatabase {
 
         }
     };
+    /**
+     * Migration from:
+     * version 4
+     * to
+     * version 5 - currency in accounts table referenced by symbol
+     */
+    private static Migration MIGRATION_4_5 = new Migration(4, 5) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+
+        }
+    };
 
     private final MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
 
@@ -105,6 +117,7 @@ public abstract class FTDatabase extends RoomDatabase {
                 .addMigrations(MIGRATION_1_2)
                 .addMigrations(MIGRATION_2_3)
                 .addMigrations(MIGRATION_3_4)
+                .addMigrations(MIGRATION_4_5)
                 .build();
     }
 
