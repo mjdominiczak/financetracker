@@ -71,6 +71,14 @@ public class DataRepository {
         return mAllCategories;
     }
 
+    public List<CategoryEntity> getIncomeCategories() {
+        return mCategoryDao.getIncomeCategoriesLive();
+    }
+
+    public List<CategoryEntity> getOutcomeCategories() {
+        return mCategoryDao.getOutcomeCategoriesLive();
+    }
+
     public LiveData<List<TransactionEntity>> getAllTransactions() {
         return mAllTransactions;
     }

@@ -1,5 +1,6 @@
 package com.mancode.financetracker.ui.transactions;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,19 +32,22 @@ import androidx.lifecycle.ViewModelProviders;
 
 public class AddTransactionFragment extends AddItemFragment {
 
-    private SetDateView mTransactionDate;
-    private RadioGroup mRadioGroupType;
-    private EditText mDescriptionField;
-    private EditText mValueField;
-    private Spinner mAccountSpinner;
-    private Spinner mCategorySpinner;
+    private SetDateView transactionDate;
+    private RadioGroup radioGroupType;
+    private EditText descriptionField;
+    private EditText valueField;
+    private Spinner accountSpinner;
+    private Spinner categorySpinner;
 
-    private ArrayAdapter<AccountExtended> mAccountSpinnerAdapter;
-    private ArrayAdapter<CategoryEntity> mCategorySpinnerAdapter;
+    private ArrayAdapter<AccountExtended> accountSpinnerAdapter;
+    private ArrayAdapter<CategoryEntity> incomeSpinnerAdapter;
+    private ArrayAdapter<CategoryEntity> outcomeSpinnerAdapter;
+    private List<CategoryEntity> incomeCategories;
+    private List<CategoryEntity> outcomeCategories;
 
-    private AccountViewModel mAccountViewModel;
-    private CategoryViewModel mCategoryViewModel;
-    private TransactionViewModel mTransactionViewModel;
+    private AccountViewModel accountViewModel;
+    private CategoryViewModel categoryViewModel;
+    private TransactionViewModel transactionViewModel;
 
     public AddTransactionFragment() { }
 
@@ -55,18 +59,15 @@ public class AddTransactionFragment extends AddItemFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FragmentActivity activity = getActivity();
+        incomeCategories = new ArrayList<>();
+        outcomeCategories = new ArrayList<>();
         if (activity != null) {
-            mAccountViewModel = ViewModelProviders.of(activity).get(AccountViewModel.class);
-            mCategoryViewModel = ViewModelProviders.of(activity).get(CategoryViewModel.class);
-            mTransactionViewModel = ViewModelProviders.of(activity).get(TransactionViewModel.class);
-            mCategoryViewModel.getAllCategories().observe(this, categories -> {
-                if (mCategorySpinnerAdapter != null) {
-                    mCategorySpinnerAdapter.clear();
-                    List<CategoryEntity> temp = mCategoryViewModel.getAllCategories().getValue();
-                    if (temp != null) {
-                        mCategorySpinnerAdapter.addAll(temp);
-                    }
-                }
+            accountViewModel = ViewModelProviders.of(activity).get(AccountViewModel.class);
+            categoryViewModel = ViewModelProviders.of(activity).get(CategoryViewModel.class);
+            transactionViewModel = ViewModelProviders.of(activity).get(TransactionViewModel.class);
+            AsyncTask.execute(() -> {
+                incomeCategories.addAll(categoryViewModel.getIncomeCategories());
+                outcomeCategories.addAll(categoryViewModel.getOutcomeCategories());
             });
         }
     }
@@ -76,29 +77,42 @@ public class AddTransactionFragment extends AddItemFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_transaction, container, false);
 
-        mTransactionDate = view.findViewById(R.id.sd_transaction_date);
-        mRadioGroupType = view.findViewById(R.id.rg_transaction_type);
-        mDescriptionField = view.findViewById(R.id.tf_description);
-        mValueField = view.findViewById(R.id.tf_value);
-        mAccountSpinner = view.findViewById(R.id.spinner_transaction_account);
-        mAccountSpinnerAdapter = getAccountAdapter();
-        mAccountSpinner.setAdapter(mAccountSpinnerAdapter);
-        mCategorySpinner = view.findViewById(R.id.spinner_transaction_category);
-        mCategorySpinnerAdapter = getCategoryAdapter();
-        mCategorySpinner.setAdapter(mCategorySpinnerAdapter);
+        transactionDate = view.findViewById(R.id.sd_transaction_date);
+        radioGroupType = view.findViewById(R.id.rg_transaction_type);
+        radioGroupType.setOnCheckedChangeListener((group, checkedId) -> {
+            switch (checkedId) {
+                case R.id.rb_income:
+                    if (incomeSpinnerAdapter == null) {
+                        incomeSpinnerAdapter = getIncomeAdapter();
+                    }
+                    categorySpinner.setAdapter(incomeSpinnerAdapter);
+                    break;
+                case R.id.rb_outcome:
+                    categorySpinner.setAdapter(outcomeSpinnerAdapter);
+                    break;
+            }
+        });
+        descriptionField = view.findViewById(R.id.tf_description);
+        valueField = view.findViewById(R.id.tf_value);
+        accountSpinner = view.findViewById(R.id.spinner_transaction_account);
+        accountSpinnerAdapter = getAccountAdapter();
+        accountSpinner.setAdapter(accountSpinnerAdapter);
+        categorySpinner = view.findViewById(R.id.spinner_transaction_category);
+        outcomeSpinnerAdapter = getOutcomeAdapter();
+        categorySpinner.setAdapter(outcomeSpinnerAdapter);
 
         Toolbar toolbar = view.findViewById(R.id.add_transaction_toolbar);
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_menu_save) {
-                Date date = mTransactionDate.getDate();
-                int type = mRadioGroupType.getCheckedRadioButtonId() == R.id.rb_income ?
+                Date date = transactionDate.getDate();
+                int type = radioGroupType.getCheckedRadioButtonId() == R.id.rb_income ?
                         1 : -1;
-                String description = mDescriptionField.getText().toString();
-                double value = Double.parseDouble(mValueField.getText().toString());
-                int account = mAccountSpinnerAdapter.getItem(
-                        mAccountSpinner.getSelectedItemPosition()).id;
-                int category = mCategorySpinnerAdapter.getItem(
-                        mCategorySpinner.getSelectedItemPosition()).getId();
+                String description = descriptionField.getText().toString();
+                double value = Double.parseDouble(valueField.getText().toString());
+                int account = ((AccountExtended) accountSpinner.getAdapter().getItem(
+                        accountSpinner.getSelectedItemPosition())).id;
+                int category = ((CategoryEntity) categorySpinner.getAdapter().getItem(
+                        categorySpinner.getSelectedItemPosition())).id;
                 TransactionEntity transaction = new TransactionEntity(
                         0, // not set
                         date,
@@ -110,7 +124,7 @@ public class AddTransactionFragment extends AddItemFragment {
                 );
 
                 if (true) { // TODO validate
-                    mTransactionViewModel.insertTransaction(transaction);
+                    transactionViewModel.insertTransaction(transaction);
                     dismiss();
                 }
             }
@@ -124,7 +138,7 @@ public class AddTransactionFragment extends AddItemFragment {
     }
 
     private ArrayAdapter<AccountExtended> getAccountAdapter() {
-        List<AccountExtended> accountEntityList = mAccountViewModel.getAllAccounts().getValue();
+        List<AccountExtended> accountEntityList = accountViewModel.getAllAccounts().getValue();
         return accountEntityList == null || getContext() == null ? null :
                 new ArrayAdapter<>(
                     getContext(),
@@ -133,11 +147,19 @@ public class AddTransactionFragment extends AddItemFragment {
         );
     }
 
-    private ArrayAdapter<CategoryEntity> getCategoryAdapter() {
+    private ArrayAdapter<CategoryEntity> getIncomeAdapter() {
         return getContext() == null ? null : new ArrayAdapter<>(
                 getContext(),
                 android.R.layout.simple_spinner_dropdown_item,
-                new ArrayList<>()
+                incomeCategories
+        );
+    }
+
+    private ArrayAdapter<CategoryEntity> getOutcomeAdapter() {
+        return getContext() == null ? null : new ArrayAdapter<>(
+                getContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                outcomeCategories
         );
     }
 }

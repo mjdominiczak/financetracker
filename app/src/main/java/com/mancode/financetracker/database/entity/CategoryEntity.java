@@ -13,22 +13,18 @@ public class CategoryEntity {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id")
-    private int id;
+    public int id;
 
     @ColumnInfo(name = "category")
-    private String category;
+    public String category;
 
-    public CategoryEntity(int id, String category) {
+    @ColumnInfo(name = "category_type")
+    public int categoryType;
+
+    public CategoryEntity(int id, String category, int categoryType) {
         this.id = id;
         this.category = category;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getCategory() {
-        return category;
+        this.categoryType = categoryType;
     }
 
     @Override

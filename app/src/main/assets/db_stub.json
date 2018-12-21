@@ -20,58 +20,72 @@
   "categories": [
     {
       "category": "Jedzenie",
+      "categoryType": -1,
       "id": 1
     },
     {
       "category": "Dom",
+      "categoryType": -1,
       "id": 2
     },
     {
       "category": "Transport",
+      "categoryType": -1,
       "id": 3
     },
     {
       "category": "Telekomunikacja",
+      "categoryType": -1,
       "id": 4
     },
     {
       "category": "Opieka zdrowotna",
+      "categoryType": -1,
       "id": 5
     },
     {
       "category": "Ubranie",
+      "categoryType": -1,
       "id": 6
     },
     {
       "category": "Higiena",
+      "categoryType": -1,
       "id": 7
     },
     {
       "category": "Dzieci",
+      "categoryType": -1,
       "id": 8
     },
     {
       "category": "Rozrywka",
+      "categoryType": -1,
       "id": 9
     },
     {
       "category": "Inne wydatki",
+      "categoryType": -1,
       "id": 10
     },
     {
       "category": "Pensja",
+      "categoryType": 1,
       "id": 11
     },
     {
       "category": "Odsetki",
+      "categoryType": 1,
       "id": 12
     },
     {
       "category": "Prezenty",
+      "categoryType": 1,
       "id": 13
     },
     {
       "category": "Inne przychody",
+      "categoryType": 1,
       "id": 14
     }
   ],
@@ -98,5 +112,5 @@
       "value": 0.0
     }
   ],
-  "version": 5
+  "version": 6
 }
