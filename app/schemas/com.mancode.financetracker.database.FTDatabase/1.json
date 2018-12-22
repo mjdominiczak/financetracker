@@ -2,44 +2,44 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "28c752df3fa84ee6287fcdf8bec22d93",
+    "identityHash": "6bb70f39441b1b47da5b8ae999eba0bd",
     "entities": [
       {
         "tableName": "accounts",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER NOT NULL, `account_name` TEXT, `account_type` INTEGER NOT NULL, `account_currency` INTEGER NOT NULL, `account_open_date` TEXT, `account_close_date` TEXT, PRIMARY KEY(`_id`), FOREIGN KEY(`account_currency`) REFERENCES `currencies`(`_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `account_name` TEXT, `account_type` INTEGER NOT NULL, `account_currency` TEXT, `account_open_date` TEXT, `account_close_date` TEXT, FOREIGN KEY(`account_currency`) REFERENCES `currencies`(`currency_symbol`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
-            "fieldPath": "mId",
+            "fieldPath": "id",
             "columnName": "_id",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mAccountName",
+            "fieldPath": "accountName",
             "columnName": "account_name",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "mAccountType",
+            "fieldPath": "accountType",
             "columnName": "account_type",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mAccountCurrency",
+            "fieldPath": "currency",
             "columnName": "account_currency",
-            "affinity": "INTEGER",
-            "notNull": true
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
-            "fieldPath": "mAccountOpenDate",
+            "fieldPath": "openDate",
             "columnName": "account_open_date",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "mAccountCloseDate",
+            "fieldPath": "closeDate",
             "columnName": "account_close_date",
             "affinity": "TEXT",
             "notNull": false
@@ -49,7 +49,7 @@
           "columnNames": [
             "_id"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [],
         "foreignKeys": [
@@ -61,41 +61,41 @@
               "account_currency"
             ],
             "referencedColumns": [
-              "_id"
+              "currency_symbol"
             ]
           }
         ]
       },
       {
         "tableName": "balances",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER NOT NULL, `balance_check_date` TEXT, `balance_account_id` INTEGER NOT NULL, `balance_value` REAL NOT NULL, `balance_fixed` INTEGER NOT NULL, PRIMARY KEY(`_id`), FOREIGN KEY(`balance_account_id`) REFERENCES `accounts`(`_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `balance_check_date` TEXT, `balance_account_id` INTEGER NOT NULL, `balance_value` REAL NOT NULL, `balance_fixed` INTEGER NOT NULL, FOREIGN KEY(`balance_account_id`) REFERENCES `accounts`(`_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
-            "fieldPath": "mId",
+            "fieldPath": "id",
             "columnName": "_id",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mBalanceCheckDate",
+            "fieldPath": "checkDate",
             "columnName": "balance_check_date",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "mBalanceAccountId",
+            "fieldPath": "accountId",
             "columnName": "balance_account_id",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mBalanceValue",
+            "fieldPath": "value",
             "columnName": "balance_value",
             "affinity": "REAL",
             "notNull": true
           },
           {
-            "fieldPath": "mBalanceFixed",
+            "fieldPath": "fixed",
             "columnName": "balance_fixed",
             "affinity": "INTEGER",
             "notNull": true
@@ -105,7 +105,7 @@
           "columnNames": [
             "_id"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [],
         "foreignKeys": [
@@ -124,48 +124,54 @@
       },
       {
         "tableName": "categories",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER NOT NULL, `category` TEXT, PRIMARY KEY(`_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `category` TEXT, `category_type` INTEGER NOT NULL)",
         "fields": [
           {
-            "fieldPath": "mId",
+            "fieldPath": "id",
             "columnName": "_id",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mCategory",
+            "fieldPath": "category",
             "columnName": "category",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "categoryType",
+            "columnName": "category_type",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
             "_id"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [],
         "foreignKeys": []
       },
       {
         "tableName": "currencies",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER NOT NULL, `currency_symbol` TEXT, `currency_exchange_rate` REAL NOT NULL, PRIMARY KEY(`_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `currency_symbol` TEXT, `currency_exchange_rate` REAL NOT NULL)",
         "fields": [
           {
-            "fieldPath": "mId",
+            "fieldPath": "id",
             "columnName": "_id",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mCurrencySymbol",
+            "fieldPath": "currencySymbol",
             "columnName": "currency_symbol",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "mExchangeRate",
+            "fieldPath": "exchangeRate",
             "columnName": "currency_exchange_rate",
             "affinity": "REAL",
             "notNull": true
@@ -175,53 +181,62 @@
           "columnNames": [
             "_id"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_currencies_currency_symbol",
+            "unique": true,
+            "columnNames": [
+              "currency_symbol"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_currencies_currency_symbol` ON `${TABLE_NAME}` (`currency_symbol`)"
+          }
+        ],
         "foreignKeys": []
       },
       {
         "tableName": "transactions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER NOT NULL, `transaction_date` TEXT, `transaction_type` INTEGER NOT NULL, `transaction_description` TEXT, `transaction_value` REAL NOT NULL, `transaction_account` INTEGER NOT NULL, `transaction_category` INTEGER NOT NULL, PRIMARY KEY(`_id`), FOREIGN KEY(`transaction_account`) REFERENCES `accounts`(`_id`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`transaction_category`) REFERENCES `categories`(`_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `transaction_date` TEXT, `transaction_type` INTEGER NOT NULL, `transaction_description` TEXT, `transaction_value` REAL NOT NULL, `transaction_account` INTEGER NOT NULL, `transaction_category` INTEGER NOT NULL, FOREIGN KEY(`transaction_account`) REFERENCES `accounts`(`_id`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`transaction_category`) REFERENCES `categories`(`_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
-            "fieldPath": "mId",
+            "fieldPath": "id",
             "columnName": "_id",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mDate",
+            "fieldPath": "date",
             "columnName": "transaction_date",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "mType",
+            "fieldPath": "type",
             "columnName": "transaction_type",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mDescription",
+            "fieldPath": "description",
             "columnName": "transaction_description",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "mValue",
+            "fieldPath": "value",
             "columnName": "transaction_value",
             "affinity": "REAL",
             "notNull": true
           },
           {
-            "fieldPath": "mAccountId",
+            "fieldPath": "accountId",
             "columnName": "transaction_account",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "mCategoryId",
+            "fieldPath": "categoryId",
             "columnName": "transaction_category",
             "affinity": "INTEGER",
             "notNull": true
@@ -231,7 +246,7 @@
           "columnNames": [
             "_id"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [],
         "foreignKeys": [
@@ -260,9 +275,15 @@
         ]
       }
     ],
+    "views": [
+      {
+        "viewName": "accounts_view",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT accounts._id, account_name, account_type, balance_check_date, balance_value, (SELECT balances._id FROM balances WHERE balance_account_id = accounts._id ORDER BY date(balance_check_date) DESC LIMIT 1) AS balance_id FROM accounts INNER JOIN balances ON balance_id = balances._id"
+      }
+    ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"28c752df3fa84ee6287fcdf8bec22d93\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"6bb70f39441b1b47da5b8ae999eba0bd\")"
     ]
   }
 }
