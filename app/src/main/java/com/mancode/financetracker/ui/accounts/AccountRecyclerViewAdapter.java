@@ -81,12 +81,16 @@ public class AccountRecyclerViewAdapter
             mAccount = account;
             mIdView.setText(String.valueOf(mAccount.id));
             mContentView.setText(mAccount.accountName);
-            mBalanceView.setText(String.format(Locale.getDefault(), "%.2f", mAccount.balanceValue));
-            if (mAccount.balanceValue != 0) {
-                int color = mAccount.accountType == 1 ?
-                        ContextCompat.getColor(mContext, R.color.colorPositiveValue) :
-                        ContextCompat.getColor(mContext, R.color.colorNegativeValue);
-                mBalanceView.setTextColor(color);
+            if (mAccount.balanceCheckDate != null) {
+                mBalanceView.setText(String.format(Locale.getDefault(), "%.2f", mAccount.balanceValue));
+                if (mAccount.balanceValue != 0) {
+                    int color = mAccount.accountType == 1 ?
+                            ContextCompat.getColor(mContext, R.color.colorPositiveValue) :
+                            ContextCompat.getColor(mContext, R.color.colorNegativeValue);
+                    mBalanceView.setTextColor(color);
+                }
+            } else {
+                mBalanceView.setText("n/a"); //TODO refactor - different info
             }
         }
     }

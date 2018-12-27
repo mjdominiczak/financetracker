@@ -13,7 +13,7 @@ import androidx.room.TypeConverters;
         value = "SELECT accounts._id, account_name, account_type, balance_check_date, balance_value, " +
         "(SELECT balances._id FROM balances WHERE balance_account_id = accounts._id " +
         "ORDER BY date(balance_check_date) DESC LIMIT 1) AS balance_id " +
-        "FROM accounts INNER JOIN balances ON balance_id = balances._id")
+        "FROM accounts LEFT JOIN balances ON balance_id = balances._id")
 @TypeConverters(DateConverter.class)
 public class AccountExtended {
 
