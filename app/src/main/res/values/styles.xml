@@ -26,6 +26,6 @@
 
     <style name="SetDateView" parent="@style/Widget.AppCompat.Spinner.Underlined"/>
 
-    <style name="Spinner" parent="@style/Widget.AppCompat.Spinner.Underlined"/>
+    <style name="Spinner" parent="@style/Widget.AppCompat.Spinner"/>
 
 </resources>

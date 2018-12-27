@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppTheme.Dialog"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@id/add_account_toolbar"
+    android:layout_marginTop="0dp"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:showIn="@layout/fragment_add_account">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/sp_currency"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tf_account_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_account_name"
+            android:inputType="textCapSentences" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Spinner
+        android:id="@+id/sp_currency"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textInputLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textInputLayout" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="112dp" />
+
+    <TextView
+        android:id="@+id/label_account_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_account_type"
+        app:layout_constraintBottom_toBottomOf="@+id/rg_account_type"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rg_account_type"
+        tools:text="@string/label_account_type" />
+
+    <RadioGroup
+        android:id="@+id/rg_account_type"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:checkedButton="@id/rb_assets"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+
+        <RadioButton
+            android:id="@+id/rb_assets"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/assets" />
+
+        <RadioButton
+            android:id="@+id/rb_liabilities"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/liabilities" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/label_account_open_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/account_open_date"
+        app:layout_constraintBottom_toBottomOf="@+id/sd_account_open_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sd_account_open_date"
+        tools:text="@string/account_open_date" />
+
+    <com.mancode.financetracker.ui.SetDateView
+        android:id="@+id/sd_account_open_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="@string/hint_account_open_date"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/rg_account_type" />
+
+    <CheckBox
+        android:id="@+id/cb_account_closed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:checked="false"
+        android:text="@string/account_closed"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/sd_account_open_date" />
+
+    <TextView
+        android:id="@+id/label_account_close_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/account_close_date"
+        app:layout_constraintBottom_toBottomOf="@+id/sd_account_close_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sd_account_close_date"
+        tools:text="@string/account_close_date" />
+
+    <com.mancode.financetracker.ui.SetDateView
+        android:id="@+id/sd_account_close_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:hint="@string/hint_account_close_date"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/cb_account_closed" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
