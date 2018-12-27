@@ -25,7 +25,7 @@
     <string name="hint_account_close_date">Account close date</string>
     <string name="hint_balance_value">Balance value</string>
     <string name="hint_balance_currency">Currency</string>
-    <string name="toolbar_action_save">SAVE</string>
+    <string name="toolbar_action_save">Save</string>
     <string name="check_date">Balance check date</string>
     <string name="hint_transaction_date">Transaction date</string>
     <string name="hint_transaction_description">Description</string>
@@ -43,6 +43,9 @@
     <string name="categories">Categories</string>
     <string name="button_transaction_menu">Transaction menu button</string>
     <string name="action_delete">Delete</string>
+    <string name="label_account_type">Type</string>
+    <string name="account_open_date">Open date</string>
+    <string name="account_close_date">Close date</string>
 
     <string-array name="transaction_filter_type">
         <item>All</item>
