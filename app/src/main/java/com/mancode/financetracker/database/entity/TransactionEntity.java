@@ -1,14 +1,14 @@
 package com.mancode.financetracker.database.entity;
 
+import com.mancode.financetracker.database.converter.DateConverter;
+
+import java.util.Date;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
-
-import com.mancode.financetracker.database.converter.DateConverter;
-
-import java.util.Date;
 
 /**
  * Created by Manveru on 25.01.2018.
@@ -31,25 +31,25 @@ public class TransactionEntity {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id")
-    private int id;
+    public int id;
 
     @ColumnInfo(name = "transaction_date")
-    private Date date;
+    public Date date;
 
     @ColumnInfo(name = "transaction_type")
-    private int type;
+    public int type;
 
     @ColumnInfo(name = "transaction_description")
-    private String description;
+    public String description;
 
     @ColumnInfo(name = "transaction_value")
-    private double value;
+    public double value;
 
     @ColumnInfo(name = "transaction_account")
-    private int accountId;
+    public int accountId;
 
     @ColumnInfo(name = "transaction_category")
-    private int categoryId;
+    public int categoryId;
 
     public TransactionEntity(int id, Date date, int type, String description,
                              double value, int accountId, int categoryId) {
@@ -60,33 +60,5 @@ public class TransactionEntity {
         this.value = value;
         this.accountId = accountId;
         this.categoryId = categoryId;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public double getValue() {
-        return value;
-    }
-
-    public int getAccountId() {
-        return accountId;
-    }
-
-    public int getCategoryId() {
-        return categoryId;
     }
 }

@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.mancode.financetracker.database.DataRepository;
 import com.mancode.financetracker.database.entity.TransactionEntity;
+import com.mancode.financetracker.database.entity.TransactionFull;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ import androidx.lifecycle.LiveData;
 public class TransactionViewModel extends AndroidViewModel {
 
     private DataRepository mRepository;
-    private LiveData<List<TransactionEntity>> mAllTransactions;
+    private LiveData<List<TransactionFull>> mAllTransactions;
 
     public TransactionViewModel(@NonNull Application application) {
         super(application);
@@ -26,7 +27,7 @@ public class TransactionViewModel extends AndroidViewModel {
         mAllTransactions = mRepository.getAllTransactions();
     }
 
-    public LiveData<List<TransactionEntity>> getAllTransactions() {
+    public LiveData<List<TransactionFull>> getAllTransactions() {
         return mAllTransactions;
     }
 

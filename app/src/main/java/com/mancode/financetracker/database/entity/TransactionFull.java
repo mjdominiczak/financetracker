@@ -5,54 +5,44 @@ import com.mancode.financetracker.database.converter.DateConverter;
 import java.util.Date;
 
 import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.ForeignKey;
-import androidx.room.PrimaryKey;
+import androidx.room.Embedded;
 import androidx.room.TypeConverters;
 
-/**
- * Created by Manveru on 23.01.2018.
- */
-
-@Entity(tableName = "accounts",
-        foreignKeys = @ForeignKey(entity = CurrencyEntity.class,
-                                  parentColumns = "currency_symbol",
-                                  childColumns = "account_currency"))
 @TypeConverters(DateConverter.class)
-public class AccountEntity {
+public class TransactionFull {
 
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "_id")
-    public int id;
-
+    @Embedded
+    public TransactionEntity transaction;
     @ColumnInfo(name = "account_name")
     public String accountName;
-
     @ColumnInfo(name = "account_type")
     public int accountType;
-
     @ColumnInfo(name = "account_currency")
     public String currency;
-
     @ColumnInfo(name = "account_open_date")
     public Date openDate;
-
     @ColumnInfo(name = "account_close_date")
     public Date closeDate;
+    @ColumnInfo(name = "category")
+    public String category;
+    @ColumnInfo(name = "category_type")
+    public int categoryType;
 
-    public AccountEntity(int id, String accountName,
-                         int accountType, String currency,
-                         Date openDate, Date closeDate) {
-        this.id = id;
+    public TransactionFull(TransactionEntity transaction,
+                           String accountName,
+                           int accountType,
+                           String currency,
+                           Date openDate,
+                           Date closeDate,
+                           String category,
+                           int categoryType) {
+        this.transaction = transaction;
         this.accountName = accountName;
         this.accountType = accountType;
         this.currency = currency;
         this.openDate = openDate;
         this.closeDate = closeDate;
-    }
-
-    @Override
-    public String toString() {
-        return accountName;
+        this.category = category;
+        this.categoryType = categoryType;
     }
 }

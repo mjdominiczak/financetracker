@@ -12,6 +12,7 @@ import com.mancode.financetracker.database.entity.BalanceEntity;
 import com.mancode.financetracker.database.entity.BalanceExtended;
 import com.mancode.financetracker.database.entity.CategoryEntity;
 import com.mancode.financetracker.database.entity.TransactionEntity;
+import com.mancode.financetracker.database.entity.TransactionFull;
 import com.mancode.financetracker.database.views.AccountExtended;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class DataRepository {
     private LiveData<List<AccountExtended>> mAllAccounts;
     private LiveData<List<BalanceExtended>> mAllBalances;
     private LiveData<List<CategoryEntity>> mAllCategories;
-    private LiveData<List<TransactionEntity>> mAllTransactions;
+    private LiveData<List<TransactionFull>> mAllTransactions;
 
     private DataRepository(Application application) {
         FTDatabase database = FTDatabase.getInstance(application);
@@ -79,7 +80,7 @@ public class DataRepository {
         return mCategoryDao.getOutcomeCategoriesLive();
     }
 
-    public LiveData<List<TransactionEntity>> getAllTransactions() {
+    public LiveData<List<TransactionFull>> getAllTransactions() {
         return mAllTransactions;
     }
 

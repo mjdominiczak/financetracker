@@ -15,11 +15,12 @@ import android.widget.TextView;
 import com.mancode.financetracker.R;
 import com.mancode.financetracker.database.converter.DateConverter;
 import com.mancode.financetracker.database.entity.TransactionEntity;
+import com.mancode.financetracker.database.entity.TransactionFull;
+import com.mancode.financetracker.ui.UIUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -35,14 +36,14 @@ class TransactionRecyclerViewAdapter
 
     private static final String TAG = TransactionRecyclerViewAdapter.class.getSimpleName();
 
-    private List<TransactionEntity> allTransactions;
-    private List<TransactionEntity> filteredTransactions;
+    private List<TransactionFull> allTransactions;
+    private List<TransactionFull> filteredTransactions;
     private boolean isFiltered = false;
     private FilterQuery filterQuery;
     private Context context;
     private DeleteRequestListener deleteRequestListener;
 
-    public TransactionRecyclerViewAdapter(Context context, DeleteRequestListener deleteRequestListener) {
+    TransactionRecyclerViewAdapter(Context context, DeleteRequestListener deleteRequestListener) {
         this.context = context;
         this.deleteRequestListener = deleteRequestListener;
     }
@@ -58,7 +59,7 @@ class TransactionRecyclerViewAdapter
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int position) {
         if (filteredTransactions != null && filteredTransactions.size() > position) {
-            TransactionEntity transaction = filteredTransactions.get(position);
+            TransactionFull transaction = filteredTransactions.get(position);
             viewHolder.init(transaction);
         } else {
             Log.e(TAG, "");
@@ -72,7 +73,7 @@ class TransactionRecyclerViewAdapter
         } else return 0;
     }
 
-    public void setTransactions(List<TransactionEntity> transactions) {
+    public void setTransactions(List<TransactionFull> transactions) {
         allTransactions = transactions;
         filteredTransactions = transactions;  // TODO think through
         notifyDataSetChanged();
@@ -98,7 +99,7 @@ class TransactionRecyclerViewAdapter
         private TextView tvValue;
         private TextView tvDescription;
         private ImageButton menuButton;
-        private TransactionEntity mTransaction;
+        private TransactionFull mTransaction;
 
         ViewHolder(View view) {
             super(view);
@@ -108,15 +109,16 @@ class TransactionRecyclerViewAdapter
             menuButton = view.findViewById(R.id.transaction_menu_button);
         }
 
-        void init(TransactionEntity transaction) {
+        void init(TransactionFull transaction) {
             mTransaction = transaction;
-            tvDate.setText(DateConverter.toString(mTransaction.getDate()));
-            tvValue.setText(String.format(Locale.getDefault(), "%.2f", mTransaction.getValue()));
-            int color = mTransaction.getType() == 1 ?
+            tvDate.setText(DateConverter.toString(mTransaction.transaction.date));
+            tvValue.setText(UIUtils.getFormattedMoney(
+                    mTransaction.transaction.value, mTransaction.currency));
+            int color = mTransaction.transaction.type == 1 ?
                     ContextCompat.getColor(context, R.color.colorPositiveValue) :
                     ContextCompat.getColor(context, R.color.colorNegativeValue);
             tvValue.setTextColor(color);
-            tvDescription.setText(mTransaction.getDescription());
+            tvDescription.setText(mTransaction.transaction.description);
             menuButton.setOnClickListener(this::showTransactionPopup);
         }
 
@@ -128,7 +130,7 @@ class TransactionRecyclerViewAdapter
                 switch (item.getItemId()) {
                     case R.id.action_delete_transaction:
                         if (deleteRequestListener != null) {
-                            deleteRequestListener.onDeleteRequested(mTransaction);
+                            deleteRequestListener.onDeleteRequested(mTransaction.transaction);
                         }
                         return true;
                 }
@@ -142,14 +144,14 @@ class TransactionRecyclerViewAdapter
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
             String query = charSequence.toString();
-            List<TransactionEntity> filteredList = new ArrayList<>();
+            List<TransactionFull> filteredList = new ArrayList<>();
             if (query.isEmpty()) {
                 isFiltered = false;
                 filteredList = allTransactions;
             } else {
                 isFiltered = true;
                 filterQuery = new FilterQuery(query);
-                for (TransactionEntity transaction : allTransactions) {
+                for (TransactionFull transaction : allTransactions) {
                     if (filterQuery.isMatch(transaction)) {
                         filteredList.add(transaction);
                     }
@@ -162,7 +164,7 @@ class TransactionRecyclerViewAdapter
 
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            filteredTransactions = (ArrayList<TransactionEntity>) filterResults.values;
+            filteredTransactions = (ArrayList<TransactionFull>) filterResults.values;
             notifyDataSetChanged();
         }
     }

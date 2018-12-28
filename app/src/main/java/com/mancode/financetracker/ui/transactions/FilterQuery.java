@@ -1,7 +1,7 @@
 package com.mancode.financetracker.ui.transactions;
 
 import com.mancode.financetracker.database.converter.DateConverter;
-import com.mancode.financetracker.database.entity.TransactionEntity;
+import com.mancode.financetracker.database.entity.TransactionFull;
 
 import java.util.Date;
 
@@ -35,7 +35,7 @@ public class FilterQuery {
         tokenize();
     }
 
-    public static String getEmptyQuery() {
+    static String getEmptyQuery() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < TOKENS_COUNT - 1; i++) {
             sb.append(SEPARATOR);
@@ -56,21 +56,21 @@ public class FilterQuery {
         return !token.isEmpty() ? Integer.parseInt(token) : TYPE_ALL;
     }
 
-    public Date getFromDate() {
+    Date getFromDate() {
         return DateConverter.toDate(mTokens[TOKEN_FROM_DATE]);
     }
 
-    public Date getToDate() {
+    Date getToDate() {
         return DateConverter.toDate(mTokens[TOKEN_TO_DATE]);
     }
 
-    public boolean isMatch(TransactionEntity transaction) {
+    boolean isMatch(TransactionFull transaction) {
         int type = getType();
         Date fromDate = getFromDate();
         Date toDate = getToDate();
 
-        return (type == TYPE_ALL || type == transaction.getType()) &&
-                (fromDate == null || !transaction.getDate().before(fromDate)) &&
-                (toDate == null || !transaction.getDate().after(toDate));
+        return (type == TYPE_ALL || type == transaction.transaction.type) &&
+                (fromDate == null || !transaction.transaction.date.before(fromDate)) &&
+                (toDate == null || !transaction.transaction.date.after(toDate));
     }
 }
