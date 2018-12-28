@@ -1,7 +1,5 @@
 package com.mancode.financetracker.ui.balances;
 
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +19,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Manveru on 06.09.2017.
@@ -49,7 +51,7 @@ public class BalanceRecyclerViewAdapter
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         mRecyclerView = recyclerView;
     }
@@ -82,26 +84,25 @@ public class BalanceRecyclerViewAdapter
         } else return 0;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_balance, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int position) {
         if (!(position >= 0 && position < mBalancesMap.size())) {
             throw new IllegalStateException("Position invalid: " + position);
         }
-        if (mBalancesMap != null) {
-            int i = 0;
-            for (Map.Entry<Date, List<BalanceExtended>> entry : mBalancesMap.entrySet()){
-                if (i == position) {
-                    viewHolder.initFromList(entry.getKey(), entry.getValue());
-                    break;
-                } else i++;
-            }
+        int i = 0;
+        for (Map.Entry<Date, List<BalanceExtended>> entry : mBalancesMap.entrySet()){
+            if (i == position) {
+                viewHolder.initFromList(entry.getKey(), entry.getValue());
+                break;
+            } else i++;
         }
     }
 
@@ -131,7 +132,7 @@ public class BalanceRecyclerViewAdapter
             balanceDate.setText(DateConverter.toString(key));
             TextView balanceDaily = mView.findViewById(R.id.balance_daily);
             balanceDaily.setText(String.format(Locale.getDefault(),
-                    "%.2f", calculateDailyBalance(itemList)));
+                    "%.2f", calculateDailyBalance(itemList))); // TODO format as currency
             for (BalanceExtended item : itemList) {
                 LinearLayout innerLayout = (LinearLayout) LayoutInflater.from(mView.getContext())
                         .inflate(R.layout.single_balance, mList, false);

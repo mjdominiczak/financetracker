@@ -10,7 +10,8 @@ import androidx.room.DatabaseView;
 import androidx.room.TypeConverters;
 
 @DatabaseView(viewName = "accounts_view",
-        value = "SELECT accounts._id, account_name, account_type, balance_check_date, balance_value, " +
+        value = "SELECT accounts._id, account_name, account_type, " +
+        "account_currency, balance_check_date, balance_value, " +
         "(SELECT balances._id FROM balances WHERE balance_account_id = accounts._id " +
         "ORDER BY date(balance_check_date) DESC LIMIT 1) AS balance_id " +
         "FROM accounts LEFT JOIN balances ON balance_id = balances._id")
@@ -23,6 +24,8 @@ public class AccountExtended {
     public String accountName;
     @ColumnInfo(name = "account_type")
     public int accountType;
+    @ColumnInfo(name = "account_currency")
+    public String accountCurrency;
     @ColumnInfo(name = "balance_check_date")
     public Date balanceCheckDate;
     @ColumnInfo(name = "balance_value")

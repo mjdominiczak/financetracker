@@ -1,5 +1,9 @@
 package com.mancode.financetracker.ui;
 
+import java.text.NumberFormat;
+import java.util.Currency;
+import java.util.Locale;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -22,5 +26,13 @@ public class UIUtils {
                     android.R.animator.fade_in, android.R.animator.fade_out,
                     android.R.animator.fade_in, android.R.animator.fade_out)
                 .add(android.R.id.content, fragment).addToBackStack(null).commit();
+    }
+
+    public static String getFormattedMoney(double value, String currencyCode) {
+        Currency currency = Currency.getInstance(currencyCode);
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        formatter.setCurrency(currency);
+        formatter.setMaximumFractionDigits(currency.getDefaultFractionDigits());
+        return formatter.format(value);
     }
 }
