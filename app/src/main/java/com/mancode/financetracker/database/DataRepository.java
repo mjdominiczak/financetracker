@@ -6,11 +6,13 @@ import android.os.AsyncTask;
 import com.mancode.financetracker.database.dao.AccountDao;
 import com.mancode.financetracker.database.dao.BalanceDao;
 import com.mancode.financetracker.database.dao.CategoryDao;
+import com.mancode.financetracker.database.dao.CurrencyDao;
 import com.mancode.financetracker.database.dao.TransactionDao;
 import com.mancode.financetracker.database.entity.AccountEntity;
 import com.mancode.financetracker.database.entity.BalanceEntity;
 import com.mancode.financetracker.database.entity.BalanceExtended;
 import com.mancode.financetracker.database.entity.CategoryEntity;
+import com.mancode.financetracker.database.entity.CurrencyEntity;
 import com.mancode.financetracker.database.entity.TransactionEntity;
 import com.mancode.financetracker.database.entity.TransactionFull;
 import com.mancode.financetracker.database.views.AccountExtended;
@@ -30,6 +32,7 @@ public class DataRepository {
     private AccountDao mAccountDao;
     private BalanceDao mBalanceDao;
     private CategoryDao mCategoryDao;
+    private CurrencyDao mCurrencyDao;
     private TransactionDao mTransactionDao;
 
     private LiveData<List<AccountExtended>> mAllAccounts;
@@ -45,6 +48,7 @@ public class DataRepository {
         mAllBalances = mBalanceDao.getBalancesForDisplay();
         mCategoryDao = database.categoryDao();
         mAllCategories = mCategoryDao.getAllCategoriesLive();
+        mCurrencyDao = database.currencyDao();
         mTransactionDao = database.transactionDao();
         mAllTransactions = mTransactionDao.getAllTransactionsLive();
     }
@@ -85,7 +89,16 @@ public class DataRepository {
     }
 
     public void insertAccount(AccountEntity account) {
-        AsyncTask.execute(() -> mAccountDao.insertAccount(account));
+        AsyncTask.execute(() -> {
+            if (mCurrencyDao.getCurrencyCount(account.currency) == 0) {
+                mCurrencyDao.insertCurrency(new CurrencyEntity(
+                        0,
+                        account.currency,
+                        1.0
+                ));
+            }
+            mAccountDao.insertAccount(account);
+        });
     }
 
     public void insertBalance(BalanceEntity balance) {
