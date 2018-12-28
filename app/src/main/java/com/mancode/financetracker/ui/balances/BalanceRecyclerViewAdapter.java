@@ -15,6 +15,7 @@ import com.mancode.financetracker.ui.UIUtils;
 import net.cachapa.expandablelayout.ExpandableLayout;
 
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -132,8 +133,8 @@ public class BalanceRecyclerViewAdapter
             TextView balanceDate = mView.findViewById(R.id.balance_date);
             balanceDate.setText(DateConverter.toString(key));
             TextView balanceDaily = mView.findViewById(R.id.balance_daily);
-            balanceDaily.setText(String.format(Locale.getDefault(),
-                    "%.2f", calculateDailyBalance(itemList))); // TODO format as currency
+            balanceDaily.setText(UIUtils.getFormattedMoney(calculateDailyBalance(itemList),
+                    Currency.getInstance(Locale.getDefault()).getCurrencyCode())); // TODO default currency??? - selectable?
             for (BalanceExtended item : itemList) {
                 LinearLayout innerLayout = (LinearLayout) LayoutInflater.from(mView.getContext())
                         .inflate(R.layout.single_balance, mList, false);
