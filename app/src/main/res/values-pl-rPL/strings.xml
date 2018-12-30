@@ -24,7 +24,7 @@
     <string name="hint_balance_currency">Waluta</string>
     <string name="toolbar_action_save">Zapisz</string>
     <string name="check_date">Bilans na dzień</string>
-    <string name="hint_transaction_date">Data transkacji</string>
+    <string name="hint_transaction_date">Data transakcji</string>
     <string name="hint_transaction_description">Opis</string>
     <string name="hint_transaction_value">Wartość</string>
     <string name="assets">Majątek</string>
@@ -43,6 +43,10 @@
     <string name="label_account_type">Typ</string>
     <string name="account_open_date">Data otwarcia</string>
     <string name="account_close_date">Data zamknięcia</string>
+    <string name="hint_transaction_type">Typ</string>
+    <string name="label_account">Konto</string>
+    <string name="label_category">Kategoria</string>
+    <string name="label_date">Data</string>
 
     <string-array name="transaction_filter_type">
         <item>Wszystkie</item>

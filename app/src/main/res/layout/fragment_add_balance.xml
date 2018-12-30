@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
+    android:focusable="true"
     tools:context="com.mancode.financetracker.ui.balances.AddBalanceFragment">
 
     <androidx.appcompat.widget.Toolbar
@@ -25,38 +26,7 @@
         android:layout_width="match_parent"
         style="@style/AppTheme.Dialog">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:padding="16dp">
-
-            <com.mancode.financetracker.ui.SetDateView
-                android:id="@+id/tf_balance_check_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/check_date" />
-
-            <Spinner
-                android:id="@+id/spinner_balance_account"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:spinnerMode="dropdown"
-                style="@style/Widget.AppCompat.Spinner.Underlined" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tf_balance"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_balance_value"
-                    android:inputType="numberDecimal" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
+        <include layout="@layout/edit_balance" />
 
     </ScrollView>
 

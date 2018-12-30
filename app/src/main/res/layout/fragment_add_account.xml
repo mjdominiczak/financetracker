@@ -20,6 +20,6 @@
         android:theme="@style/AppTheme.AppBarOverlay"
         app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
-    <include layout="@layout/account_edit" />
+    <include layout="@layout/edit_account" />
 
 </RelativeLayout>
