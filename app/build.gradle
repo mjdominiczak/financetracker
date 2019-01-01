@@ -5,9 +5,9 @@ android {
     defaultConfig {
         applicationId "com.mancode.financetracker"
         minSdkVersion 22
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName "0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         // used by Room, to test Migrations
         javaCompileOptions {
