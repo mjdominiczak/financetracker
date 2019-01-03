@@ -2,6 +2,7 @@ captures/
 app/build
 
 # built application files
+*.aab
 *.apk
 *.ap_
 
