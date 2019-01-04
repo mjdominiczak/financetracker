@@ -1,3 +1,16 @@
+plugins {
+    id 'com.chattylabs.versioning' version '0.19.5'
+}
+
+versioning {
+    tagPrefix "v"
+    keywords {
+        major "[incompatible]", "[major]"
+        minor "[feature]", "[minor]"
+        patch "[bug]", "[patch]"
+    }
+}
+
 apply plugin: 'com.android.application'
 
 android {
@@ -6,8 +19,8 @@ android {
         applicationId "com.mancode.financetracker"
         minSdkVersion 22
         targetSdkVersion 28
-        versionCode 1
-        versionName "0.0.1"
+        versionCode versioning.code()
+        versionName versioning.name()
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         // used by Room, to test Migrations
         javaCompileOptions {

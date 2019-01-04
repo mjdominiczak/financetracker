@@ -39,6 +39,9 @@ local.properties
 # Windows clutter
 Thumbs.db
 
+# Versioning properties
+version.properties
+
 # Intellij IDEA (see https://intellij-support.jetbrains.com/entries/23393067)
 .idea/caches
 .idea/codeStyles
