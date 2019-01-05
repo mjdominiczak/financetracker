@@ -33,15 +33,17 @@ public class ImportFromJsonWorker extends Worker {
         Gson gson = new GsonBuilder()
                 .setDateFormat(DateConverter.DATE_FORMAT_STRING)
                 .create();
-        String json;
+        StringBuilder json = new StringBuilder();
 
         try {
             if (JSON_FILE.exists()) {
-                Scanner scanner = new Scanner(JSON_FILE);
-                json = scanner.useDelimiter("\\Z").next();
+                Scanner scanner = new Scanner(JSON_FILE).useDelimiter("\\z");
+                while (scanner.hasNext()) {
+                    json.append(scanner.next());
+                }
                 scanner.close();
 
-                DatabaseObject databaseObject = gson.fromJson(json, DatabaseObject.class);
+                DatabaseObject databaseObject = gson.fromJson(json.toString(), DatabaseObject.class);
                 if (FTDatabase.DATABASE_VERSION == databaseObject.version) {
                     FTDatabase database = FTDatabase.getInstance(getApplicationContext());
                     database.clearAllTables();
