@@ -47,6 +47,9 @@
     <string name="label_account">Konto</string>
     <string name="label_category">Kategoria</string>
     <string name="label_date">Data</string>
+    <string name="error_description_empty">Pole opisu nie może być puste</string>
+    <string name="error_value_empty">Pole wartości nie może być puste</string>
+    <string name="error_name_empty">Pole nazwy nie może być puste</string>
 
     <string-array name="transaction_filter_type">
         <item>Wszystkie</item>

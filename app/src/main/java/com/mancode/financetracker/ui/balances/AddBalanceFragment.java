@@ -1,6 +1,9 @@
 package com.mancode.financetracker.ui.balances;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,14 +34,14 @@ import androidx.lifecycle.ViewModelProviders;
 
 public class AddBalanceFragment extends AddItemFragment {
 
-    private SetDateView mCheckDate;
-    private Spinner mAccountSpinner;
-    private EditText mBalanceValue;
+    private SetDateView checkDate;
+    private Spinner accountSpinner;
+    private EditText valueField;
 
-    private ArrayAdapter<AccountExtended> mAccountSpinnerAdapter;
+    private ArrayAdapter<AccountExtended> accountSpinnerAdapter;
 
-    private AccountViewModel mAccountViewModel;
-    private BalanceViewModel mBalanceViewModel;
+    private AccountViewModel accountViewModel;
+    private BalanceViewModel balanceViewModel;
 
     public AddBalanceFragment() { }
 
@@ -51,8 +54,8 @@ public class AddBalanceFragment extends AddItemFragment {
         super.onCreate(savedInstanceState);
         FragmentActivity activity = getActivity();
         if (activity != null) {
-            mAccountViewModel = ViewModelProviders.of(activity).get(AccountViewModel.class);
-            mBalanceViewModel = ViewModelProviders.of(activity).get(BalanceViewModel.class);
+            accountViewModel = ViewModelProviders.of(activity).get(AccountViewModel.class);
+            balanceViewModel = ViewModelProviders.of(activity).get(BalanceViewModel.class);
         }
     }
 
@@ -61,39 +64,59 @@ public class AddBalanceFragment extends AddItemFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_balance, container, false);
 
-        mCheckDate = view.findViewById(R.id.tf_balance_check_date);
-        mAccountSpinner = view.findViewById(R.id.spinner_balance_account);
-        mBalanceValue = view.findViewById(R.id.tf_balance);
+        checkDate = view.findViewById(R.id.tf_balance_check_date);
+        accountSpinner = view.findViewById(R.id.spinner_balance_account);
+        valueField = view.findViewById(R.id.tf_balance);
+        valueField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-        List<AccountExtended> accountEntityList = mAccountViewModel.getAllAccounts().getValue();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(s)) {
+                    valueField.setError(getString(R.string.error_value_empty));
+                }
+            }
+        });
+
+        List<AccountExtended> accountEntityList = accountViewModel.getAllAccounts().getValue();
         if (accountEntityList != null && getContext() != null) {
-            mAccountSpinnerAdapter = new ArrayAdapter<>(
+            accountSpinnerAdapter = new ArrayAdapter<>(
                     getContext(),
                     android.R.layout.simple_spinner_dropdown_item,
                     accountEntityList
             );
         }
-        mAccountSpinner.setAdapter(mAccountSpinnerAdapter);
+        accountSpinner.setAdapter(accountSpinnerAdapter);
 
         Toolbar toolbar = view.findViewById(R.id.add_balance_toolbar);
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_menu_save) {
-                Date checkDate = mCheckDate.getDate();
-                int accountId = mAccountSpinnerAdapter.getItem(
-                        mAccountSpinner.getSelectedItemPosition()).id;
-                double value = Double.parseDouble(mBalanceValue.getText().toString());
-                BalanceEntity balance = new BalanceEntity(
-                        0, // not set
-                        checkDate,
-                        accountId,
-                        value,
-                        true
-                );
+                Date date = checkDate.getDate();
+                int accountId = ((AccountExtended) accountSpinner.getAdapter().getItem(
+                        accountSpinner.getSelectedItemPosition())).id;
+                String valueString = valueField.getText().toString();
 
-                //noinspection ConstantConditions
-                if (true) { // TODO validate
-                    mBalanceViewModel.insert(balance);
+                if (!TextUtils.isEmpty(valueString)) {
+                    double value = Double.parseDouble(valueString);
+                    BalanceEntity balance = new BalanceEntity(
+                            0, // not set
+                            date,
+                            accountId,
+                            value,
+                            true
+                    );
+                    balanceViewModel.insert(balance);
                     dismiss();
+                } else {
+                    valueField.setError(getString(R.string.error_value_empty));
                 }
             }
             return false;

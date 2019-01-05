@@ -50,6 +50,9 @@
     <string name="label_account">Account</string>
     <string name="label_category">Category</string>
     <string name="label_date">Date</string>
+    <string name="error_description_empty">Description field cannot be empty</string>
+    <string name="error_value_empty">Value field cannot be empty</string>
+    <string name="error_name_empty">Name field cannot be empty</string>
 
     <string-array name="transaction_filter_type">
         <item>All</item>

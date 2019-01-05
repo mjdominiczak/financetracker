@@ -2,6 +2,9 @@ package com.mancode.financetracker.ui.accounts;
 
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +64,24 @@ public class AddAccountFragment extends AddItemFragment {
         View view = inflater.inflate(R.layout.fragment_add_account, container, false);
 
         nameField = view.findViewById(R.id.tf_account_name);
+        nameField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(s)) {
+                    nameField.setError(getString(R.string.error_name_empty));
+                }
+            }
+        });
         currencySpinner = view.findViewById(R.id.sp_currency);
         radioGroupType = view.findViewById(R.id.rg_account_type);
         openDate = view.findViewById(R.id.sd_account_open_date);
@@ -96,18 +117,20 @@ public class AddAccountFragment extends AddItemFragment {
                 Date openDate = this.openDate.getDate();
                 Date closeDate = this.closeDate.getDate();
                 String currency = currencyAdapter.getItem(currencySpinner.getSelectedItemPosition());
-                AccountEntity account = new AccountEntity(
-                        0, // not set
-                        name,
-                        type,
-                        currency,
-                        openDate,
-                        closeDate
-                );
 
-                if (true) { // TODO validate
+                if (!TextUtils.isEmpty(name)) {
+                    AccountEntity account = new AccountEntity(
+                            0, // not set
+                            name,
+                            type,
+                            currency,
+                            openDate,
+                            closeDate
+                    );
                     accountViewModel.insert(account);
                     dismiss();
+                } else {
+                    nameField.setError(getString(R.string.error_name_empty));
                 }
             }
             return false;

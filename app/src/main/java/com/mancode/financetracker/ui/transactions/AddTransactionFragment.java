@@ -2,6 +2,9 @@ package com.mancode.financetracker.ui.transactions;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,7 +96,41 @@ public class AddTransactionFragment extends AddItemFragment {
             }
         });
         descriptionField = view.findViewById(R.id.tf_description);
+        descriptionField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(s))
+                    descriptionField.setError(getString(R.string.error_description_empty));
+            }
+        });
         valueField = view.findViewById(R.id.tf_value);
+        valueField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(s))
+                    valueField.setError(getString(R.string.error_value_empty));
+            }
+        });
         accountSpinner = view.findViewById(R.id.spinner_transaction_account);
         accountSpinnerAdapter = getAccountAdapter();
         accountSpinner.setAdapter(accountSpinnerAdapter);
@@ -104,28 +141,36 @@ public class AddTransactionFragment extends AddItemFragment {
         Toolbar toolbar = view.findViewById(R.id.add_transaction_toolbar);
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_menu_save) {
+                String description = descriptionField.getText().toString();
+                String valueString = valueField.getText().toString();
                 Date date = transactionDate.getDate();
                 int type = radioGroupType.getCheckedRadioButtonId() == R.id.rb_income ?
                         1 : -1;
-                String description = descriptionField.getText().toString();
-                double value = Double.parseDouble(valueField.getText().toString());
                 int account = ((AccountExtended) accountSpinner.getAdapter().getItem(
                         accountSpinner.getSelectedItemPosition())).id;
                 int category = ((CategoryEntity) categorySpinner.getAdapter().getItem(
                         categorySpinner.getSelectedItemPosition())).id;
-                TransactionEntity transaction = new TransactionEntity(
-                        0, // not set
-                        date,
-                        type,
-                        description,
-                        value,
-                        account,
-                        category
-                );
 
-                if (true) { // TODO validate
+                if (!TextUtils.isEmpty(description) && !TextUtils.isEmpty(valueString)) {
+                    double value = Double.parseDouble(valueString);
+                    TransactionEntity transaction = new TransactionEntity(
+                            0, // not set
+                            date,
+                            type,
+                            description,
+                            value,
+                            account,
+                            category
+                    );
                     transactionViewModel.insertTransaction(transaction);
                     dismiss();
+                } else {
+                    if (TextUtils.isEmpty(description)) {
+                        descriptionField.setError(getString(R.string.error_description_empty));
+                    }
+                    if (TextUtils.isEmpty(valueString)) {
+                        valueField.setError(getString(R.string.error_value_empty));
+                    }
                 }
             }
             return false;
