@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "6bb70f39441b1b47da5b8ae999eba0bd",
+    "identityHash": "f9924511317838cb94016bff525ad6d7",
     "entities": [
       {
         "tableName": "accounts",
@@ -273,17 +273,49 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "net_values",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`date` TEXT NOT NULL, `value` REAL NOT NULL, `complete` INTEGER NOT NULL, PRIMARY KEY(`date`))",
+        "fields": [
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isComplete",
+            "columnName": "complete",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "date"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [
       {
         "viewName": "accounts_view",
-        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT accounts._id, account_name, account_type, balance_check_date, balance_value, (SELECT balances._id FROM balances WHERE balance_account_id = accounts._id ORDER BY date(balance_check_date) DESC LIMIT 1) AS balance_id FROM accounts INNER JOIN balances ON balance_id = balances._id"
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT accounts._id, account_name, account_type, account_currency, balance_check_date, balance_value, (SELECT balances._id FROM balances WHERE balance_account_id = accounts._id ORDER BY date(balance_check_date) DESC LIMIT 1) AS balance_id FROM accounts LEFT JOIN balances ON balance_id = balances._id"
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"6bb70f39441b1b47da5b8ae999eba0bd\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"f9924511317838cb94016bff525ad6d7\")"
     ]
   }
 }

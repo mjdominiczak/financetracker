@@ -29,6 +29,9 @@ import androidx.room.TypeConverters;
 @TypeConverters(DateConverter.class)
 public class TransactionEntity {
 
+    public static final int TYPE_INCOME = 1;
+    public static final int TYPE_OUTCOME = -1;
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id")
     public int id;

@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab1_name));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab2_name));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab3_name));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab4_name));
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 

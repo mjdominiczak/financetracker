@@ -114,7 +114,7 @@ class TransactionRecyclerViewAdapter
             tvDate.setText(DateConverter.toString(mTransaction.transaction.date));
             tvValue.setText(UIUtils.getFormattedMoney(
                     mTransaction.transaction.value, mTransaction.currency));
-            int color = mTransaction.transaction.type == 1 ?
+            int color = mTransaction.transaction.type == TransactionEntity.TYPE_INCOME ?
                     ContextCompat.getColor(context, R.color.colorPositiveValue) :
                     ContextCompat.getColor(context, R.color.colorNegativeValue);
             tvValue.setTextColor(color);

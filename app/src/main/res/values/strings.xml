@@ -18,6 +18,7 @@
     <string name="tab1_name">Accounts</string>
     <string name="tab2_name">Balances</string>
     <string name="tab3_name">Transactions</string>
+    <string name="tab4_name">Reports</string>
 
     <string name="hint_account_name">Account name</string>
     <string name="hint_account_type">Account type</string>
@@ -35,6 +36,7 @@
     <string name="account_closed">Account closed</string>
     <string name="income">Income</string>
     <string name="outcome">Outcome</string>
+    <string name="balance">Balance</string>
     <string name="filter">Filter</string>
     <string name="transactions_type">Transactions type</string>
     <string name="timespan">Timespan</string>
@@ -53,6 +55,11 @@
     <string name="error_description_empty">Description field cannot be empty</string>
     <string name="error_value_empty">Value field cannot be empty</string>
     <string name="error_name_empty">Name field cannot be empty</string>
+    <string name="total_label">Total:</string>
+    <string name="registered_outcome">Registered outcome</string>
+    <string name="registered_income">Registered income</string>
+    <string name="previous_report">Previous report</string>
+    <string name="next_report">Next report</string>
 
     <string-array name="transaction_filter_type">
         <item>All</item>

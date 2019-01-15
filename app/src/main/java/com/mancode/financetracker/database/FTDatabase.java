@@ -6,14 +6,17 @@ import com.mancode.financetracker.database.dao.AccountDao;
 import com.mancode.financetracker.database.dao.BalanceDao;
 import com.mancode.financetracker.database.dao.CategoryDao;
 import com.mancode.financetracker.database.dao.CurrencyDao;
+import com.mancode.financetracker.database.dao.NetValueDao;
 import com.mancode.financetracker.database.dao.TransactionDao;
 import com.mancode.financetracker.database.entity.AccountEntity;
 import com.mancode.financetracker.database.entity.BalanceEntity;
 import com.mancode.financetracker.database.entity.CategoryEntity;
 import com.mancode.financetracker.database.entity.CurrencyEntity;
+import com.mancode.financetracker.database.entity.NetValue;
 import com.mancode.financetracker.database.entity.TransactionEntity;
 import com.mancode.financetracker.database.views.AccountExtended;
 import com.mancode.financetracker.database.workers.PrepopulateDatabaseWorker;
+import com.mancode.financetracker.database.workers.UpdateStateWorker;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -32,7 +35,8 @@ import androidx.work.WorkManager;
                         BalanceEntity.class,
                         CategoryEntity.class,
                         CurrencyEntity.class,
-                        TransactionEntity.class},
+                        TransactionEntity.class,
+                        NetValue.class},
             views = {AccountExtended.class},
             version = FTDatabase.DATABASE_VERSION)
 public abstract class FTDatabase extends RoomDatabase {
@@ -65,6 +69,15 @@ public abstract class FTDatabase extends RoomDatabase {
                         WorkManager.getInstance().enqueue(request);
                     }
                 })
+                .addCallback(new Callback() {
+                    @Override
+                    public void onOpen(@NonNull SupportSQLiteDatabase db) {
+                        super.onOpen(db);
+                        OneTimeWorkRequest request =
+                                new OneTimeWorkRequest.Builder(UpdateStateWorker.class).build();
+                        WorkManager.getInstance().enqueue(request);
+                    }
+                })
                 .build();
     }
 
@@ -77,4 +90,6 @@ public abstract class FTDatabase extends RoomDatabase {
     public abstract CurrencyDao currencyDao();
 
     public abstract TransactionDao transactionDao();
+
+    public abstract NetValueDao netValueDao();
 }
