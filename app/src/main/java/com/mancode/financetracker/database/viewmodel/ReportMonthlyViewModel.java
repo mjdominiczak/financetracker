@@ -38,4 +38,8 @@ public class ReportMonthlyViewModel extends AndroidViewModel {
         return repository.getNetValueBefore(date);
     }
 
+    public LiveData<NetValue> getNetValueAfter(Date date) {
+        return repository.getNetValueAfter(date);
+    }
+
 }

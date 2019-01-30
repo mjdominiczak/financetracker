@@ -44,4 +44,8 @@ public class ReportRepository {
     public LiveData<NetValue> getNetValueBefore(Date date) {
         return netValueDao.getValueBefore(date);
     }
+
+    public LiveData<NetValue> getNetValueAfter(Date date) {
+        return netValueDao.getValueAfter(date);
+    }
 }

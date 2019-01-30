@@ -17,6 +17,7 @@ import com.mancode.financetracker.database.entity.BalanceEntity;
 import com.mancode.financetracker.database.viewmodel.AccountViewModel;
 import com.mancode.financetracker.database.viewmodel.BalanceViewModel;
 import com.mancode.financetracker.database.views.AccountExtended;
+import com.mancode.financetracker.database.workers.UpdateStateWorker;
 import com.mancode.financetracker.ui.SetDateView;
 
 import java.util.Date;
@@ -27,6 +28,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 /**
  * Created by Manveru on 07.09.2017.
@@ -114,6 +117,9 @@ public class AddBalanceFragment extends AddItemFragment {
                             true
                     );
                     balanceViewModel.insert(balance);
+                    OneTimeWorkRequest request =
+                            new OneTimeWorkRequest.Builder(UpdateStateWorker.class).build();
+                    WorkManager.getInstance().enqueue(request);
                     dismiss();
                 } else {
                     valueField.setError(getString(R.string.error_value_empty));

@@ -1,21 +1,33 @@
 package com.mancode.financetracker.database.pojos;
 
+import com.mancode.financetracker.database.entity.NetValue;
 import com.mancode.financetracker.database.entity.TransactionEntity;
 import com.mancode.financetracker.database.entity.TransactionFull;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class Report {
 
     private List<TransactionFull> transactions;
+    private NetValue netValue1;
+    private NetValue netValue2;
 
     private Date from;
     private Date to;
     private double income;
     private double outcome;
+    private double calculatedOutcome;
     private double balance;
     private double total;
+
+    private int dayCount;
+    private double dailyAverage;
+
+    private NetValue netValueFrom;
+    private NetValue netValueTo;
 
     public Report(Date from, Date to) {
         resetDates(from, to);
@@ -26,8 +38,12 @@ public class Report {
         this.to = to;
         income = 0;
         outcome = 0;
+        calculatedOutcome = 0;
         balance = 0;
         total = 0;
+        netValue1 = null;
+        netValue2 = null;
+        dailyAverage = 0;
     }
 
     public Date getFrom() {
@@ -46,6 +62,10 @@ public class Report {
         return outcome;
     }
 
+    public double getCalculatedOutcome() {
+        return calculatedOutcome;
+    }
+
     public double getBalance() {
         return balance;
     }
@@ -54,18 +74,43 @@ public class Report {
         return total;
     }
 
+    public int getDayCount() {
+        return dayCount;
+    }
+
+    public NetValue getNetValue1() {
+        return netValue1;
+    }
+
+    public NetValue getNetValue2() {
+        return netValue2;
+    }
+
+    public double getDailyAverage() {
+        return dailyAverage;
+    }
+
+    public NetValue getNetValueFrom() {
+        return netValueFrom;
+    }
+
+    public NetValue getNetValueTo() {
+        return netValueTo;
+    }
+
     public void setTransactions(List<TransactionFull> transactions) {
         this.transactions = transactions;
         calculateIncome();
-        calculateOutcome();
+        calculateOutcomeWithTransactions();
         updateBalance();
+        continueIfDataPresent();
     }
 
     private void calculateIncome() {
         income = sumTransactions(TransactionEntity.TYPE_INCOME);
     }
 
-    private void calculateOutcome() {
+    private void calculateOutcomeWithTransactions() {
         outcome = sumTransactions(TransactionEntity.TYPE_OUTCOME);
     }
 
@@ -82,4 +127,56 @@ public class Report {
     private void updateBalance() {
         balance = income - outcome;
     }
+
+    public void setNetValue1(NetValue netValue) {
+        this.netValue1 = netValue;
+        continueIfDataPresent();
+    }
+
+    public void setNetValue2(NetValue netValue) {
+        this.netValue2 = netValue;
+        continueIfDataPresent();
+    }
+
+    private void continueIfDataPresent() {
+        if (netValue1 != null && netValue2 != null) {
+            calculateDailyAverage();
+            calculateSyntheticNetValues();
+            calculateOutcomeWithBalances();
+        }
+    }
+
+    private void calculateDailyAverage() {
+        dayCount = computeDayDiff(netValue1.getDate(), netValue2.getDate());
+        dailyAverage = (netValue2.getValue() - netValue1.getValue()) / dayCount;
+    }
+
+    private void calculateSyntheticNetValues() { // TODO TEST
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd", Locale.US);
+        if (!format.format(from).equals(format.format(netValue1.getDate()))) {
+            double valueFrom = netValue1.getValue() +
+                    dailyAverage * computeDayDiff(netValue1.getDate(), from);
+            netValueFrom = new NetValue(from, valueFrom);
+        } else {
+            netValueFrom = netValue1;
+        }
+        if (!format.format(to).equals(format.format(netValue2.getDate()))) {
+            double valueTo = netValue2.getValue() +
+                    dailyAverage * computeDayDiff(netValue2.getDate(), to);
+            netValueTo = new NetValue(to, valueTo);
+        } else {
+            netValueTo = netValue2;
+        }
+    }
+
+    private void calculateOutcomeWithBalances() {
+        calculatedOutcome = income - (netValueTo.getValue() - netValueFrom.getValue());
+    }
+
+    private static int computeDayDiff(Date from, Date to) { // TODO test
+        long dateDiff = to.getTime() - from.getTime();
+        return (int) (dateDiff / (1000 * 60 * 60 * 24));
+    }
 }
+
+// TODO uwzględnić transakcje w wyliczaniu dziennej delty

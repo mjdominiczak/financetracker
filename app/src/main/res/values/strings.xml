@@ -60,6 +60,9 @@
     <string name="registered_income">Registered income</string>
     <string name="previous_report">Previous report</string>
     <string name="next_report">Next report</string>
+    <string name="base_net_values">Base net values</string>
+    <string name="calculated_net_values">Calculated net values</string>
+    <string name="calculated_outcome">Calculated outcome</string>
 
     <string-array name="transaction_filter_type">
         <item>All</item>

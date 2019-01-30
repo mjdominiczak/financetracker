@@ -23,6 +23,9 @@ public interface NetValueDao {
     @Query("SELECT * FROM net_values WHERE date <= :date ORDER BY date DESC LIMIT 1")
     LiveData<NetValue> getValueBefore(Date date);
 
+    @Query("SELECT * FROM net_values WHERE date >= :date ORDER BY date ASC LIMIT 1")
+    LiveData<NetValue> getValueAfter(Date date);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<NetValue> netValues);
 }

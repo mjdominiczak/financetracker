@@ -57,6 +57,9 @@
     <string name="total_label">Suma:</string>
     <string name="previous_report">Poprzedni raport</string>
     <string name="next_report">Następny raport</string>
+    <string name="base_net_values">Bazowe wartości netto</string>
+    <string name="calculated_net_values">Obliczone wartości netto</string>
+    <string name="calculated_outcome">Obliczone wydatki</string>
 
     <string-array name="transaction_filter_type">
         <item>Wszystkie</item>

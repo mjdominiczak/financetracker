@@ -5,13 +5,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.mancode.financetracker.R;
+import com.mancode.financetracker.database.entity.NetValue;
 import com.mancode.financetracker.database.entity.TransactionFull;
 import com.mancode.financetracker.database.pojos.Report;
 import com.mancode.financetracker.database.viewmodel.ReportMonthlyViewModel;
+import com.mancode.financetracker.ui.UIUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -22,6 +25,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 
 public class ReportMonthlyFragment extends Fragment {
@@ -32,15 +36,25 @@ public class ReportMonthlyFragment extends Fragment {
 
     private ReportMonthlyViewModel viewModel;
     private Report report;
-    private Calendar calendar = Calendar.getInstance();
+    private Calendar calendar;
 
-    private TextView tvReportRange;
+    private TextView tvNetValueDate1;
+    private TextView tvNetValueDate2;
+    private TextView tvNetValue1;
+    private TextView tvNetValue2;
     private TextView tvIncome;
     private TextView tvOutcome;
+    private TextView tvCalcOutcome;
     private TextView tvBalance;
     private TextView tvTotal;
+    private TextView tvDailyAverage;
     private ImageButton btnPrev;
     private ImageButton btnNext;
+    private Button btnRange;
+    private TextView tvNetValueFromDate;
+    private TextView tvNetValueToDate;
+    private TextView tvNetValueFrom;
+    private TextView tvNetValueTo;
 
     public ReportMonthlyFragment() {
         // Required empty public constructor
@@ -55,38 +69,58 @@ public class ReportMonthlyFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         viewModel = ViewModelProviders.of(this).get(ReportMonthlyViewModel.class);
         viewModel.setVisibleReport(report);
-        viewModel.getTransactions().observe(this,
-                this::setTransactions);
-//        viewModel.getNetValueBefore() TODO
+        resetObservers();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_report_monthly, container, false);
-        tvReportRange = view.findViewById(R.id.btn_report_range);
+        btnRange = view.findViewById(R.id.btn_report_range);
+        tvNetValueDate1 = view.findViewById(R.id.tv_net_value_date1);
+        tvNetValueDate2 = view.findViewById(R.id.tv_net_value_date2);
+        tvNetValue1 = view.findViewById(R.id.tv_net_value1);
+        tvNetValue2 = view.findViewById(R.id.tv_net_value2);
         tvIncome = view.findViewById(R.id.tv_report_income);
         tvOutcome = view.findViewById(R.id.tv_report_outcome);
+        tvCalcOutcome = view.findViewById(R.id.tv_report_calc_outcome);
         tvBalance = view.findViewById(R.id.tv_report_balance);
         tvTotal = view.findViewById(R.id.tv_report_total);
+        tvDailyAverage = view.findViewById(R.id.tv_daily_average);
+        tvNetValueFromDate = view.findViewById(R.id.tv_net_value_from_date);
+        tvNetValueToDate = view.findViewById(R.id.tv_net_value_to_date);
+        tvNetValueFrom = view.findViewById(R.id.tv_net_value_from);
+        tvNetValueTo = view.findViewById(R.id.tv_net_value_to);
 
         btnPrev = view.findViewById(R.id.btn_prev_report);
         btnPrev.setOnClickListener(v -> {
             ReportMonthlyFragment.this.initReport(MONTH_PREVIOUS);
-            viewModel.getTransactions().removeObservers(this);
-            viewModel.getTransactions().observe(ReportMonthlyFragment.this,
-                    this::setTransactions);
+            resetObservers();
         });
         btnNext = view.findViewById(R.id.btn_next_report);
         btnNext.setOnClickListener(v -> {
             initReport(MONTH_NEXT);
-            viewModel.getTransactions().removeObservers(this);
-            viewModel.getTransactions().observe(this,
-                    this::setTransactions);
+            resetObservers();
+        });
+        btnRange.setOnClickListener(v -> {
+            initReport(MONTH_THIS);
+            resetObservers();
         });
 
         initReport(MONTH_THIS);
         return view;
+    }
+
+    private void resetObservers() {
+        LiveData<List<TransactionFull>> transactions = viewModel.getTransactions();
+        transactions.removeObservers(this);
+        transactions.observe(ReportMonthlyFragment.this, this::setTransactions);
+        LiveData<NetValue> netValueBefore1 = viewModel.getNetValueBefore(report.getTo()); // TODO alghoritm for choosing netvalues
+        netValueBefore1.removeObservers(this);
+        netValueBefore1.observe(this, this::setNetValue2);
+        LiveData<NetValue> netValueBefore2 = viewModel.getNetValueBefore(report.getFrom());
+        netValueBefore2.removeObservers(this);
+        netValueBefore2.observe(this, this::setNetValue1);
     }
 
     private void initReport(int whichMonth) {
@@ -101,16 +135,17 @@ public class ReportMonthlyFragment extends Fragment {
     public void setTransactions(List<TransactionFull> transactions) {
         report.setTransactions(transactions);
         updateViews();
+        updateNetValueViews();
     }
 
     private void updateViews() {
         DateFormat format = SimpleDateFormat.getDateInstance();
         String reportRange = format.format(report.getFrom()) + " - " + format.format(report.getTo());
-        tvReportRange.setText(reportRange);
-        tvIncome.setText(String.valueOf(report.getIncome()));
-        tvOutcome.setText(String.valueOf(report.getOutcome()));
-        tvBalance.setText(String.valueOf(report.getBalance()));
-        tvTotal.setText(String.valueOf(report.getTotal()));
+        btnRange.setText(reportRange);
+        tvIncome.setText(UIUtils.getFormattedMoney(report.getIncome(), "PLN")); // TODO hardcoded currency
+        tvOutcome.setText(UIUtils.getFormattedMoney(report.getOutcome(), "PLN")); // TODO hardcoded currency
+        tvBalance.setText(UIUtils.getFormattedMoney(report.getBalance(), "PLN")); // TODO hardcoded currency
+        tvTotal.setText(UIUtils.getFormattedMoney(report.getTotal(), "PLN")); // TODO hardcoded currency
 
         if (report.getTo().after(Calendar.getInstance().getTime())) {
             btnNext.setEnabled(false);
@@ -119,16 +154,63 @@ public class ReportMonthlyFragment extends Fragment {
         }
     }
 
+    private void setNetValue1(NetValue netValue) {
+        report.setNetValue1(netValue);
+        updateNetValueViews();
+    }
+
+    private void setNetValue2(NetValue netValue) {
+        report.setNetValue2(netValue);
+        updateNetValueViews();
+    }
+
+    private void updateNetValueViews() {
+        DateFormat format = SimpleDateFormat.getDateInstance();
+        boolean value1Set = report.getNetValue1() != null;
+        boolean value2Set = report.getNetValue2() != null;
+        if (value1Set) {
+            tvNetValueDate1.setText(format.format(report.getNetValue1().getDate()));
+            tvNetValue1.setText(UIUtils.getFormattedMoney(
+                    report.getNetValue1().getValue(), "PLN")); // TODO hardcoded currency
+        } else {
+            tvNetValueDate1.setText("n/a");
+            tvNetValue1.setText("n/a");
+        }
+        if (value2Set) {
+            tvNetValueDate2.setText(format.format(report.getNetValue2().getDate()));
+            tvNetValue2.setText(UIUtils.getFormattedMoney(
+                    report.getNetValue2().getValue(), "PLN")); // TODO hardcoded currency
+        } else {
+            tvNetValueDate2.setText("n/a");
+            tvNetValue2.setText("n/a");
+        }
+        if (value1Set && value2Set) {
+            tvNetValueFromDate.setText(format.format(report.getNetValueFrom().getDate()));
+            tvNetValueToDate.setText(format.format(report.getNetValueTo().getDate()));
+            tvNetValueFrom.setText(UIUtils.getFormattedMoney(
+                    report.getNetValueFrom().getValue(), "PLN")); // TODO hardcoded currency
+            tvNetValueTo.setText(UIUtils.getFormattedMoney(
+                    report.getNetValueTo().getValue(), "PLN")); // TODO hardcoded currency
+            tvDailyAverage.setText(UIUtils.getFormattedMoney(
+                    report.getDailyAverage(), "PLN")); // TODO hardcoded currency
+            tvCalcOutcome.setText(UIUtils.getFormattedMoney(
+                    report.getCalculatedOutcome(), "PLN")); // TODO hardcoded currency
+        }
+    }
+
     private Date getMonthStart(int whichMonth) {
-        if (report != null) calendar.setTime(report.getFrom());
+        if (whichMonth == MONTH_THIS) calendar = Calendar.getInstance();
+        else calendar.setTime(report.getFrom());
         calendar.add(Calendar.MONTH, whichMonth);
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         return calendar.getTime();
     }
 
     private Date getMonthEnd(int whichMonth) {
-        if (report != null) calendar.setTime(report.getFrom());
+        if (whichMonth == MONTH_THIS) calendar = Calendar.getInstance();
+        else calendar.setTime(report.getFrom());
         calendar.add(Calendar.MONTH, whichMonth + 1);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
         calendar.add(Calendar.DAY_OF_MONTH, -1);
         return calendar.getTime();
     }
