@@ -131,7 +131,7 @@ public class BalanceRecyclerViewAdapter
         void initFromList(Date key, List<BalanceExtended> itemList) {
             mList.removeAllViews();
             TextView balanceDate = mView.findViewById(R.id.balance_date);
-            balanceDate.setText(DateConverter.toString(key));
+            balanceDate.setText(DateConverter.INSTANCE.toString(key));
             TextView balanceDaily = mView.findViewById(R.id.balance_daily);
             balanceDaily.setText(UIUtils.getFormattedMoney(calculateDailyBalance(itemList),
                     Currency.getInstance(Locale.getDefault()).getCurrencyCode())); // TODO default currency??? - selectable?

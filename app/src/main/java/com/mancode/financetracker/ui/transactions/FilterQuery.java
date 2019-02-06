@@ -29,9 +29,9 @@ public class FilterQuery {
     FilterQuery(Integer type, Date from, Date to) {
         mQuery = String.valueOf(type) +
                 SEPARATOR +
-                DateConverter.toString(from) +
+                DateConverter.INSTANCE.toString(from) +
                 SEPARATOR +
-                DateConverter.toString(to);
+                DateConverter.INSTANCE.toString(to);
         tokenize();
     }
 
@@ -57,11 +57,11 @@ public class FilterQuery {
     }
 
     Date getFromDate() {
-        return DateConverter.toDate(mTokens[TOKEN_FROM_DATE]);
+        return DateConverter.INSTANCE.toDate(mTokens[TOKEN_FROM_DATE]);
     }
 
     Date getToDate() {
-        return DateConverter.toDate(mTokens[TOKEN_TO_DATE]);
+        return DateConverter.INSTANCE.toDate(mTokens[TOKEN_TO_DATE]);
     }
 
     boolean isMatch(TransactionFull transaction) {
