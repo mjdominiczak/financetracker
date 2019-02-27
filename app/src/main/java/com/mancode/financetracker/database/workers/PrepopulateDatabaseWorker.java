@@ -7,8 +7,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.mancode.financetracker.database.FTDatabase;
-import com.mancode.financetracker.database.converter.DateConverter;
 import com.mancode.financetracker.database.json.DatabaseObject;
+import com.mancode.financetracker.database.json.LocalDateGsonAdapter;
+
+import org.threeten.bp.LocalDate;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,7 +35,7 @@ public class PrepopulateDatabaseWorker extends Worker {
     public Result doWork() {
 
         Gson gson = new GsonBuilder()
-                .setDateFormat(DateConverter.DATE_FORMAT_STRING)
+                .registerTypeAdapter(LocalDate.class, new LocalDateGsonAdapter())
                 .create();
         JsonReader reader;
 

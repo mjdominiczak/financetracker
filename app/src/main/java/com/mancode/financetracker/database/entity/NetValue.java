@@ -2,7 +2,7 @@ package com.mancode.financetracker.database.entity;
 
 import com.mancode.financetracker.database.converter.DateConverter;
 
-import java.util.Date;
+import org.threeten.bp.LocalDate;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -16,14 +16,14 @@ public class NetValue {
     @NonNull
     @PrimaryKey
     @TypeConverters(DateConverter.class)
-    private Date date;
+    private LocalDate date;
 
     private double value;
 
     @ColumnInfo(name = "complete")
     private boolean isComplete;
 
-    public NetValue(@NonNull Date date, double value) {
+    public NetValue(@NonNull LocalDate date, double value) {
         this.date = date;
         this.value = value;
     }
@@ -33,7 +33,7 @@ public class NetValue {
     }
 
     @NonNull
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 

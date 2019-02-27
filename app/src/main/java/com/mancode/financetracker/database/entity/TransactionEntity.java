@@ -2,7 +2,7 @@ package com.mancode.financetracker.database.entity;
 
 import com.mancode.financetracker.database.converter.DateConverter;
 
-import java.util.Date;
+import org.threeten.bp.LocalDate;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -37,7 +37,7 @@ public class TransactionEntity {
     public int id;
 
     @ColumnInfo(name = "transaction_date")
-    public Date date;
+    public LocalDate date;
 
     @ColumnInfo(name = "transaction_type")
     public int type;
@@ -54,7 +54,7 @@ public class TransactionEntity {
     @ColumnInfo(name = "transaction_category")
     public int categoryId;
 
-    public TransactionEntity(int id, Date date, int type, String description,
+    public TransactionEntity(int id, LocalDate date, int type, String description,
                              double value, int accountId, int categoryId) {
         this.id = id;
         this.date = date;

@@ -4,7 +4,8 @@ import com.mancode.financetracker.database.converter.DateConverter;
 import com.mancode.financetracker.database.entity.TransactionEntity;
 import com.mancode.financetracker.database.entity.TransactionFull;
 
-import java.util.Date;
+import org.threeten.bp.LocalDate;
+
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
@@ -43,7 +44,10 @@ public interface TransactionDao {
             "LEFT JOIN categories ON transaction_category = categories._id " +
             "WHERE date(transaction_date) >= date(:from)" +
             "AND date(transaction_date) <= date(:to)")
-    LiveData<List<TransactionFull>> getTransactionsFromRange(Date from, Date to);
+    LiveData<List<TransactionFull>> getTransactionsFromRange(LocalDate from, LocalDate to);
+
+    @Query("SELECT * FROM transactions WHERE transaction_date = :date")
+    List<TransactionEntity> getTransactionsForDate(LocalDate date);
 
     @Insert
     void insertTransaction(TransactionEntity transaction);

@@ -3,7 +3,7 @@ package com.mancode.financetracker.ui.transactions;
 import com.mancode.financetracker.database.converter.DateConverter;
 import com.mancode.financetracker.database.entity.TransactionFull;
 
-import java.util.Date;
+import org.threeten.bp.LocalDate;
 
 public class FilterQuery {
 
@@ -26,7 +26,7 @@ public class FilterQuery {
         tokenize();
     }
 
-    FilterQuery(Integer type, Date from, Date to) {
+    FilterQuery(Integer type, LocalDate from, LocalDate to) {
         mQuery = String.valueOf(type) +
                 SEPARATOR +
                 DateConverter.INSTANCE.toString(from) +
@@ -56,21 +56,21 @@ public class FilterQuery {
         return !token.isEmpty() ? Integer.parseInt(token) : TYPE_ALL;
     }
 
-    Date getFromDate() {
+    LocalDate getFromDate() {
         return DateConverter.INSTANCE.toDate(mTokens[TOKEN_FROM_DATE]);
     }
 
-    Date getToDate() {
+    LocalDate getToDate() {
         return DateConverter.INSTANCE.toDate(mTokens[TOKEN_TO_DATE]);
     }
 
     boolean isMatch(TransactionFull transaction) {
         int type = getType();
-        Date fromDate = getFromDate();
-        Date toDate = getToDate();
+        LocalDate fromDate = getFromDate();
+        LocalDate toDate = getToDate();
 
         return (type == TYPE_ALL || type == transaction.transaction.type) &&
-                (fromDate == null || !transaction.transaction.date.before(fromDate)) &&
-                (toDate == null || !transaction.transaction.date.after(toDate));
+                (fromDate == null || !transaction.transaction.date.isBefore(fromDate)) &&
+                (toDate == null || !transaction.transaction.date.isAfter(toDate));
     }
 }

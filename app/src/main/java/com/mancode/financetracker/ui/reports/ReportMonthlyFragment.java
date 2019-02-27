@@ -1,6 +1,5 @@
 package com.mancode.financetracker.ui.reports;
 
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +15,10 @@ import com.mancode.financetracker.database.pojos.Report;
 import com.mancode.financetracker.database.viewmodel.ReportMonthlyViewModel;
 import com.mancode.financetracker.ui.UIUtils;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.temporal.TemporalAdjusters;
+
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -139,15 +138,14 @@ public class ReportMonthlyFragment extends Fragment {
     }
 
     private void updateViews() {
-        DateFormat format = SimpleDateFormat.getDateInstance();
-        String reportRange = format.format(report.getFrom()) + " - " + format.format(report.getTo());
+        String reportRange = report.getFrom().toString() + " - " + report.getTo().toString();
         btnRange.setText(reportRange);
         tvIncome.setText(UIUtils.getFormattedMoney(report.getIncome(), "PLN")); // TODO hardcoded currency
         tvOutcome.setText(UIUtils.getFormattedMoney(report.getOutcome(), "PLN")); // TODO hardcoded currency
         tvBalance.setText(UIUtils.getFormattedMoney(report.getBalance(), "PLN")); // TODO hardcoded currency
         tvTotal.setText(UIUtils.getFormattedMoney(report.getTotal(), "PLN")); // TODO hardcoded currency
 
-        if (report.getTo().after(Calendar.getInstance().getTime())) {
+        if (report.getTo().isAfter(LocalDate.now())) {
             btnNext.setEnabled(false);
         } else {
             btnNext.setEnabled(true);
@@ -165,11 +163,10 @@ public class ReportMonthlyFragment extends Fragment {
     }
 
     private void updateNetValueViews() {
-        DateFormat format = SimpleDateFormat.getDateInstance();
         boolean value1Set = report.getNetValue1() != null;
         boolean value2Set = report.getNetValue2() != null;
         if (value1Set) {
-            tvNetValueDate1.setText(format.format(report.getNetValue1().getDate()));
+            tvNetValueDate1.setText(report.getNetValue1().getDate().toString());
             tvNetValue1.setText(UIUtils.getFormattedMoney(
                     report.getNetValue1().getValue(), "PLN")); // TODO hardcoded currency
         } else {
@@ -177,7 +174,7 @@ public class ReportMonthlyFragment extends Fragment {
             tvNetValue1.setText("n/a");
         }
         if (value2Set) {
-            tvNetValueDate2.setText(format.format(report.getNetValue2().getDate()));
+            tvNetValueDate2.setText(report.getNetValue2().getDate().toString());
             tvNetValue2.setText(UIUtils.getFormattedMoney(
                     report.getNetValue2().getValue(), "PLN")); // TODO hardcoded currency
         } else {
@@ -185,12 +182,12 @@ public class ReportMonthlyFragment extends Fragment {
             tvNetValue2.setText("n/a");
         }
         if (value1Set && value2Set) {
-            tvNetValueFromDate.setText(format.format(report.getNetValueFrom().getDate()));
-            tvNetValueToDate.setText(format.format(report.getNetValueTo().getDate()));
+            tvNetValueFromDate.setText(report.getNetValue1().getDate().toString());
+            tvNetValueToDate.setText(report.getNetValue2().getDate().toString());
             tvNetValueFrom.setText(UIUtils.getFormattedMoney(
-                    report.getNetValueFrom().getValue(), "PLN")); // TODO hardcoded currency
+                    report.getNetValue1().getValue(), "PLN")); // TODO hardcoded currency
             tvNetValueTo.setText(UIUtils.getFormattedMoney(
-                    report.getNetValueTo().getValue(), "PLN")); // TODO hardcoded currency
+                    report.getNetValue2().getValue(), "PLN")); // TODO hardcoded currency
             tvDailyAverage.setText(UIUtils.getFormattedMoney(
                     report.getDailyAverage(), "PLN")); // TODO hardcoded currency
             tvCalcOutcome.setText(UIUtils.getFormattedMoney(
@@ -198,21 +195,24 @@ public class ReportMonthlyFragment extends Fragment {
         }
     }
 
-    private Date getMonthStart(int whichMonth) {
-        if (whichMonth == MONTH_THIS) calendar = Calendar.getInstance();
-        else calendar.setTime(report.getFrom());
-        calendar.add(Calendar.MONTH, whichMonth);
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        return calendar.getTime();
+    private LocalDate getMonthStart(int whichMonth) {
+        if (whichMonth == MONTH_THIS)
+            return LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
+        else {
+            return LocalDate.from(report.getFrom())
+                    .plusMonths(whichMonth)
+                    .with(TemporalAdjusters.firstDayOfMonth());
+        }
     }
 
-    private Date getMonthEnd(int whichMonth) {
-        if (whichMonth == MONTH_THIS) calendar = Calendar.getInstance();
-        else calendar.setTime(report.getFrom());
-        calendar.add(Calendar.MONTH, whichMonth + 1);
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        calendar.add(Calendar.DAY_OF_MONTH, -1);
-        return calendar.getTime();
+    private LocalDate getMonthEnd(int whichMonth) {
+        if (whichMonth == MONTH_THIS)
+            return LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
+        else {
+            return LocalDate.from(report.getFrom())
+                    .plusMonths(whichMonth)
+                    .with(TemporalAdjusters.lastDayOfMonth());
+        }
     }
 
 }

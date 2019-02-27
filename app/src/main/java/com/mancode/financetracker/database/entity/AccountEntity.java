@@ -2,7 +2,7 @@ package com.mancode.financetracker.database.entity;
 
 import com.mancode.financetracker.database.converter.DateConverter;
 
-import java.util.Date;
+import org.threeten.bp.LocalDate;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -35,14 +35,14 @@ public class AccountEntity {
     public String currency;
 
     @ColumnInfo(name = "account_open_date")
-    public Date openDate;
+    public LocalDate openDate;
 
     @ColumnInfo(name = "account_close_date")
-    public Date closeDate;
+    public LocalDate closeDate;
 
     public AccountEntity(int id, String accountName,
                          int accountType, String currency,
-                         Date openDate, Date closeDate) {
+                         LocalDate openDate, LocalDate closeDate) {
         this.id = id;
         this.accountName = accountName;
         this.accountType = accountType;

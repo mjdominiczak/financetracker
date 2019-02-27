@@ -5,7 +5,8 @@ import com.mancode.financetracker.database.entity.BalanceEntity;
 import com.mancode.financetracker.database.entity.BalanceExtended;
 import com.mancode.financetracker.database.pojos.BalanceMini;
 
-import java.util.Date;
+import org.threeten.bp.LocalDate;
+
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
@@ -35,13 +36,13 @@ public interface BalanceDao {
             "ORDER BY date(balance_check_date) DESC, balance_account_id ASC")
     LiveData<List<BalanceExtended>> getBalancesForDisplay();
 
-    @Query("SELECT DISTINCT balance_check_date FROM balances")
-    List<Date> getDateKeys(); // TODO add ordering for performance???
+    @Query("SELECT DISTINCT balance_check_date FROM balances ORDER BY balance_check_date ASC")
+    List<LocalDate> getDateKeys();
 
     @Query("SELECT balance_check_date, balance_value, account_type, account_currency " +
             "FROM balances INNER JOIN accounts ON balance_account_id = accounts._id " +
             "WHERE balance_check_date = :date")
-    List<BalanceMini> getBalancesForDate(Date date);
+    List<BalanceMini> getBalancesForDate(LocalDate date);
 
     @Insert
     void insertBalance(BalanceEntity balance);

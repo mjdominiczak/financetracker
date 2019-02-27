@@ -3,7 +3,8 @@ package com.mancode.financetracker.database.dao;
 import com.mancode.financetracker.database.converter.DateConverter;
 import com.mancode.financetracker.database.entity.NetValue;
 
-import java.util.Date;
+import org.threeten.bp.LocalDate;
+
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
@@ -21,10 +22,10 @@ public interface NetValueDao {
     LiveData<List<NetValue>> getValues();
 
     @Query("SELECT * FROM net_values WHERE date <= :date ORDER BY date DESC LIMIT 1")
-    LiveData<NetValue> getValueBefore(Date date);
+    LiveData<NetValue> getValueBefore(LocalDate date);
 
     @Query("SELECT * FROM net_values WHERE date >= :date ORDER BY date ASC LIMIT 1")
-    LiveData<NetValue> getValueAfter(Date date);
+    LiveData<NetValue> getValueAfter(LocalDate date);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<NetValue> netValues);

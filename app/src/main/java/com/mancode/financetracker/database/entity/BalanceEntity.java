@@ -1,14 +1,14 @@
 package com.mancode.financetracker.database.entity;
 
+import com.mancode.financetracker.database.converter.DateConverter;
+
+import org.threeten.bp.LocalDate;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
-
-import com.mancode.financetracker.database.converter.DateConverter;
-
-import java.util.Date;
 
 /**
  * Created by Manveru on 25.01.2018.
@@ -26,7 +26,7 @@ public class BalanceEntity {
     private int id;
 
     @ColumnInfo(name = "balance_check_date")
-    private Date checkDate;
+    private LocalDate checkDate;
 
     @ColumnInfo(name = "balance_account_id")
     private int accountId;
@@ -37,7 +37,7 @@ public class BalanceEntity {
     @ColumnInfo(name = "balance_fixed")
     private boolean fixed;
 
-    public BalanceEntity(int id, Date checkDate, int accountId, double value, boolean fixed) {
+    public BalanceEntity(int id, LocalDate checkDate, int accountId, double value, boolean fixed) {
         this.id = id;
         this.checkDate = checkDate;
         this.accountId = accountId;
@@ -49,7 +49,7 @@ public class BalanceEntity {
         return id;
     }
 
-    public Date getCheckDate() {
+    public LocalDate getCheckDate() {
         return checkDate;
     }
 

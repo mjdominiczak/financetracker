@@ -14,9 +14,10 @@ import com.mancode.financetracker.ui.UIUtils;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
+import org.threeten.bp.LocalDate;
+
 import java.util.ArrayList;
 import java.util.Currency;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -34,7 +35,7 @@ public class BalanceRecyclerViewAdapter
         extends RecyclerView.Adapter<BalanceRecyclerViewAdapter.ViewHolder> {
 
     private RecyclerView mRecyclerView;
-    private LinkedHashMap<Date, List<BalanceExtended>> mBalancesMap;
+    private LinkedHashMap<LocalDate, List<BalanceExtended>> mBalancesMap;
     private List<BalanceExtended> mAllBalances;
 
     private int mExpandedPosition = -1;
@@ -43,7 +44,7 @@ public class BalanceRecyclerViewAdapter
     public long getItemId(int position) {
         if (mBalancesMap != null && mBalancesMap.size() >= position) {
             int i = 0;
-            for (Map.Entry<Date, List<BalanceExtended>> entry : mBalancesMap.entrySet()){
+            for (Map.Entry<LocalDate, List<BalanceExtended>> entry : mBalancesMap.entrySet()){
                 if (i == position) {
                     return entry.hashCode();
                 } else i++;
@@ -66,7 +67,7 @@ public class BalanceRecyclerViewAdapter
         }
         if (mAllBalances != null) {
             for (BalanceExtended balance : mAllBalances) {
-                Date date = balance.checkDate;
+                LocalDate date = balance.checkDate;
                 List<BalanceExtended> list;
                 if (mBalancesMap.containsKey(date)) {
                     list = mBalancesMap.get(date);
@@ -100,7 +101,7 @@ public class BalanceRecyclerViewAdapter
             throw new IllegalStateException("Position invalid: " + position);
         }
         int i = 0;
-        for (Map.Entry<Date, List<BalanceExtended>> entry : mBalancesMap.entrySet()){
+        for (Map.Entry<LocalDate, List<BalanceExtended>> entry : mBalancesMap.entrySet()){
             if (i == position) {
                 viewHolder.initFromList(entry.getKey(), entry.getValue());
                 break;
@@ -128,7 +129,7 @@ public class BalanceRecyclerViewAdapter
             mList = view.findViewById(R.id.balances_list);
         }
 
-        void initFromList(Date key, List<BalanceExtended> itemList) {
+        void initFromList(LocalDate key, List<BalanceExtended> itemList) {
             mList.removeAllViews();
             TextView balanceDate = mView.findViewById(R.id.balance_date);
             balanceDate.setText(DateConverter.INSTANCE.toString(key));

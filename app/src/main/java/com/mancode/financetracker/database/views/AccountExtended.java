@@ -2,7 +2,7 @@ package com.mancode.financetracker.database.views;
 
 import com.mancode.financetracker.database.converter.DateConverter;
 
-import java.util.Date;
+import org.threeten.bp.LocalDate;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -27,7 +27,7 @@ public class AccountExtended {
     @ColumnInfo(name = "account_currency")
     public String accountCurrency;
     @ColumnInfo(name = "balance_check_date")
-    public Date balanceCheckDate;
+    public LocalDate balanceCheckDate;
     @ColumnInfo(name = "balance_value")
     public double balanceValue;
     @ColumnInfo(name = "balance_id")

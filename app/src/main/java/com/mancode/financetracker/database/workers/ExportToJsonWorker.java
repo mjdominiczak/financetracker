@@ -6,8 +6,10 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mancode.financetracker.database.FTDatabase;
-import com.mancode.financetracker.database.converter.DateConverter;
 import com.mancode.financetracker.database.json.DatabaseObject;
+import com.mancode.financetracker.database.json.LocalDateGsonAdapter;
+
+import org.threeten.bp.LocalDate;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -33,7 +35,7 @@ public class ExportToJsonWorker extends Worker {
     public Result doWork() {
 
         Gson gson = new GsonBuilder()
-                .setDateFormat(DateConverter.DATE_FORMAT_STRING)
+                .registerTypeAdapter(LocalDate.class, new LocalDateGsonAdapter())
                 .create();
 
         FTDatabase database = FTDatabase.getInstance(getApplicationContext());

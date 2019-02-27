@@ -4,10 +4,11 @@ import com.mancode.financetracker.database.entity.NetValue;
 import com.mancode.financetracker.database.entity.TransactionEntity;
 import com.mancode.financetracker.database.entity.TransactionFull;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import org.threeten.bp.LocalDate;
+
 import java.util.List;
-import java.util.Locale;
+
+import static org.threeten.bp.temporal.ChronoUnit.DAYS;
 
 public class Report {
 
@@ -15,25 +16,25 @@ public class Report {
     private NetValue netValue1;
     private NetValue netValue2;
 
-    private Date from;
-    private Date to;
+    private LocalDate from;
+    private LocalDate to;
     private double income;
     private double outcome;
     private double calculatedOutcome;
     private double balance;
     private double total;
 
-    private int dayCount;
+    private long dayCount;
     private double dailyAverage;
 
     private NetValue netValueFrom;
     private NetValue netValueTo;
 
-    public Report(Date from, Date to) {
+    public Report(LocalDate from, LocalDate to) {
         resetDates(from, to);
     }
 
-    public void resetDates(Date from, Date to) {
+    public void resetDates(LocalDate from, LocalDate to) {
         this.from = from;
         this.to = to;
         income = 0;
@@ -46,11 +47,11 @@ public class Report {
         dailyAverage = 0;
     }
 
-    public Date getFrom() {
+    public LocalDate getFrom() {
         return from;
     }
 
-    public Date getTo() {
+    public LocalDate getTo() {
         return to;
     }
 
@@ -74,7 +75,7 @@ public class Report {
         return total;
     }
 
-    public int getDayCount() {
+    public long getDayCount() {
         return dayCount;
     }
 
@@ -147,22 +148,21 @@ public class Report {
     }
 
     private void calculateDailyAverage() {
-        dayCount = computeDayDiff(netValue1.getDate(), netValue2.getDate());
+        dayCount = DAYS.between(netValue1.getDate(), netValue2.getDate());
         dailyAverage = (netValue2.getValue() - netValue1.getValue()) / dayCount;
     }
 
     private void calculateSyntheticNetValues() { // TODO TEST
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd", Locale.US);
-        if (!format.format(from).equals(format.format(netValue1.getDate()))) {
+        if (from.isEqual(netValue1.getDate())) {
             double valueFrom = netValue1.getValue() +
-                    dailyAverage * computeDayDiff(netValue1.getDate(), from);
+                    dailyAverage * DAYS.between(netValue1.getDate(), from);
             netValueFrom = new NetValue(from, valueFrom);
         } else {
             netValueFrom = netValue1;
         }
-        if (!format.format(to).equals(format.format(netValue2.getDate()))) {
+        if (to.isEqual(netValue2.getDate())) {
             double valueTo = netValue2.getValue() +
-                    dailyAverage * computeDayDiff(netValue2.getDate(), to);
+                    dailyAverage * DAYS.between(netValue2.getDate(), to);
             netValueTo = new NetValue(to, valueTo);
         } else {
             netValueTo = netValue2;
@@ -171,11 +171,6 @@ public class Report {
 
     private void calculateOutcomeWithBalances() {
         calculatedOutcome = income - (netValueTo.getValue() - netValueFrom.getValue());
-    }
-
-    private static int computeDayDiff(Date from, Date to) { // TODO test
-        long dateDiff = to.getTime() - from.getTime();
-        return (int) (dateDiff / (1000 * 60 * 60 * 24));
     }
 }
 

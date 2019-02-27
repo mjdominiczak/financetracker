@@ -19,8 +19,8 @@ import com.mancode.financetracker.database.viewmodel.TransactionViewModel;
 import com.mancode.financetracker.ui.SetDateView;
 import com.mancode.financetracker.ui.UIUtils;
 
-import java.util.Calendar;
-import java.util.Date;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.temporal.TemporalAdjusters;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -63,12 +63,12 @@ public class TransactionFragment extends Fragment implements TransactionRecycler
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_transaction_fragment, menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.app_bar_filter:
                 new FilterDialog().show();
@@ -134,9 +134,9 @@ public class TransactionFragment extends Fragment implements TransactionRecycler
             FilterQuery query = mAdapter.getFilterQuery();
             if (query != null) {
                 mTransactionTypeSpinner.setSelection(getTypePosition(query.getType()));
-                Date fromDate = query.getFromDate();
+                LocalDate fromDate = query.getFromDate();
                 if (fromDate != null) mFromDate.setDate(fromDate);
-                Date toDate = query.getToDate();
+                LocalDate toDate = query.getToDate();
                 if (toDate != null) mToDate.setDate(toDate);
             }
             mBuilder.setTitle(R.string.title_transaction_filter)
@@ -177,38 +177,32 @@ public class TransactionFragment extends Fragment implements TransactionRecycler
         }
 
         private void handleTimespan(int position) {
-            Calendar calendar = Calendar.getInstance();
             switch (position) {
                 case 0: // UNCONSTRAINED
                     mToDate.resetDate();
                     mFromDate.resetDate();
                     break;
                 case 1: // LAST WEEK
-                    mToDate.setDate(calendar.getTime());
-                    calendar.add(Calendar.DAY_OF_YEAR, -7);
-                    mFromDate.setDate(calendar.getTime());
+                    mToDate.setDate(LocalDate.now());
+                    mFromDate.setDate(LocalDate.now().minusDays(7));
                     break;
                 case 2: // LAST MONTH
-                    mToDate.setDate(calendar.getTime());
-                    calendar.add(Calendar.MONTH, -1);
-                    mFromDate.setDate(calendar.getTime());
+                    mToDate.setDate(LocalDate.now());
+                    mFromDate.setDate(LocalDate.now().minusMonths(1));
                     break;
                 case 3: // THIS MONTH
-                    mToDate.setDate(calendar.getTime());
-                    calendar.set(Calendar.DAY_OF_MONTH, 1);
-                    mFromDate.setDate(calendar.getTime());
+                    mToDate.setDate(LocalDate.now());
+                    mFromDate.setDate(LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()));
                     break;
                 case 4: // PREVIOUS MONTH
-                    calendar.set(Calendar.DAY_OF_MONTH, 1);
-                    calendar.add(Calendar.DAY_OF_MONTH, -1);
-                    mToDate.setDate(calendar.getTime());
-                    calendar.set(Calendar.DAY_OF_MONTH, 1);
-                    mFromDate.setDate(calendar.getTime());
+                    mToDate.setDate(LocalDate.now()
+                            .minusMonths(1).with(TemporalAdjusters.lastDayOfMonth()));
+                    mFromDate.setDate(LocalDate.now()
+                            .minusMonths(1).with(TemporalAdjusters.firstDayOfMonth()));
                     break;
                 case 5: // THIS YEAR
-                    mToDate.setDate(calendar.getTime());
-                    calendar.set(Calendar.DAY_OF_YEAR, 1);
-                    mFromDate.setDate(calendar.getTime());
+                    mToDate.setDate(LocalDate.now());
+                    mFromDate.setDate(LocalDate.now().with(TemporalAdjusters.firstDayOfYear()));
                     break;
                 case 6: // CUSTOM
                     mToDate.setEnabled(true);
@@ -219,11 +213,11 @@ public class TransactionFragment extends Fragment implements TransactionRecycler
             mFromDate.setEnabled(false);
         }
 
-        private Date getFromDate() {
+        private LocalDate getFromDate() {
             return mFromDate.getDate();
         }
 
-        private Date getToDate() {
+        private LocalDate getToDate() {
             return mToDate.getDate();
         }
     }

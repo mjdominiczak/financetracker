@@ -2,9 +2,8 @@ package com.mancode.financetracker.database.converter
 
 import android.util.Log
 import androidx.room.TypeConverter
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.*
+import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeParseException
 
 /**
  * Created by Manveru on 02.02.2018.
@@ -14,16 +13,19 @@ object DateConverter {
 
     private val TAG = DateConverter::class.java.name
 
+    /**
+     * Same as DateTimeFormatter.ISO_LOCAL_DATE
+     */
     const val DATE_FORMAT_STRING = "yyyy-MM-dd"
 
     @TypeConverter
-    fun toDate(string: String?): Date? {
+    @JvmStatic
+    fun toDate(string: String?): LocalDate? {
         if (string == null || string.isEmpty()) return null
-        var result: Date? = null
+        var result: LocalDate? = null
         try {
-            val df = SimpleDateFormat(DATE_FORMAT_STRING, Locale.getDefault())
-            result = df.parse(string)
-        } catch (e: ParseException) {
+            result = LocalDate.parse(string)
+        } catch (e: DateTimeParseException) {
             Log.d(TAG, "Error when trying to convert string [$string] to date")
         }
 
@@ -31,10 +33,8 @@ object DateConverter {
     }
 
     @TypeConverter
-    fun toString(date: Date?): String? {
-        return if (date == null)
-            null
-        else
-            SimpleDateFormat(DATE_FORMAT_STRING, Locale.US).format(date)
+    @JvmStatic
+    fun toString(date: LocalDate?): String? {
+        return date?.toString()
     }
 }

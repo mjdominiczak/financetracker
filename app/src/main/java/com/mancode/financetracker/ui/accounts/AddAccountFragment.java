@@ -21,9 +21,9 @@ import com.mancode.financetracker.database.viewmodel.AccountViewModel;
 import com.mancode.financetracker.ui.SetDateView;
 
 import org.joda.money.CurrencyUnit;
+import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -114,8 +114,8 @@ public class AddAccountFragment extends AddItemFragment {
                 String name = nameField.getText().toString();
                 int type = radioGroupType.getCheckedRadioButtonId() == R.id.rb_assets ?
                         1 : -1;
-                Date openDate = this.openDate.getDate();
-                Date closeDate = this.closeDate.getDate();
+                LocalDate openDate = this.openDate.getDate();
+                LocalDate closeDate = this.closeDate.getDate();
                 String currency = currencyAdapter.getItem(currencySpinner.getSelectedItemPosition());
 
                 if (!TextUtils.isEmpty(name)) {

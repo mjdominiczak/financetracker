@@ -20,7 +20,8 @@ import com.mancode.financetracker.database.views.AccountExtended;
 import com.mancode.financetracker.database.workers.UpdateStateWorker;
 import com.mancode.financetracker.ui.SetDateView;
 
-import java.util.Date;
+import org.threeten.bp.LocalDate;
+
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -102,7 +103,7 @@ public class AddBalanceFragment extends AddItemFragment {
         Toolbar toolbar = view.findViewById(R.id.add_balance_toolbar);
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_menu_save) {
-                Date date = checkDate.getDate();
+                LocalDate date = checkDate.getDate();
                 int accountId = ((AccountExtended) accountSpinner.getAdapter().getItem(
                         accountSpinner.getSelectedItemPosition())).id;
                 String valueString = valueField.getText().toString();

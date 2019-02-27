@@ -8,7 +8,8 @@ import com.mancode.financetracker.database.entity.TransactionFull;
 import com.mancode.financetracker.database.pojos.Report;
 import com.mancode.financetracker.repository.ReportRepository;
 
-import java.util.Date;
+import org.threeten.bp.LocalDate;
+
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -34,11 +35,11 @@ public class ReportMonthlyViewModel extends AndroidViewModel {
         return repository.getTransactionsForRange(visibleReport.getFrom(), visibleReport.getTo());
     }
 
-    public LiveData<NetValue> getNetValueBefore(Date date) {
+    public LiveData<NetValue> getNetValueBefore(LocalDate date) {
         return repository.getNetValueBefore(date);
     }
 
-    public LiveData<NetValue> getNetValueAfter(Date date) {
+    public LiveData<NetValue> getNetValueAfter(LocalDate date) {
         return repository.getNetValueAfter(date);
     }
 

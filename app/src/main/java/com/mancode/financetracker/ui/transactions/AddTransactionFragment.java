@@ -23,8 +23,9 @@ import com.mancode.financetracker.database.viewmodel.TransactionViewModel;
 import com.mancode.financetracker.database.views.AccountExtended;
 import com.mancode.financetracker.ui.SetDateView;
 
+import org.threeten.bp.LocalDate;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -143,7 +144,7 @@ public class AddTransactionFragment extends AddItemFragment {
             if (item.getItemId() == R.id.action_menu_save) {
                 String description = descriptionField.getText().toString();
                 String valueString = valueField.getText().toString();
-                Date date = transactionDate.getDate();
+                LocalDate date = transactionDate.getDate();
                 int type = radioGroupType.getCheckedRadioButtonId() == R.id.rb_income ?
                         1 : -1;
                 int account = ((AccountExtended) accountSpinner.getAdapter().getItem(

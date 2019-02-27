@@ -5,7 +5,8 @@ import com.mancode.financetracker.database.dao.TransactionDao;
 import com.mancode.financetracker.database.entity.NetValue;
 import com.mancode.financetracker.database.entity.TransactionFull;
 
-import java.util.Date;
+import org.threeten.bp.LocalDate;
+
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
@@ -33,7 +34,7 @@ public class ReportRepository {
         return instance;
     }
 
-    public LiveData<List<TransactionFull>> getTransactionsForRange(Date from, Date to) {
+    public LiveData<List<TransactionFull>> getTransactionsForRange(LocalDate from, LocalDate to) {
         return transactionDao.getTransactionsFromRange(from, to);
     }
 
@@ -41,11 +42,11 @@ public class ReportRepository {
         return netValueDao.getValues();
     }
 
-    public LiveData<NetValue> getNetValueBefore(Date date) {
+    public LiveData<NetValue> getNetValueBefore(LocalDate date) {
         return netValueDao.getValueBefore(date);
     }
 
-    public LiveData<NetValue> getNetValueAfter(Date date) {
+    public LiveData<NetValue> getNetValueAfter(LocalDate date) {
         return netValueDao.getValueAfter(date);
     }
 }

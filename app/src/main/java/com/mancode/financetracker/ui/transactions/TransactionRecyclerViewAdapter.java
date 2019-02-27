@@ -18,8 +18,9 @@ import com.mancode.financetracker.database.entity.TransactionEntity;
 import com.mancode.financetracker.database.entity.TransactionFull;
 import com.mancode.financetracker.ui.UIUtils;
 
+import org.threeten.bp.LocalDate;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -84,7 +85,7 @@ class TransactionRecyclerViewAdapter
         return new TransactionFilter();
     }
 
-    String buildFilterQuery(int type, Date from, Date to) {
+    String buildFilterQuery(int type, LocalDate from, LocalDate to) {
         filterQuery = new FilterQuery(type, from, to);
         return filterQuery.getQuery();
     }
