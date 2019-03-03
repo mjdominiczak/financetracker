@@ -3,7 +3,7 @@ package com.mancode.financetracker.repository;
 import com.mancode.financetracker.database.dao.NetValueDao;
 import com.mancode.financetracker.database.dao.TransactionDao;
 import com.mancode.financetracker.database.entity.NetValue;
-import com.mancode.financetracker.database.entity.TransactionFull;
+import com.mancode.financetracker.database.entity.TransactionEntity;
 
 import org.threeten.bp.LocalDate;
 
@@ -34,7 +34,7 @@ public class ReportRepository {
         return instance;
     }
 
-    public LiveData<List<TransactionFull>> getTransactionsForRange(LocalDate from, LocalDate to) {
+    public LiveData<List<TransactionEntity>> getTransactionsForRange(LocalDate from, LocalDate to) {
         return transactionDao.getTransactionsFromRange(from, to);
     }
 

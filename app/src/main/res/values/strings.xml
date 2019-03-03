@@ -36,7 +36,7 @@
     <string name="account_closed">Account closed</string>
     <string name="income">Income</string>
     <string name="outcome">Outcome</string>
-    <string name="balance">Balance</string>
+    <string name="monthly_balance">Monthly balance</string>
     <string name="filter">Filter</string>
     <string name="transactions_type">Transactions type</string>
     <string name="timespan">Timespan</string>
@@ -62,7 +62,8 @@
     <string name="next_report">Next report</string>
     <string name="base_net_values">Base net values</string>
     <string name="calculated_net_values">Calculated net values</string>
-    <string name="calculated_outcome">Calculated outcome</string>
+    <string name="total_outcome">Calculated outcome</string>
+    <string name="unregistered_outcome">Unregistered outcome</string>
 
     <string-array name="transaction_filter_type">
         <item>All</item>

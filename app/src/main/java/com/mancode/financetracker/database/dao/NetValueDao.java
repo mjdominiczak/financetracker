@@ -29,4 +29,7 @@ public interface NetValueDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<NetValue> netValues);
+
+    @Query("DELETE FROM net_values")
+    void clear();
 }

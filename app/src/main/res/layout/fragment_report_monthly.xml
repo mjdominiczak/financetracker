@@ -55,7 +55,7 @@
         tools:text="+4500,00 zł" />
 
     <TextView
-        android:id="@+id/tv_report_outcome"
+        android:id="@+id/tv_report_reg_outcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorNegativeValue"
@@ -73,22 +73,22 @@
         tools:text="-4000,00 zł" />
 
     <TextView
+        android:id="@+id/tv_report_unreg_outcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorNegativeValue"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textView9"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        tools:text="-200,00 zł" />
+
+    <TextView
         android:id="@+id/tv_report_balance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView8"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        tools:text="+700,00 zł" />
-
-    <TextView
-        android:id="@+id/tv_report_total"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium"
-        app:layout_constraintStart_toStartOf="@+id/tv_report_balance"
-        app:layout_constraintTop_toBottomOf="@+id/tv_report_balance"
-        tools:text="+14700,00 zł" />
+        tools:text="+500,00 zł" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -108,10 +108,10 @@
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:text="@string/registered_income"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_net_value_to_date" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_net_value_date2" />
 
     <TextView
         android:id="@+id/textView7"
@@ -120,15 +120,6 @@
         android:layout_marginTop="16dp"
         android:text="@string/registered_outcome"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/balance"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
     <TextView
@@ -136,27 +127,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/calculated_net_values"
+        android:text="@string/unregistered_outcome"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_net_value_date2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/monthly_balance"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
     <TextView
         android:id="@+id/textView10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/calculated_outcome"
+        android:text="@string/total_outcome"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
-
-    <TextView
-        android:id="@+id/tv_report_total_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:text="@string/total_label"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tv_report_total"
-        app:layout_constraintEnd_toStartOf="@+id/tv_report_total" />
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <TextView
         android:id="@+id/textView5"
@@ -179,7 +171,7 @@
     <TextView
         android:id="@+id/tv_net_value1"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBaseline_toBaselineOf="@+id/tv_net_value_date1"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         tools:text="+12000,00 zł" />
@@ -196,51 +188,8 @@
     <TextView
         android:id="@+id/tv_net_value2"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBaseline_toBaselineOf="@+id/tv_net_value_date2"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        tools:text="+14000,00 zł" />
-
-    <TextView
-        android:id="@+id/tv_daily_average"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/tv_report_total"
-        tools:text="123.25" />
-
-    <TextView
-        android:id="@+id/tv_net_value_from_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/textView9"
-        tools:text="30.04.2018" />
-
-    <TextView
-        android:id="@+id/tv_net_value_from"
-        android:layout_width="wrap_content"
-        android:layout_height="18dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tv_net_value_from_date"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        tools:text="+12000,00 zł" />
-
-    <TextView
-        android:id="@+id/tv_net_value_to_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/tv_net_value_from_date"
-        tools:text="31.05.2018" />
-
-    <TextView
-        android:id="@+id/tv_net_value_to"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tv_net_value_to_date"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         tools:text="+14000,00 zł" />
 

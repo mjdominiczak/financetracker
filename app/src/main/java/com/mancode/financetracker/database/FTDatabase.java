@@ -23,6 +23,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
@@ -41,11 +42,22 @@ import androidx.work.WorkManager;
             version = FTDatabase.DATABASE_VERSION)
 public abstract class FTDatabase extends RoomDatabase {
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "database.db";
     private static FTDatabase sInstance;
 
     private final MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
+
+    /**
+     * Migration from version 1 to version 2:
+     * Introducing net_values table
+     */
+    private static Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+
+        }
+    };
 
     public static FTDatabase getInstance(final Context context) {
         if (sInstance == null) {
@@ -60,6 +72,7 @@ public abstract class FTDatabase extends RoomDatabase {
 
     private static FTDatabase buildDatabase(final Context applicationContext) {
         return Room.databaseBuilder(applicationContext, FTDatabase.class, DATABASE_NAME)
+                .addMigrations(MIGRATION_1_2)
                 .addCallback(new Callback() {
                     @Override
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {

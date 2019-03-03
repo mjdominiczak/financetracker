@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.mancode.financetracker.R;
 import com.mancode.financetracker.database.entity.NetValue;
-import com.mancode.financetracker.database.entity.TransactionFull;
+import com.mancode.financetracker.database.entity.TransactionEntity;
 import com.mancode.financetracker.database.pojos.Report;
 import com.mancode.financetracker.database.viewmodel.ReportMonthlyViewModel;
 import com.mancode.financetracker.ui.UIUtils;
@@ -18,7 +18,6 @@ import com.mancode.financetracker.ui.UIUtils;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.temporal.TemporalAdjusters;
 
-import java.util.Calendar;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -35,25 +34,19 @@ public class ReportMonthlyFragment extends Fragment {
 
     private ReportMonthlyViewModel viewModel;
     private Report report;
-    private Calendar calendar;
 
     private TextView tvNetValueDate1;
     private TextView tvNetValueDate2;
     private TextView tvNetValue1;
     private TextView tvNetValue2;
     private TextView tvIncome;
-    private TextView tvOutcome;
+    private TextView tvRegisteredOutcome;
+    private TextView tvUnregisteredOutcome;
     private TextView tvCalcOutcome;
     private TextView tvBalance;
-    private TextView tvTotal;
-    private TextView tvDailyAverage;
     private ImageButton btnPrev;
     private ImageButton btnNext;
     private Button btnRange;
-    private TextView tvNetValueFromDate;
-    private TextView tvNetValueToDate;
-    private TextView tvNetValueFrom;
-    private TextView tvNetValueTo;
 
     public ReportMonthlyFragment() {
         // Required empty public constructor
@@ -81,15 +74,10 @@ public class ReportMonthlyFragment extends Fragment {
         tvNetValue1 = view.findViewById(R.id.tv_net_value1);
         tvNetValue2 = view.findViewById(R.id.tv_net_value2);
         tvIncome = view.findViewById(R.id.tv_report_income);
-        tvOutcome = view.findViewById(R.id.tv_report_outcome);
+        tvRegisteredOutcome = view.findViewById(R.id.tv_report_reg_outcome);
+        tvUnregisteredOutcome = view.findViewById(R.id.tv_report_unreg_outcome);
         tvCalcOutcome = view.findViewById(R.id.tv_report_calc_outcome);
         tvBalance = view.findViewById(R.id.tv_report_balance);
-        tvTotal = view.findViewById(R.id.tv_report_total);
-        tvDailyAverage = view.findViewById(R.id.tv_daily_average);
-        tvNetValueFromDate = view.findViewById(R.id.tv_net_value_from_date);
-        tvNetValueToDate = view.findViewById(R.id.tv_net_value_to_date);
-        tvNetValueFrom = view.findViewById(R.id.tv_net_value_from);
-        tvNetValueTo = view.findViewById(R.id.tv_net_value_to);
 
         btnPrev = view.findViewById(R.id.btn_prev_report);
         btnPrev.setOnClickListener(v -> {
@@ -111,7 +99,7 @@ public class ReportMonthlyFragment extends Fragment {
     }
 
     private void resetObservers() {
-        LiveData<List<TransactionFull>> transactions = viewModel.getTransactions();
+        LiveData<List<TransactionEntity>> transactions = viewModel.getTransactions();
         transactions.removeObservers(this);
         transactions.observe(ReportMonthlyFragment.this, this::setTransactions);
         LiveData<NetValue> netValueBefore1 = viewModel.getNetValueBefore(report.getTo()); // TODO alghoritm for choosing netvalues
@@ -131,35 +119,36 @@ public class ReportMonthlyFragment extends Fragment {
         updateViews();
     }
 
-    public void setTransactions(List<TransactionFull> transactions) {
+    public void setTransactions(List<TransactionEntity> transactions) {
         report.setTransactions(transactions);
         updateViews();
-        updateNetValueViews();
     }
 
     private void updateViews() {
         String reportRange = report.getFrom().toString() + " - " + report.getTo().toString();
         btnRange.setText(reportRange);
         tvIncome.setText(UIUtils.getFormattedMoney(report.getIncome(), "PLN")); // TODO hardcoded currency
-        tvOutcome.setText(UIUtils.getFormattedMoney(report.getOutcome(), "PLN")); // TODO hardcoded currency
+        tvRegisteredOutcome.setText(UIUtils.getFormattedMoney(report.getRegisteredOutcome(), "PLN")); // TODO hardcoded currency
+        tvUnregisteredOutcome.setText(UIUtils.getFormattedMoney(report.getUnregisteredOutcome(), "PLN")); // TODO hardcoded currency
         tvBalance.setText(UIUtils.getFormattedMoney(report.getBalance(), "PLN")); // TODO hardcoded currency
-        tvTotal.setText(UIUtils.getFormattedMoney(report.getTotal(), "PLN")); // TODO hardcoded currency
 
         if (report.getTo().isAfter(LocalDate.now())) {
             btnNext.setEnabled(false);
         } else {
             btnNext.setEnabled(true);
         }
+
+        updateNetValueViews();
     }
 
     private void setNetValue1(NetValue netValue) {
         report.setNetValue1(netValue);
-        updateNetValueViews();
+        updateViews();
     }
 
     private void setNetValue2(NetValue netValue) {
         report.setNetValue2(netValue);
-        updateNetValueViews();
+        updateViews();
     }
 
     private void updateNetValueViews() {
@@ -182,14 +171,6 @@ public class ReportMonthlyFragment extends Fragment {
             tvNetValue2.setText("n/a");
         }
         if (value1Set && value2Set) {
-            tvNetValueFromDate.setText(report.getNetValue1().getDate().toString());
-            tvNetValueToDate.setText(report.getNetValue2().getDate().toString());
-            tvNetValueFrom.setText(UIUtils.getFormattedMoney(
-                    report.getNetValue1().getValue(), "PLN")); // TODO hardcoded currency
-            tvNetValueTo.setText(UIUtils.getFormattedMoney(
-                    report.getNetValue2().getValue(), "PLN")); // TODO hardcoded currency
-            tvDailyAverage.setText(UIUtils.getFormattedMoney(
-                    report.getDailyAverage(), "PLN")); // TODO hardcoded currency
             tvCalcOutcome.setText(UIUtils.getFormattedMoney(
                     report.getCalculatedOutcome(), "PLN")); // TODO hardcoded currency
         }

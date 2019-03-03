@@ -5,7 +5,6 @@ import com.mancode.financetracker.database.converter.DateConverter;
 import org.threeten.bp.LocalDate;
 
 import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
@@ -20,16 +19,18 @@ public class NetValue {
 
     private double value;
 
-    @ColumnInfo(name = "complete")
-    private boolean isComplete;
+    private boolean calculated;
 
-    public NetValue(@NonNull LocalDate date, double value) {
+    private boolean complete;
+
+    public NetValue(@NonNull LocalDate date, double value, boolean calculated) {
         this.date = date;
         this.value = value;
+        this.calculated = calculated;
     }
 
     public void setComplete(boolean complete) {
-        isComplete = complete;
+        this.complete = complete;
     }
 
     @NonNull
@@ -41,8 +42,12 @@ public class NetValue {
         return value;
     }
 
+    public boolean isCalculated() {
+        return calculated;
+    }
+
     public boolean isComplete() {
-        return isComplete;
+        return complete;
     }
 
 }

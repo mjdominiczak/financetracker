@@ -4,7 +4,7 @@ import android.app.Application;
 
 import com.mancode.financetracker.database.FTDatabase;
 import com.mancode.financetracker.database.entity.NetValue;
-import com.mancode.financetracker.database.entity.TransactionFull;
+import com.mancode.financetracker.database.entity.TransactionEntity;
 import com.mancode.financetracker.database.pojos.Report;
 import com.mancode.financetracker.repository.ReportRepository;
 
@@ -31,7 +31,7 @@ public class ReportMonthlyViewModel extends AndroidViewModel {
         repository = ReportRepository.getInstance(db.transactionDao(), db.netValueDao());
     }
 
-    public LiveData<List<TransactionFull>> getTransactions() {
+    public LiveData<List<TransactionEntity>> getTransactions() {
         return repository.getTransactionsForRange(visibleReport.getFrom(), visibleReport.getTo());
     }
 

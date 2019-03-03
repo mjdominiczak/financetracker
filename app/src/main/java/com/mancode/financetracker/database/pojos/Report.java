@@ -2,7 +2,6 @@ package com.mancode.financetracker.database.pojos;
 
 import com.mancode.financetracker.database.entity.NetValue;
 import com.mancode.financetracker.database.entity.TransactionEntity;
-import com.mancode.financetracker.database.entity.TransactionFull;
 
 import org.threeten.bp.LocalDate;
 
@@ -12,23 +11,20 @@ import static org.threeten.bp.temporal.ChronoUnit.DAYS;
 
 public class Report {
 
-    private List<TransactionFull> transactions;
+    private List<TransactionEntity> transactions;
     private NetValue netValue1;
     private NetValue netValue2;
 
     private LocalDate from;
     private LocalDate to;
     private double income;
-    private double outcome;
+    private double registeredOutcome;
+    private double unregisteredOutcome;
     private double calculatedOutcome;
     private double balance;
-    private double total;
 
     private long dayCount;
     private double dailyAverage;
-
-    private NetValue netValueFrom;
-    private NetValue netValueTo;
 
     public Report(LocalDate from, LocalDate to) {
         resetDates(from, to);
@@ -38,10 +34,10 @@ public class Report {
         this.from = from;
         this.to = to;
         income = 0;
-        outcome = 0;
+        registeredOutcome = 0;
+        unregisteredOutcome = 0;
         calculatedOutcome = 0;
         balance = 0;
-        total = 0;
         netValue1 = null;
         netValue2 = null;
         dailyAverage = 0;
@@ -59,8 +55,12 @@ public class Report {
         return income;
     }
 
-    public double getOutcome() {
-        return outcome;
+    public double getRegisteredOutcome() {
+        return registeredOutcome;
+    }
+
+    public double getUnregisteredOutcome() {
+        return unregisteredOutcome;
     }
 
     public double getCalculatedOutcome() {
@@ -69,10 +69,6 @@ public class Report {
 
     public double getBalance() {
         return balance;
-    }
-
-    public double getTotal() {
-        return total;
     }
 
     public long getDayCount() {
@@ -91,19 +87,10 @@ public class Report {
         return dailyAverage;
     }
 
-    public NetValue getNetValueFrom() {
-        return netValueFrom;
-    }
-
-    public NetValue getNetValueTo() {
-        return netValueTo;
-    }
-
-    public void setTransactions(List<TransactionFull> transactions) {
+    public void setTransactions(List<TransactionEntity> transactions) {
         this.transactions = transactions;
         calculateIncome();
         calculateOutcomeWithTransactions();
-        updateBalance();
         continueIfDataPresent();
     }
 
@@ -112,21 +99,21 @@ public class Report {
     }
 
     private void calculateOutcomeWithTransactions() {
-        outcome = sumTransactions(TransactionEntity.TYPE_OUTCOME);
+        registeredOutcome = sumTransactions(TransactionEntity.TYPE_OUTCOME);
     }
 
     private double sumTransactions(int type) {
         double sum = 0;
-        for (TransactionFull t : transactions) {
-            if (t.transaction.type == type) {
-                sum += t.transaction.value;
+        for (TransactionEntity t : transactions) {
+            if (t.type == type) {
+                sum += t.value;
             }
         }
         return sum;
     }
 
     private void updateBalance() {
-        balance = income - outcome;
+        balance = income - calculatedOutcome;
     }
 
     public void setNetValue1(NetValue netValue) {
@@ -140,37 +127,21 @@ public class Report {
     }
 
     private void continueIfDataPresent() {
-        if (netValue1 != null && netValue2 != null) {
-            calculateDailyAverage();
-            calculateSyntheticNetValues();
+        if (transactions != null && netValue1 != null && netValue2 != null) {
             calculateOutcomeWithBalances();
+            calculateDailyAverage();
+            updateBalance();
         }
     }
 
     private void calculateDailyAverage() {
         dayCount = DAYS.between(netValue1.getDate(), netValue2.getDate());
-        dailyAverage = (netValue2.getValue() - netValue1.getValue()) / dayCount;
-    }
-
-    private void calculateSyntheticNetValues() { // TODO TEST
-        if (from.isEqual(netValue1.getDate())) {
-            double valueFrom = netValue1.getValue() +
-                    dailyAverage * DAYS.between(netValue1.getDate(), from);
-            netValueFrom = new NetValue(from, valueFrom);
-        } else {
-            netValueFrom = netValue1;
-        }
-        if (to.isEqual(netValue2.getDate())) {
-            double valueTo = netValue2.getValue() +
-                    dailyAverage * DAYS.between(netValue2.getDate(), to);
-            netValueTo = new NetValue(to, valueTo);
-        } else {
-            netValueTo = netValue2;
-        }
+        dailyAverage = unregisteredOutcome / dayCount;
     }
 
     private void calculateOutcomeWithBalances() {
-        calculatedOutcome = income - (netValueTo.getValue() - netValueFrom.getValue());
+        calculatedOutcome = income - (netValue2.getValue() - netValue1.getValue());
+        unregisteredOutcome = calculatedOutcome - registeredOutcome;
     }
 }
 

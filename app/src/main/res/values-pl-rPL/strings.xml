@@ -33,7 +33,7 @@
     <string name="account_closed">Konto zamknięte</string>
     <string name="income">Przychody</string>
     <string name="outcome">Wydatki</string>
-    <string name="balance">Bilans</string>
+    <string name="monthly_balance">Bilans miesięczny</string>
     <string name="registered_income">Zarejestrowane przychody</string>
     <string name="registered_outcome">Zarejestrowane wydatki</string>
     <string name="filter">Filtr</string>
@@ -59,7 +59,8 @@
     <string name="next_report">Następny raport</string>
     <string name="base_net_values">Bazowe wartości netto</string>
     <string name="calculated_net_values">Obliczone wartości netto</string>
-    <string name="calculated_outcome">Obliczone wydatki</string>
+    <string name="total_outcome">Całkowite wydatki</string>
+    <string name="unregistered_outcome">Niezarejestrowane wydatki</string>
 
     <string-array name="transaction_filter_type">
         <item>Wszystkie</item>
