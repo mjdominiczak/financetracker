@@ -55,7 +55,9 @@ public abstract class FTDatabase extends RoomDatabase {
     private static Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-
+            database.execSQL("CREATE TABLE IF NOT EXISTS `net_values` " +
+                    "(`date` TEXT NOT NULL, `value` REAL NOT NULL, `calculated` INTEGER NOT NULL, " +
+                    "`complete` INTEGER NOT NULL, PRIMARY KEY(`date`))");
         }
     };
 
