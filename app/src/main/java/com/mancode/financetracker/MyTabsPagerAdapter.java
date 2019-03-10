@@ -15,10 +15,10 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 public class MyTabsPagerAdapter extends FragmentStatePagerAdapter {
 
-    private final int ACCOUNT_FRAGMENT = 0;
-    private final int BALANCE_FRAGMENT = 1;
-    private final int TRANSACTION_FRAGMENT = 2;
-    private final int REPORTS_FRAGMENT = 3;
+    public static final int ACCOUNT_FRAGMENT = 0;
+    public static final int BALANCE_FRAGMENT = 1;
+    public static final int TRANSACTION_FRAGMENT = 2;
+    public static final int REPORTS_FRAGMENT = 3;
 
     private SparseArray<Fragment> registeredFragments = new SparseArray<>();
 
@@ -26,12 +26,14 @@ public class MyTabsPagerAdapter extends FragmentStatePagerAdapter {
         super(fm);
     }
 
+    @NonNull
     @Override
     public Fragment getItem(int i) {
 
         Fragment fragment;
 
         switch (i) {
+            default:
             case ACCOUNT_FRAGMENT:
                 fragment = AccountFragment.newInstance();
                 break;
@@ -43,9 +45,6 @@ public class MyTabsPagerAdapter extends FragmentStatePagerAdapter {
                 break;
             case REPORTS_FRAGMENT:
                 fragment = ReportMonthlyFragment.newInstance();
-                break;
-            default:
-                fragment = null;
                 break;
         }
 

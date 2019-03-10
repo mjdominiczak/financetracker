@@ -64,6 +64,10 @@
     <string name="calculated_net_values">Calculated net values</string>
     <string name="total_outcome">Calculated outcome</string>
     <string name="unregistered_outcome">Unregistered outcome</string>
+    <string name="channel_name_transaction_input_reminder">Reminder</string>
+    <string name="channel_desc_transaction_input_reminder">Reminder about entering transactions</string>
+    <string name="notification_title_reminder">Knock, knock…</string>
+    <string name="notification_text_reminder">Do you have any transactions to enter?</string>
 
     <string-array name="transaction_filter_type">
         <item>All</item>

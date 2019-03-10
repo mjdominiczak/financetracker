@@ -24,7 +24,7 @@
         </activity>
 
         <receiver
-            android:name=".notifications.AlarmReceiver"
+            android:name=".notifications.ReminderNotificationReceiver"
             android:enabled="true"
             android:exported="false"/>
     </application>

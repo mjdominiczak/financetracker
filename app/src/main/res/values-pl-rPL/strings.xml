@@ -61,6 +61,10 @@
     <string name="calculated_net_values">Obliczone wartości netto</string>
     <string name="total_outcome">Całkowite wydatki</string>
     <string name="unregistered_outcome">Niezarejestrowane wydatki</string>
+    <string name="channel_name_transaction_input_reminder">Przypomnienie</string>
+    <string name="channel_desc_transaction_input_reminder">Przypomnienie o wprowadzaniu transakcji</string>
+    <string name="notification_title_reminder">Puk, puk…</string>
+    <string name="notification_text_reminder">Masz może jakieś transakcje do wpisania?</string>
 
     <string-array name="transaction_filter_type">
         <item>Wszystkie</item>
