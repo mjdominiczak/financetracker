@@ -24,6 +24,9 @@ public interface AccountDao {
     @Query("SELECT * FROM accounts")
     List<AccountEntity> getAllAccounts();
 
+    @Query("SELECT account_name FROM accounts")
+    List<String> getAccountsNames();
+
     @Query("SELECT * FROM accounts WHERE _id = :id")
     AccountEntity getAccountById(int id);
 

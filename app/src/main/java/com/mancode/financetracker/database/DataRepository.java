@@ -68,6 +68,10 @@ public class DataRepository {
         return mAllAccounts;
     }
 
+    public List<String> getAccountsNames() {
+        return mAccountDao.getAccountsNames();
+    }
+
     public LiveData<List<BalanceExtended>> getAllBalances() {
         return mAllBalances;
     }

@@ -1,20 +1,22 @@
 package com.mancode.financetracker.ui.accounts;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mancode.financetracker.R;
 import com.mancode.financetracker.database.viewmodel.AccountViewModel;
 import com.mancode.financetracker.ui.UIUtils;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Manveru on 03.09.2017.
@@ -22,7 +24,7 @@ import com.mancode.financetracker.ui.UIUtils;
 
 public class AccountFragment extends Fragment {
 
-    public AccountRecyclerViewAdapter mAdapter;
+    private AccountRecyclerViewAdapter mAdapter;
 
     public AccountFragment() { }
 
@@ -31,16 +33,16 @@ public class AccountFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         AccountViewModel accountViewModel =
-                ViewModelProviders.of(getActivity()).get(AccountViewModel.class);
+                ViewModelProviders.of(this).get(AccountViewModel.class);
         accountViewModel.getAllAccounts().observe(this,
                 accounts -> mAdapter.setAccounts(accounts));
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_account_list, container, false);
         View recyclerView = view.findViewById(R.id.list);

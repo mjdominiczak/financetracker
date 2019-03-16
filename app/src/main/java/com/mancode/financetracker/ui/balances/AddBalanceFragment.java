@@ -44,6 +44,7 @@ public class AddBalanceFragment extends AddItemFragment {
 
     private ArrayAdapter<AccountExtended> accountSpinnerAdapter;
 
+    // TODO refactor to 1 ViewModel
     private AccountViewModel accountViewModel;
     private BalanceViewModel balanceViewModel;
 

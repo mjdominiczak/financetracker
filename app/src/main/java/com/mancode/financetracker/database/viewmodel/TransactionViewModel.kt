@@ -13,19 +13,10 @@ import com.mancode.financetracker.database.entity.TransactionFull
 
 class TransactionViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val mRepository: DataRepository
-    val allTransactions: LiveData<List<TransactionFull>>
-
-    init {
-        mRepository = DataRepository.getInstance(application)
-        allTransactions = mRepository.allTransactions
-    }
-
-    fun insertTransaction(transaction: TransactionEntity) {
-        mRepository.insertTransaction(transaction)
-    }
+    private val repository: DataRepository = DataRepository.getInstance(application)
+    val allTransactions: LiveData<List<TransactionFull>> by lazy { repository.allTransactions }
 
     fun deleteTransaction(transaction: TransactionEntity) {
-        mRepository.deleteTransaction(transaction)
+        repository.deleteTransaction(transaction)
     }
 }
