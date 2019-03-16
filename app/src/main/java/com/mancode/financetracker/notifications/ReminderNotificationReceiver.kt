@@ -21,7 +21,7 @@ class ReminderNotificationReceiver : BroadcastReceiver() {
                 PendingIntent.FLAG_UPDATE_CURRENT)
 
         val notification = NotificationCompat.Builder(context, MainActivity.CHANNEL_ID_REMINDER)
-                .setContentTitle("FT Reminder")
+                .setContentTitle(context.getString(R.string.notification_title_reminder))
                 .setContentText(context.getString(R.string.notification_text_reminder))
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
