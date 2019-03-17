@@ -5,17 +5,12 @@ import androidx.room.TypeConverters
 import com.mancode.financetracker.database.converter.DateConverter
 import org.threeten.bp.LocalDate
 
-/**
- * Created by Manveru on 03.02.2018.
- */
-
-class BalanceExtended(@field:ColumnInfo(name = "_id")
-                      var id: Int, @field:ColumnInfo(name = "balance_check_date")
-                      @field:TypeConverters(DateConverter::class)
-                      var checkDate: LocalDate,
-                      @field:ColumnInfo(name = "balance_value")
-                      var value: Double, @field:ColumnInfo(name = "account_name")
-                      var accountName: String,
-                      @field:ColumnInfo(name = "account_type")
-                      var accountType: Int, @field:ColumnInfo(name = "account_currency")
-                      var accountCurrency: String)
+class BalanceExtended(
+        @ColumnInfo(name = "_id") val id: Int,
+        @ColumnInfo(name = "balance_check_date")
+        @TypeConverters(DateConverter::class) val checkDate: LocalDate,
+        @ColumnInfo(name = "balance_value") val value: Double,
+        @ColumnInfo(name = "account_name") val accountName: String,
+        @ColumnInfo(name = "account_type") val accountType: Int,
+        @ColumnInfo(name = "account_currency") val accountCurrency: String
+)
