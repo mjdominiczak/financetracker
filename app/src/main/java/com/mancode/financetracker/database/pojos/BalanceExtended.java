@@ -1,4 +1,4 @@
-package com.mancode.financetracker.database.entity;
+package com.mancode.financetracker.database.pojos;
 
 import com.mancode.financetracker.database.converter.DateConverter;
 

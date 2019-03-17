@@ -1,7 +1,7 @@
 package com.mancode.financetracker.ui.transactions;
 
 import com.mancode.financetracker.database.converter.DateConverter;
-import com.mancode.financetracker.database.entity.TransactionFull;
+import com.mancode.financetracker.database.pojos.TransactionFull;
 
 import org.threeten.bp.LocalDate;
 

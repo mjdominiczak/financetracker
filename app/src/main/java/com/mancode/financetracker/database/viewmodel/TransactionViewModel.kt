@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.mancode.financetracker.database.DataRepository
 import com.mancode.financetracker.database.entity.TransactionEntity
-import com.mancode.financetracker.database.entity.TransactionFull
+import com.mancode.financetracker.database.pojos.TransactionFull
 
 /**
  * Created by Manveru on 12.02.2018.

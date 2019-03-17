@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.mancode.financetracker.R;
 import com.mancode.financetracker.database.converter.DateConverter;
 import com.mancode.financetracker.database.entity.TransactionEntity;
-import com.mancode.financetracker.database.entity.TransactionFull;
+import com.mancode.financetracker.database.pojos.TransactionFull;
 import com.mancode.financetracker.ui.UIUtils;
 
 import org.threeten.bp.LocalDate;

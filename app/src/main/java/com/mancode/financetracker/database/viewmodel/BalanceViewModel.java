@@ -1,15 +1,16 @@
 package com.mancode.financetracker.database.viewmodel;
 
 import android.app.Application;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
-import androidx.annotation.NonNull;
 
 import com.mancode.financetracker.database.DataRepository;
 import com.mancode.financetracker.database.entity.BalanceEntity;
-import com.mancode.financetracker.database.entity.BalanceExtended;
+import com.mancode.financetracker.database.pojos.BalanceExtended;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 /**
  * Created by Manveru on 03.02.2018.

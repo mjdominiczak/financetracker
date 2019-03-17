@@ -10,12 +10,12 @@ import com.mancode.financetracker.database.dao.CurrencyDao;
 import com.mancode.financetracker.database.dao.TransactionDao;
 import com.mancode.financetracker.database.entity.AccountEntity;
 import com.mancode.financetracker.database.entity.BalanceEntity;
-import com.mancode.financetracker.database.entity.BalanceExtended;
 import com.mancode.financetracker.database.entity.CategoryEntity;
 import com.mancode.financetracker.database.entity.CurrencyEntity;
 import com.mancode.financetracker.database.entity.TransactionEntity;
-import com.mancode.financetracker.database.entity.TransactionFull;
 import com.mancode.financetracker.database.pojos.AccountMini;
+import com.mancode.financetracker.database.pojos.BalanceExtended;
+import com.mancode.financetracker.database.pojos.TransactionFull;
 import com.mancode.financetracker.database.views.AccountExtended;
 
 import java.util.List;

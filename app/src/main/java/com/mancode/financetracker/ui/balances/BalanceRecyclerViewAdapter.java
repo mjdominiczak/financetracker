@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.mancode.financetracker.R;
 import com.mancode.financetracker.database.converter.DateConverter;
-import com.mancode.financetracker.database.entity.BalanceExtended;
+import com.mancode.financetracker.database.pojos.BalanceExtended;
 import com.mancode.financetracker.ui.UIUtils;
 
 import net.cachapa.expandablelayout.ExpandableLayout;

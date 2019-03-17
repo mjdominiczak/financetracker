@@ -2,7 +2,7 @@ package com.mancode.financetracker.database.dao;
 
 import com.mancode.financetracker.database.converter.DateConverter;
 import com.mancode.financetracker.database.entity.BalanceEntity;
-import com.mancode.financetracker.database.entity.BalanceExtended;
+import com.mancode.financetracker.database.pojos.BalanceExtended;
 import com.mancode.financetracker.database.pojos.BalanceMini;
 
 import org.threeten.bp.LocalDate;
