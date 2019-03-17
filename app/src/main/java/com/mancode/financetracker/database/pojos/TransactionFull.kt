@@ -8,19 +8,13 @@ import com.mancode.financetracker.database.entity.TransactionEntity
 import org.threeten.bp.LocalDate
 
 @TypeConverters(DateConverter::class)
-class TransactionFull(@field:Embedded
-                      var transaction: TransactionEntity,
-                      @field:ColumnInfo(name = "account_name")
-                      var accountName: String,
-                      @field:ColumnInfo(name = "account_type")
-                      var accountType: Int,
-                      @field:ColumnInfo(name = "account_currency")
-                      var currency: String,
-                      @field:ColumnInfo(name = "account_open_date")
-                      var openDate: LocalDate,
-                      @field:ColumnInfo(name = "account_close_date")
-                      var closeDate: LocalDate,
-                      @field:ColumnInfo(name = "category")
-                      var category: String,
-                      @field:ColumnInfo(name = "category_type")
-                      var categoryType: Int)
+class TransactionFull(
+        @Embedded val transaction: TransactionEntity,
+        @ColumnInfo(name = "account_name") val accountName: String,
+        @ColumnInfo(name = "account_type") val accountType: Int,
+        @ColumnInfo(name = "account_currency") val currency: String,
+        @ColumnInfo(name = "account_open_date") val openDate: LocalDate,
+        @ColumnInfo(name = "account_close_date") val closeDate: LocalDate?,
+        @ColumnInfo(name = "category") val category: String,
+        @ColumnInfo(name = "category_type") val categoryType: Int
+)
