@@ -69,8 +69,8 @@ public class FilterQuery {
         LocalDate fromDate = getFromDate();
         LocalDate toDate = getToDate();
 
-        return (type == TYPE_ALL || type == transaction.transaction.type) &&
-                (fromDate == null || !transaction.transaction.date.isBefore(fromDate)) &&
-                (toDate == null || !transaction.transaction.date.isAfter(toDate));
+        return (type == TYPE_ALL || type == transaction.getTransaction().type) &&
+                (fromDate == null || !transaction.getTransaction().date.isBefore(fromDate)) &&
+                (toDate == null || !transaction.getTransaction().date.isAfter(toDate));
     }
 }

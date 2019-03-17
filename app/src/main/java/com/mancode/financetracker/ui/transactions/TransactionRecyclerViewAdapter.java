@@ -112,14 +112,14 @@ class TransactionRecyclerViewAdapter
 
         void init(TransactionFull transaction) {
             mTransaction = transaction;
-            tvDate.setText(DateConverter.INSTANCE.toString(mTransaction.transaction.date));
+            tvDate.setText(DateConverter.toString(mTransaction.getTransaction().date));
             tvValue.setText(UIUtils.getFormattedMoney(
-                    mTransaction.transaction.value, mTransaction.currency));
-            int color = mTransaction.transaction.type == TransactionEntity.TYPE_INCOME ?
+                    mTransaction.getTransaction().value, mTransaction.getCurrency()));
+            int color = mTransaction.getTransaction().type == TransactionEntity.TYPE_INCOME ?
                     ContextCompat.getColor(context, R.color.colorPositiveValue) :
                     ContextCompat.getColor(context, R.color.colorNegativeValue);
             tvValue.setTextColor(color);
-            tvDescription.setText(mTransaction.transaction.description);
+            tvDescription.setText(mTransaction.getTransaction().description);
             menuButton.setOnClickListener(this::showTransactionPopup);
         }
 
@@ -131,7 +131,7 @@ class TransactionRecyclerViewAdapter
                 switch (item.getItemId()) {
                     case R.id.action_delete_transaction:
                         if (deleteRequestListener != null) {
-                            deleteRequestListener.onDeleteRequested(mTransaction.transaction);
+                            deleteRequestListener.onDeleteRequested(mTransaction.getTransaction());
                         }
                         return true;
                 }
