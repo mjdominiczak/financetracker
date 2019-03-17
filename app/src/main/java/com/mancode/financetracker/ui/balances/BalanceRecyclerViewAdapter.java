@@ -67,7 +67,7 @@ public class BalanceRecyclerViewAdapter
         }
         if (mAllBalances != null) {
             for (BalanceExtended balance : mAllBalances) {
-                LocalDate date = balance.checkDate;
+                LocalDate date = balance.getCheckDate();
                 List<BalanceExtended> list;
                 if (mBalancesMap.containsKey(date)) {
                     list = mBalancesMap.get(date);
@@ -140,15 +140,15 @@ public class BalanceRecyclerViewAdapter
                 LinearLayout innerLayout = (LinearLayout) LayoutInflater.from(mView.getContext())
                         .inflate(R.layout.single_balance, mList, false);
                 TextView balanceValue = innerLayout.findViewById(R.id.balance_value);
-                balanceValue.setText(UIUtils.getFormattedMoney(item.value, item.accountCurrency));
-                if (item.value != 0) {
-                    int color = item.accountType == 1 ?
+                balanceValue.setText(UIUtils.getFormattedMoney(item.getValue(), item.getAccountCurrency()));
+                if (item.getValue() != 0) {
+                    int color = item.getAccountType() == 1 ?
                             ContextCompat.getColor(mRecyclerView.getContext(), R.color.colorPositiveValue) :
                             ContextCompat.getColor(mRecyclerView.getContext(), R.color.colorNegativeValue);
                     balanceValue.setTextColor(color);
                 }
                 TextView balanceAccount = innerLayout.findViewById(R.id.balance_account);
-                balanceAccount.setText(item.accountName);
+                balanceAccount.setText(item.getAccountName());
                 mList.addView(innerLayout);
             }
         }
@@ -179,7 +179,7 @@ public class BalanceRecyclerViewAdapter
         private double calculateDailyBalance(List<BalanceExtended> itemList) {
             double result = 0.0;
             for (BalanceExtended item : itemList) {
-                result += ((double) item.accountType) * item.value;
+                result += ((double) item.getAccountType()) * item.getValue();
             }
             return result;
         }
