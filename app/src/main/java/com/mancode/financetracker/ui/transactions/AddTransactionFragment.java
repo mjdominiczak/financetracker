@@ -17,8 +17,8 @@ import com.mancode.financetracker.AddItemFragment;
 import com.mancode.financetracker.R;
 import com.mancode.financetracker.database.entity.CategoryEntity;
 import com.mancode.financetracker.database.entity.TransactionEntity;
+import com.mancode.financetracker.database.pojos.AccountMini;
 import com.mancode.financetracker.database.viewmodel.AddTransactionViewModel;
-import com.mancode.financetracker.database.views.AccountExtended;
 import com.mancode.financetracker.ui.SetDateView;
 
 import org.threeten.bp.LocalDate;
@@ -44,7 +44,7 @@ public class AddTransactionFragment extends AddItemFragment {
     private ArrayAdapter<CategoryEntity> outcomeSpinnerAdapter;
     private List<CategoryEntity> incomeCategories;
     private List<CategoryEntity> outcomeCategories;
-    private List<String> accountsNames;
+    private List<AccountMini> accountsNamesAndIds;
 
     private AddTransactionViewModel viewModel;
 
@@ -59,12 +59,12 @@ public class AddTransactionFragment extends AddItemFragment {
         super.onCreate(savedInstanceState);
         incomeCategories = new ArrayList<>();
         outcomeCategories = new ArrayList<>();
-        accountsNames = new ArrayList<>();
+        accountsNamesAndIds = new ArrayList<>();
         viewModel = ViewModelProviders.of(this).get(AddTransactionViewModel.class);
         AsyncTask.execute(() -> {
             incomeCategories.addAll(viewModel.getIncomeCategories());
             outcomeCategories.addAll(viewModel.getOutcomeCategories());
-            accountsNames.addAll(viewModel.getAccountsNames());
+            accountsNamesAndIds.addAll(viewModel.getAccountsNamesAndIds());
         });
     }
 
@@ -125,7 +125,7 @@ public class AddTransactionFragment extends AddItemFragment {
             }
         });
         accountSpinner = view.findViewById(R.id.spinner_transaction_account);
-        ArrayAdapter<String> accountSpinnerAdapter = getAccountAdapter();
+        ArrayAdapter<AccountMini> accountSpinnerAdapter = getAccountAdapter();
         accountSpinner.setAdapter(accountSpinnerAdapter);
         categorySpinner = view.findViewById(R.id.spinner_transaction_category);
         outcomeSpinnerAdapter = getOutcomeAdapter();
@@ -139,8 +139,8 @@ public class AddTransactionFragment extends AddItemFragment {
                 LocalDate date = transactionDate.getDate();
                 int type = radioGroupType.getCheckedRadioButtonId() == R.id.rb_income ?
                         1 : -1;
-                int account = ((AccountExtended) accountSpinner.getAdapter().getItem(
-                        accountSpinner.getSelectedItemPosition())).id;
+                int account = ((AccountMini) accountSpinner.getAdapter().getItem(
+                        accountSpinner.getSelectedItemPosition())).getId();
                 int category = ((CategoryEntity) categorySpinner.getAdapter().getItem(
                         categorySpinner.getSelectedItemPosition())).id;
 
@@ -175,11 +175,11 @@ public class AddTransactionFragment extends AddItemFragment {
         return view;
     }
 
-    private ArrayAdapter<String> getAccountAdapter() {
+    private ArrayAdapter<AccountMini> getAccountAdapter() {
         return getContext() == null ? null : new ArrayAdapter<>(
                     getContext(),
                     android.R.layout.simple_spinner_dropdown_item,
-                    accountsNames
+                accountsNamesAndIds
         );
     }
 

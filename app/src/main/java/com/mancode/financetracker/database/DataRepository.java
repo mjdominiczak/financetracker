@@ -15,6 +15,7 @@ import com.mancode.financetracker.database.entity.CategoryEntity;
 import com.mancode.financetracker.database.entity.CurrencyEntity;
 import com.mancode.financetracker.database.entity.TransactionEntity;
 import com.mancode.financetracker.database.entity.TransactionFull;
+import com.mancode.financetracker.database.pojos.AccountMini;
 import com.mancode.financetracker.database.views.AccountExtended;
 
 import java.util.List;
@@ -68,8 +69,8 @@ public class DataRepository {
         return mAllAccounts;
     }
 
-    public List<String> getAccountsNames() {
-        return mAccountDao.getAccountsNames();
+    public List<AccountMini> getAccountsNamesAndIds() {
+        return mAccountDao.getAccountsNamesAndIds();
     }
 
     public LiveData<List<BalanceExtended>> getAllBalances() {

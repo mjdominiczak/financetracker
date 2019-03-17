@@ -1,6 +1,7 @@
 package com.mancode.financetracker.database.dao;
 
 import com.mancode.financetracker.database.entity.AccountEntity;
+import com.mancode.financetracker.database.pojos.AccountMini;
 import com.mancode.financetracker.database.views.AccountExtended;
 
 import java.util.List;
@@ -24,8 +25,8 @@ public interface AccountDao {
     @Query("SELECT * FROM accounts")
     List<AccountEntity> getAllAccounts();
 
-    @Query("SELECT account_name FROM accounts")
-    List<String> getAccountsNames();
+    @Query("SELECT _id, account_name FROM accounts")
+    List<AccountMini> getAccountsNamesAndIds();
 
     @Query("SELECT * FROM accounts WHERE _id = :id")
     AccountEntity getAccountById(int id);
