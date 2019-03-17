@@ -158,9 +158,13 @@ public class ReportMonthlyFragment extends Fragment {
             tvNetValueDate1.setText(report.getNetValue1().getDate().toString());
             tvNetValue1.setText(UIUtils.getFormattedMoney(
                     report.getNetValue1().getValue(), "PLN")); // TODO hardcoded currency
+
+            btnPrev.setEnabled(true);
+
         } else {
             tvNetValueDate1.setText("n/a");
             tvNetValue1.setText("n/a");
+            btnPrev.setEnabled(false);
         }
         if (value2Set) {
             tvNetValueDate2.setText(report.getNetValue2().getDate().toString());
@@ -173,6 +177,8 @@ public class ReportMonthlyFragment extends Fragment {
         if (value1Set && value2Set) {
             tvCalcOutcome.setText(UIUtils.getFormattedMoney(
                     report.getCalculatedOutcome(), "PLN")); // TODO hardcoded currency
+        } else {
+            tvCalcOutcome.setText("n/a");
         }
     }
 
