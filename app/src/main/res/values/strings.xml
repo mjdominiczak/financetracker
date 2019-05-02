@@ -14,6 +14,8 @@
     <string name="neutral_filter">Reset</string>
     <string name="negative_filter">Cancel</string>
     <string name="positive_filter">Apply</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     <string name="tab1_name">Accounts</string>
     <string name="tab2_name">Balances</string>
@@ -68,7 +70,19 @@
     <string name="channel_desc_transaction_input_reminder">Reminder about entering transactions</string>
     <string name="notification_title_reminder">Knock, knock…</string>
     <string name="notification_text_reminder">Do you have any transactions to enter?</string>
+    <string name="pref_transaction_reminder_enabled">Transactions reminder</string>
+    <string name="pref_transaction_reminder_enabled_summary">Enable daily reminders</string>
+    <string name="pref_transaction_reminder_time">Set time</string>
+    <string name="pref_transaction_reminder_weekdays">Select days of week</string>
+    <string name="question_transaction_reminder_decision">Do you want to set daily reminder about entering transactions?</string>
 
+    <!--NON TRANSLATABLE KEYS-->
+    <string name="transaction_reminder_enabled" translatable="false">transaction_reminder_enabled</string>
+    <string name="transaction_reminder_time" translatable="false">transaction_reminder_time</string>
+    <string name="transaction_reminder_weekdays" translatable="false">transaction_reminder_weekdays</string>
+    <string name="transaction_reminder_decided" translatable="false">transaction_reminder_decided</string>
+
+    <!--ARRAYS-->
     <string-array name="transaction_filter_type">
         <item>All</item>
         <item>Income</item>
@@ -83,5 +97,24 @@
         <item>Previous month</item>
         <item>This year</item>
         <item>Custom</item>
+    </string-array>
+
+    <string-array name="days_of_week">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+    <string-array name="days_of_week_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
     </string-array>
 </resources>

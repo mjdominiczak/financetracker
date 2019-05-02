@@ -13,6 +13,9 @@
     <string name="neutral_filter">Przywróć</string>
     <string name="negative_filter">Anuluj</string>
     <string name="positive_filter">Zastosuj</string>
+    <string name="yes">Tak</string>
+    <string name="no">Nie</string>
+
     <string name="tab1_name">Konta</string>
     <string name="tab2_name">Bilanse</string>
     <string name="tab3_name">Transakcje</string>
@@ -65,6 +68,11 @@
     <string name="channel_desc_transaction_input_reminder">Przypomnienie o wprowadzaniu transakcji</string>
     <string name="notification_title_reminder">Puk, puk…</string>
     <string name="notification_text_reminder">Masz może jakieś transakcje do wpisania?</string>
+    <string name="pref_transaction_reminder_enabled">Przypomnienie o transakcjach</string>
+    <string name="pref_transaction_reminder_enabled_summary">Włącz codzienne przypomnienia</string>
+    <string name="pref_transaction_reminder_time">Ustaw czas</string>
+    <string name="pref_transaction_reminder_weekdays">Wybierz dni tygodnia</string>
+    <string name="question_transaction_reminder_decision">Czy chcesz ustawić codzienne przypomnienie o wprowadzeniu transakcji?</string>
 
     <string-array name="transaction_filter_type">
         <item>Wszystkie</item>
@@ -82,4 +90,13 @@
         <item>Inny</item>
     </string-array>
 
+    <string-array name="days_of_week">
+        <item>Poniedziałek</item>
+        <item>Wtorek</item>
+        <item>Środa</item>
+        <item>Czwartek</item>
+        <item>Piątek</item>
+        <item>Sobota</item>
+        <item>Niedziela</item>
+    </string-array>
 </resources>

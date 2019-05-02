@@ -9,10 +9,15 @@ import androidx.core.app.NotificationManagerCompat
 import com.mancode.financetracker.MainActivity
 import com.mancode.financetracker.MyTabsPagerAdapter
 import com.mancode.financetracker.R
+import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 
 class ReminderNotificationReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
+        val prefAccessor = PreferenceAccessor(context)
+        if (!prefAccessor.isTransactionReminderValid())
+            return
+
         val tapIntent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra(MainActivity.EXTRA_VISIBLE_FRAGMENT, MyTabsPagerAdapter.TRANSACTION_FRAGMENT)
@@ -20,7 +25,7 @@ class ReminderNotificationReceiver : BroadcastReceiver() {
         val pendingIntent = PendingIntent.getActivity(context, 0, tapIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val notification = NotificationCompat.Builder(context, MainActivity.CHANNEL_ID_REMINDER)
+        val notification = NotificationCompat.Builder(context, CHANNEL_ID_REMINDER)
                 .setContentTitle(context.getString(R.string.notification_title_reminder))
                 .setContentText(context.getString(R.string.notification_text_reminder))
                 .setContentIntent(pendingIntent)

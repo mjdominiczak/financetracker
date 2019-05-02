@@ -4,11 +4,11 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import androidx.appcompat.widget.AppCompatButton;
+
 import com.mancode.financetracker.R;
 
 import org.threeten.bp.LocalDate;
-
-import androidx.appcompat.widget.AppCompatButton;
 
 /**
  * Created by Manveru on 04.11.2017.
@@ -30,7 +30,7 @@ public class SetDateView extends AppCompatButton {
         mDateSetListener = (view, year, month, dayOfMonth) -> setDate(year, month + 1, dayOfMonth);
         this.setOnClickListener(v -> new DatePickerDialog(
                 getContext(),
-                R.style.AppTheme_DatePicker,
+                R.style.AppTheme_Picker,
                 mDateSetListener,
                 mDate.getYear(),
                 mDate.getMonthValue() - 1,

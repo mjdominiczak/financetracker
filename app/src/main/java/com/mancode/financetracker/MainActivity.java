@@ -1,24 +1,12 @@
 package com.mancode.financetracker;
 
 import android.Manifest;
-import android.app.AlarmManager;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-
-import com.google.android.material.tabs.TabLayout;
-import com.mancode.financetracker.database.DatabaseJson;
-import com.mancode.financetracker.database.viewmodel.BalanceViewModel;
-import com.mancode.financetracker.notifications.ReminderNotificationReceiver;
-
-import java.util.Calendar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +16,11 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.tabs.TabLayout;
+import com.mancode.financetracker.database.DatabaseJson;
+import com.mancode.financetracker.database.viewmodel.BalanceViewModel;
+import com.mancode.financetracker.ui.prefs.PreferenceAccessor;
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
@@ -35,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     public static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE   = 0;
     public static final int PERMISSION_REQUEST_READ_EXTERNAL_STORAGE    = 1;
 
-    public static final String CHANNEL_ID_REMINDER = "channel_reminder";
     public static final String EXTRA_VISIBLE_FRAGMENT = "visible_fragment";
 
     private ViewPager viewPager;
@@ -43,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        checkPreferences();
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -80,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
         int visibleFragment = getIntent().getIntExtra(EXTRA_VISIBLE_FRAGMENT, MyTabsPagerAdapter.ACCOUNT_FRAGMENT);
         viewPager.setCurrentItem(visibleFragment);
 
-        setAlarmForNotification();
-        createNotificationChannel();
     }
 
     @Override
@@ -129,6 +122,10 @@ public class MainActivity extends AppCompatActivity {
                 BalanceViewModel model = ViewModelProviders.of(this).get(BalanceViewModel.class);
                 model.removeLastBalance();
                 Toast.makeText(getApplicationContext(), "Last balance removed", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_preferences:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -178,38 +175,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setAlarmForNotification() {
-        Intent intent = new Intent(this, ReminderNotificationReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast
-                (this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 20);
-        calendar.set(Calendar.MINUTE, 0);
-        if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
-            calendar.add(Calendar.DAY_OF_YEAR, 1);
-        }
-        if (alarmManager != null) {
-            alarmManager.cancel(pendingIntent);
-            alarmManager.setInexactRepeating(
-                    AlarmManager.RTC_WAKEUP,
-                    calendar.getTimeInMillis(),
-                    AlarmManager.INTERVAL_DAY,
-                    pendingIntent);
-        }
-    }
-
-    private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            String name = getString(R.string.channel_name_transaction_input_reminder);
-            String desc = getString(R.string.channel_desc_transaction_input_reminder);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID_REMINDER, name, importance);
-            channel.setDescription(desc);
-
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
+    private void checkPreferences() {
+        new PreferenceAccessor(this).resetRemindersAndShowDecisionDialog();
     }
 }

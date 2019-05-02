@@ -8,13 +8,14 @@
 
         <item name="android:spinnerStyle">@style/Spinner</item>
         <item name="setDateViewStyle">@style/SetDateView</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
     <style name="AppTheme.Dialog">
         <item name="android:background">@android:color/background_light</item>
     </style>
 
-    <style name="AppTheme.DatePicker" parent="Theme.AppCompat.Light.Dialog">
+    <style name="AppTheme.Picker" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
