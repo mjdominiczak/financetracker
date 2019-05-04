@@ -67,8 +67,9 @@ class PreferenceAccessor(val context: Context) {
                 .create().show()
     }
 
-    private fun registerReminderWithProperty() {
+    fun registerReminderWithProperty() {
         try {
+            if (!transactionReminderEnabled) return
             assert(timeString != null)
             val time = LocalTime.parse(timeString, DateTimeFormatter.ISO_LOCAL_TIME)
             registerTransactionReminder(context, time)
