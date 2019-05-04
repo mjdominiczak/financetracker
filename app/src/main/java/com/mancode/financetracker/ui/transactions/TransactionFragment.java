@@ -12,6 +12,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mancode.financetracker.R;
 import com.mancode.financetracker.database.entity.TransactionEntity;
@@ -21,13 +28,6 @@ import com.mancode.financetracker.ui.UIUtils;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.temporal.TemporalAdjusters;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import static com.mancode.financetracker.ui.transactions.FilterQuery.TYPE_ALL;
 import static com.mancode.financetracker.ui.transactions.FilterQuery.TYPE_INCOME;
@@ -96,7 +96,7 @@ public class TransactionFragment extends Fragment implements TransactionRecycler
 
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(view1 -> UIUtils.showFullScreenDialog(
-                getFragmentManager(), AddTransactionFragment.newInstance()));
+                getFragmentManager(), AddTransactionFragment.Companion.newInstance()));
         return view;
     }
 
