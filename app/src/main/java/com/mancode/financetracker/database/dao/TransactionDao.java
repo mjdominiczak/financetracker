@@ -1,13 +1,5 @@
 package com.mancode.financetracker.database.dao;
 
-import com.mancode.financetracker.database.converter.DateConverter;
-import com.mancode.financetracker.database.entity.TransactionEntity;
-import com.mancode.financetracker.database.pojos.TransactionFull;
-
-import org.threeten.bp.LocalDate;
-
-import java.util.List;
-
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -15,6 +7,15 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.TypeConverters;
+import androidx.room.Update;
+
+import com.mancode.financetracker.database.converter.DateConverter;
+import com.mancode.financetracker.database.entity.TransactionEntity;
+import com.mancode.financetracker.database.pojos.TransactionFull;
+
+import org.threeten.bp.LocalDate;
+
+import java.util.List;
 
 /**
  * Created by Manveru on 25.01.2018.
@@ -54,6 +55,9 @@ public interface TransactionDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<TransactionEntity> transactionList);
+
+    @Update
+    void updateTransaction(TransactionEntity transaction);
 
     @Delete
     void deleteTransaction(TransactionEntity transaction);

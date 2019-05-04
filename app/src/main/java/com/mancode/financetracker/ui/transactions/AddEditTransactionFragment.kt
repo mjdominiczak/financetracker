@@ -17,11 +17,24 @@ import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.CategoryEntity
 import com.mancode.financetracker.database.entity.TransactionEntity
 import com.mancode.financetracker.database.pojos.AccountMini
-import com.mancode.financetracker.database.viewmodel.AddTransactionViewModel
+import com.mancode.financetracker.database.viewmodel.AddEditTransactionViewModel
 import kotlinx.android.synthetic.main.edit_transaction.*
+import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
 import java.util.*
 
-class AddTransactionFragment : AddItemFragment() {
+class AddEditTransactionFragment : AddItemFragment() {
+
+    /**
+     * id not set if adding new transaction
+     */
+    private var argId: Int = 0
+    private var argDate: LocalDate? = null
+    private var argType: Int? = null
+    private var argDescription: String? = null
+    private var argValue: Double? = null
+    private var argAccountId: Int? = null
+    private var argCategoryId: Int? = null
 
     private val incomeCategories by lazy { ArrayList<CategoryEntity>() }
     private val outcomeCategories by lazy { ArrayList<CategoryEntity>() }
@@ -31,7 +44,7 @@ class AddTransactionFragment : AddItemFragment() {
     private val accountSpinnerAdapter by lazy { obtainAccountAdapter() }
 
     private val viewModel by lazy {
-        ViewModelProviders.of(this).get(AddTransactionViewModel::class.java)
+        ViewModelProviders.of(this).get(AddEditTransactionViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +54,16 @@ class AddTransactionFragment : AddItemFragment() {
             outcomeCategories.addAll(viewModel.outcomeCategories)
             accountsNamesAndIds.addAll(viewModel.accountsNamesAndIds)
         }
+
+        argId = arguments?.getInt(ARG_ID) ?: 0
+        if (arguments != null) {
+            argDate = LocalDate.parse(arguments?.getString(ARG_DATE))
+        }
+        argType = arguments?.getInt(ARG_TYPE)
+        argDescription = arguments?.getString(ARG_DESCRIPTION)
+        argValue = arguments?.getDouble(ARG_VALUE)
+        argAccountId = arguments?.getInt(ARG_ACCOUNT_ID)
+        argCategoryId = arguments?.getInt(ARG_CATEGORY_ID)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -88,6 +111,25 @@ class AddTransactionFragment : AddItemFragment() {
         accountSpinner.adapter = accountSpinnerAdapter
         categorySpinner.adapter = outcomeSpinnerAdapter
 
+        if (arguments != null) {
+            transactionDate.date = argDate
+            if (argType == 1) {
+                radioGroupType.check(R.id.rb_income)
+            } else {
+                radioGroupType.check(R.id.rb_outcome)
+            }
+            descriptionField.setText(argDescription)
+            valueField.setText(argValue.toString())
+            val accountIndex = accountsNamesAndIds.map { it.id }.indexOf(argAccountId)
+            accountSpinner.setSelection(accountIndex)
+            val categoryIndex = if (argType == 1) {
+                incomeCategories.map { it.id }.indexOf(argCategoryId)
+            } else {
+                outcomeCategories.map { it.id }.indexOf(argCategoryId)
+            }
+            categorySpinner.setSelection(categoryIndex)
+        }
+
         val toolbar = view.findViewById<Toolbar>(R.id.add_transaction_toolbar)
         toolbar.setOnMenuItemClickListener { item ->
             if (item.itemId == R.id.action_menu_save) {
@@ -103,7 +145,7 @@ class AddTransactionFragment : AddItemFragment() {
                 if (description.isNotEmpty() && valueString.isNotEmpty()) {
                     val value = valueString.toDouble()
                     val transaction = TransactionEntity(
-                            0, // not set
+                            argId,
                             date,
                             type,
                             description,
@@ -111,7 +153,11 @@ class AddTransactionFragment : AddItemFragment() {
                             account,
                             category
                     )
-                    viewModel.insertTransaction(transaction)
+                    if (argId == 0) {
+                        viewModel.insertTransaction(transaction)
+                    } else {
+                        viewModel.updateTransaction(transaction)
+                    }
                     dismiss()
                 } else {
                     if (description.isEmpty()) {
@@ -164,8 +210,25 @@ class AddTransactionFragment : AddItemFragment() {
 
     companion object {
 
-        fun newInstance(): AddTransactionFragment {
-            return AddTransactionFragment()
-        }
+        private const val ARG_ID = "id"
+        private const val ARG_DATE = "date"
+        private const val ARG_TYPE = "type"
+        private const val ARG_DESCRIPTION = "description"
+        private const val ARG_VALUE = "value"
+        private const val ARG_ACCOUNT_ID = "account_id"
+        private const val ARG_CATEGORY_ID = "category_id"
+
+        fun newInstance(transaction: TransactionEntity) =
+                AddEditTransactionFragment().apply {
+                    arguments = Bundle().apply {
+                        putInt(ARG_ID, transaction.id)
+                        putString(ARG_DATE, DateTimeFormatter.ISO_LOCAL_DATE.format(transaction.date))
+                        putInt(ARG_TYPE, transaction.type)
+                        putString(ARG_DESCRIPTION, transaction.description)
+                        putDouble(ARG_VALUE, transaction.value)
+                        putInt(ARG_ACCOUNT_ID, transaction.accountId)
+                        putInt(ARG_CATEGORY_ID, transaction.categoryId)
+                    }
+                }
     }
 }

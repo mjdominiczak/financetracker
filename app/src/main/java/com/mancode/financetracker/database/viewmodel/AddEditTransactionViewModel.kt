@@ -11,7 +11,7 @@ import com.mancode.financetracker.database.pojos.AccountMini
  * Created by Manveru on 12.02.2018.
  */
 
-class AddTransactionViewModel(application: Application) : AndroidViewModel(application) {
+class AddEditTransactionViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: DataRepository = DataRepository.getInstance(application)
     val accountsNamesAndIds: List<AccountMini> by lazy { repository.accountsNamesAndIds }
@@ -22,4 +22,7 @@ class AddTransactionViewModel(application: Application) : AndroidViewModel(appli
         repository.insertTransaction(transaction)
     }
 
+    fun updateTransaction(transaction: TransactionEntity) {
+        repository.updateTransaction(transaction)
+    }
 }

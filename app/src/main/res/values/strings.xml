@@ -46,6 +46,7 @@
     <string name="to_date">To date</string>
     <string name="categories">Categories</string>
     <string name="button_transaction_menu">Transaction menu button</string>
+    <string name="action_edit">Edit</string>
     <string name="action_delete">Delete</string>
     <string name="label_account_type">Type</string>
     <string name="account_open_date">Open date</string>

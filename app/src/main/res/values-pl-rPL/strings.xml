@@ -46,6 +46,7 @@
     <string name="to_date">Data do</string>
     <string name="categories">Kategorie</string>
     <string name="button_transaction_menu">Przycisk opcji dla transakcji</string>
+    <string name="action_edit">Edytuj</string>
     <string name="action_delete">Usuń</string>
     <string name="label_account_type">Typ</string>
     <string name="account_open_date">Data otwarcia</string>

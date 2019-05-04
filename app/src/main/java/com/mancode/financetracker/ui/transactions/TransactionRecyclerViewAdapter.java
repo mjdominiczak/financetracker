@@ -12,6 +12,10 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.mancode.financetracker.R;
 import com.mancode.financetracker.database.converter.DateConverter;
 import com.mancode.financetracker.database.entity.TransactionEntity;
@@ -22,10 +26,6 @@ import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Manveru on 18.12.2017.
@@ -42,11 +42,12 @@ class TransactionRecyclerViewAdapter
     private boolean isFiltered = false;
     private FilterQuery filterQuery;
     private Context context;
-    private DeleteRequestListener deleteRequestListener;
+    private ModifyRequestListener modifyRequestListener;
 
-    TransactionRecyclerViewAdapter(Context context, DeleteRequestListener deleteRequestListener) {
+    TransactionRecyclerViewAdapter(Context context,
+                                   ModifyRequestListener modifyRequestListener) {
         this.context = context;
-        this.deleteRequestListener = deleteRequestListener;
+        this.modifyRequestListener = modifyRequestListener;
     }
 
     @NonNull
@@ -129,9 +130,14 @@ class TransactionRecyclerViewAdapter
             inflater.inflate(R.menu.transaction_actions, popup.getMenu());
             popup.setOnMenuItemClickListener(item -> {
                 switch (item.getItemId()) {
+                    case R.id.action_edit_transaction:
+                        if (modifyRequestListener != null) {
+                            modifyRequestListener.onEditRequested(mTransaction.getTransaction());
+                        }
+                        return true;
                     case R.id.action_delete_transaction:
-                        if (deleteRequestListener != null) {
-                            deleteRequestListener.onDeleteRequested(mTransaction.getTransaction());
+                        if (modifyRequestListener != null) {
+                            modifyRequestListener.onDeleteRequested(mTransaction.getTransaction());
                         }
                         return true;
                 }
@@ -170,7 +176,8 @@ class TransactionRecyclerViewAdapter
         }
     }
 
-    public interface DeleteRequestListener {
+    public interface ModifyRequestListener {
+        void onEditRequested(TransactionEntity transaction);
         void onDeleteRequested(TransactionEntity transaction);
     }
 }

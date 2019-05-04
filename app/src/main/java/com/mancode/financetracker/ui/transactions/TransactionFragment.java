@@ -37,7 +37,8 @@ import static com.mancode.financetracker.ui.transactions.FilterQuery.TYPE_OUTCOM
  * Created by Manveru on 23.11.2017.
  */
 
-public class TransactionFragment extends Fragment implements TransactionRecyclerViewAdapter.DeleteRequestListener {
+public class TransactionFragment extends Fragment
+        implements TransactionRecyclerViewAdapter.ModifyRequestListener {
 
     private TransactionRecyclerViewAdapter mAdapter;
     private TransactionViewModel transactionViewModel;
@@ -96,8 +97,15 @@ public class TransactionFragment extends Fragment implements TransactionRecycler
 
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(view1 -> UIUtils.showFullScreenDialog(
-                getFragmentManager(), AddTransactionFragment.Companion.newInstance()));
+                getFragmentManager(), new AddEditTransactionFragment()));
         return view;
+    }
+
+    @Override
+    public void onEditRequested(TransactionEntity transaction) {
+        UIUtils.showFullScreenDialog(
+                getFragmentManager(), AddEditTransactionFragment.Companion.newInstance(transaction)
+        );
     }
 
     @Override

@@ -3,6 +3,8 @@ package com.mancode.financetracker.database;
 import android.app.Application;
 import android.os.AsyncTask;
 
+import androidx.lifecycle.LiveData;
+
 import com.mancode.financetracker.database.dao.AccountDao;
 import com.mancode.financetracker.database.dao.BalanceDao;
 import com.mancode.financetracker.database.dao.CategoryDao;
@@ -18,9 +20,9 @@ import com.mancode.financetracker.database.pojos.BalanceExtended;
 import com.mancode.financetracker.database.pojos.TransactionFull;
 import com.mancode.financetracker.database.views.AccountExtended;
 
-import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
-import androidx.lifecycle.LiveData;
+import java.util.List;
 
 /**
  * Created by Manveru on 02.02.2018.
@@ -116,6 +118,10 @@ public class DataRepository {
 
     public void removeLastBalance() {
         AsyncTask.execute(() -> mBalanceDao.removeLast());
+    }
+
+    public void updateTransaction(@NotNull TransactionEntity transaction) {
+        AsyncTask.execute(() -> mTransactionDao.updateTransaction(transaction));
     }
 
     public void deleteTransaction(TransactionEntity transaction) {
