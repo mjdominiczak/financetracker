@@ -2,6 +2,16 @@ package com.mancode.financetracker.database;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
 import com.mancode.financetracker.database.dao.AccountDao;
 import com.mancode.financetracker.database.dao.BalanceDao;
 import com.mancode.financetracker.database.dao.CategoryDao;
@@ -18,31 +28,21 @@ import com.mancode.financetracker.database.views.AccountExtended;
 import com.mancode.financetracker.database.workers.PrepopulateDatabaseWorker;
 import com.mancode.financetracker.database.workers.UpdateStateWorker;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.MutableLiveData;
-import androidx.room.Database;
-import androidx.room.Room;
-import androidx.room.RoomDatabase;
-import androidx.room.migration.Migration;
-import androidx.sqlite.db.SupportSQLiteDatabase;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
-
 /**
  * Created by Manveru on 31.01.2018.
  */
 
-@Database   (entities = {AccountEntity.class,
-                        BalanceEntity.class,
-                        CategoryEntity.class,
-                        CurrencyEntity.class,
-                        TransactionEntity.class,
-                        NetValue.class},
-            views = {AccountExtended.class},
-            version = FTDatabase.DATABASE_VERSION)
+@Database(entities = {AccountEntity.class,
+        BalanceEntity.class,
+        CategoryEntity.class,
+        CurrencyEntity.class,
+        TransactionEntity.class,
+        NetValue.class},
+        views = {AccountExtended.class},
+        version = FTDatabase.DATABASE_VERSION)
 public abstract class FTDatabase extends RoomDatabase {
 
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "database.db";
     private static FTDatabase sInstance;
 
@@ -61,6 +61,33 @@ public abstract class FTDatabase extends RoomDatabase {
         }
     };
 
+    /**
+     * Migration from version 2 to version 3:
+     * TODO
+     */
+    private static Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase db) {
+            db.beginTransaction();
+            try {
+                db.execSQL("PRAGMA foreign_keys=off;");
+                db.execSQL("ALTER TABLE currencies RENAME TO old;");
+                db.execSQL("CREATE TABLE currencies (" +
+                        "    currency_symbol TEXT NOT NULL PRIMARY KEY," +
+                        "    currency_exchange_rate DOUBLE NOT NULL DEFAULT 1.0," +
+                        "    currency_rate_date TEXT" +
+                        ");");
+                db.execSQL("INSERT INTO currencies(currency_symbol, currency_exchange_rate) " +
+                        "SELECT currency_symbol, currency_exchange_rate FROM old;");
+                db.execSQL("DROP TABLE old;");
+                db.execSQL("PRAGMA foreign_keys=on;");
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
+        }
+    };
+
     public static FTDatabase getInstance(final Context context) {
         if (sInstance == null) {
             synchronized (FTDatabase.class) {
@@ -75,6 +102,7 @@ public abstract class FTDatabase extends RoomDatabase {
     private static FTDatabase buildDatabase(final Context applicationContext) {
         return Room.databaseBuilder(applicationContext, FTDatabase.class, DATABASE_NAME)
                 .addMigrations(MIGRATION_1_2)
+                .addMigrations(MIGRATION_2_3)
                 .addCallback(new Callback() {
                     @Override
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {

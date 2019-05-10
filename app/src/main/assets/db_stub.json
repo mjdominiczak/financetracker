@@ -92,13 +92,7 @@
   "currencies": [
     {
       "currencySymbol": "PLN",
-      "exchangeRate": 1.0,
-      "id": 1
-    },
-    {
-      "currencySymbol": "EUR",
-      "exchangeRate": 4.2047,
-      "id": 2
+      "exchangeRate": 1.0
     }
   ],
   "transactions": [
@@ -112,5 +106,5 @@
       "value": 0.0
     }
   ],
-  "version": 2
+  "version": 3
 }

@@ -99,9 +99,9 @@ public class DataRepository {
         AsyncTask.execute(() -> {
             if (mCurrencyDao.getCurrencyCount(account.currency) == 0) {
                 mCurrencyDao.insertCurrency(new CurrencyEntity(
-                        0,
                         account.currency,
-                        1.0
+                        1.0,
+                        null
                 ));
             }
             mAccountDao.insertAccount(account);
