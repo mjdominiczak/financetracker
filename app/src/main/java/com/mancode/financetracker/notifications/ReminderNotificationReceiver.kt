@@ -14,8 +14,7 @@ import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 class ReminderNotificationReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        val prefAccessor = PreferenceAccessor(context)
-        if (!prefAccessor.isTransactionReminderValid())
+        if (!PreferenceAccessor.isTransactionReminderValid())
             return
 
         val tapIntent = Intent(context, MainActivity::class.java).apply {

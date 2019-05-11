@@ -4,8 +4,16 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.util.Log
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
+import com.mancode.financetracker.R
+import com.mancode.financetracker.SettingsActivity
+import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 import org.threeten.bp.LocalTime
 import org.threeten.bp.ZonedDateTime
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.DateTimeParseException
 
 const val CHANNEL_ID_REMINDER = "channel_reminder"
 
@@ -42,3 +50,39 @@ private fun constructPendingIntent(context: Context): PendingIntent {
     return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 }
 
+fun resetRemindersAndShowDecisionDialog(context: Context) {
+    if (PreferenceAccessor.transactionReminderDecided) {
+        if (PreferenceAccessor.transactionReminderEnabled) {
+            registerReminderWithProperty(context)
+        } else {
+            cancelTransactionReminder(context)
+        }
+        return
+    }
+
+    val builder = AlertDialog.Builder(context)
+    builder.setMessage(context.getString(R.string.question_transaction_reminder_decision))
+            .setPositiveButton(context.getString(R.string.yes)) { _, _ ->
+                registerReminderWithProperty(context)
+                val intent = Intent(context, SettingsActivity::class.java)
+                ContextCompat.startActivity(context, intent, null)
+            }
+            .setNegativeButton(context.getString(R.string.no)) { _, _ ->
+                PreferenceAccessor.transactionReminderDecided = true
+                PreferenceAccessor.transactionReminderEnabled = false
+                cancelTransactionReminder(context)
+            }
+            .create().show()
+}
+
+fun registerReminderWithProperty(context: Context) {
+    if (!PreferenceAccessor.transactionReminderEnabled) return
+
+    val timeString = PreferenceAccessor.timeString
+    try {
+        val time = LocalTime.parse(timeString, DateTimeFormatter.ISO_LOCAL_TIME)
+        registerTransactionReminder(context, time)
+    } catch (e: DateTimeParseException) {
+        Log.d("PreferenceAccessor", "$timeString could not be parsed with ISO_LOCAL_TIME formatter")
+    }
+}

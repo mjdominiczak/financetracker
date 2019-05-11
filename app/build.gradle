@@ -69,6 +69,7 @@ dependencies {
     def espresso_version = '3.1.0-alpha4'
     def joda_money_version = "1.0.1"
     def threetenabp_version = "1.1.1"
+    def okhttp_version = "3.14.1"
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     androidTestImplementation("androidx.test.espresso:espresso-core:$espresso_version", {
@@ -89,6 +90,7 @@ dependencies {
     implementation "net.cachapa.expandablelayout:expandablelayout:$expandable_layout_version"
     implementation "org.joda:joda-money:$joda_money_version"
     implementation "com.jakewharton.threetenabp:threetenabp:$threetenabp_version"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
     testImplementation "junit:junit:$junit_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     androidTestImplementation "androidx.room:room-testing:$room_version"

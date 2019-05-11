@@ -15,11 +15,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
+import androidx.work.Constraints;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.mancode.financetracker.database.DatabaseJson;
 import com.mancode.financetracker.database.viewmodel.BalanceViewModel;
-import com.mancode.financetracker.ui.prefs.PreferenceAccessor;
+import com.mancode.financetracker.database.workers.FetchECBRatesWorker;
+import com.mancode.financetracker.notifications.ReminderFunctionsKt;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         checkPreferences();
+        fetchExchangeRates();
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -176,6 +182,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkPreferences() {
-        new PreferenceAccessor(this).resetRemindersAndShowDecisionDialog();
+        ReminderFunctionsKt.resetRemindersAndShowDecisionDialog(this);
+    }
+
+    private void fetchExchangeRates() {
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        OneTimeWorkRequest fetchWork = new OneTimeWorkRequest.Builder(FetchECBRatesWorker.class)
+                .setConstraints(constraints)
+                .build();
+        WorkManager.getInstance().enqueue(fetchWork);
     }
 }
