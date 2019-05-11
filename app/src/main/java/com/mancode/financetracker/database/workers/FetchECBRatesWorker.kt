@@ -7,6 +7,7 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.mancode.financetracker.database.FTDatabase
 import com.mancode.financetracker.database.entity.CurrencyEntity
+import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 import okhttp3.*
 import org.threeten.bp.LocalDate
 import org.xmlpull.v1.XmlPullParser
@@ -37,6 +38,7 @@ class FetchECBRatesWorker(context: Context, params: WorkerParameters)
                         val dao = FTDatabase.getInstance(applicationContext).currencyDao()
                         dao.insertCurrency(CurrencyEntity("EUR", 1.0, null))
                         dao.insertAll(ECBXmlParser().parse(responseStream))
+                        PreferenceAccessor.ratesFetchDate = LocalDate.now()
                     }
                 }
             }

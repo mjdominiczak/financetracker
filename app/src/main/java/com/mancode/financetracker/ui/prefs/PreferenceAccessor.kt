@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import com.mancode.financetracker.R
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalTime
 
 object PreferenceAccessor {
 
@@ -21,6 +22,13 @@ object PreferenceAccessor {
         editor.apply()
     }
 
+    var ratesFetchDate: LocalDate?
+        get() {
+            val string = preferences.getString("rates_fetch_date", null)
+            return if (string != null) LocalDate.parse(string) else null
+        }
+        set(value) = preferences.edit { it.putString("rates_fetch_date", value.toString()) }
+
     var transactionReminderDecided: Boolean
         get() = preferences.getBoolean("transaction_reminder_decided", false)
         set(value) = preferences.edit { it.putBoolean("transaction_reminder_decided", value) }
@@ -29,9 +37,12 @@ object PreferenceAccessor {
         get() = preferences.getBoolean("transaction_reminder_enabled", false)
         set(value) = preferences.edit { it.putBoolean("transaction_reminder_enabled", value) }
 
-    var timeString: String
-        get() = preferences.getString("transaction_reminder_time", "20:00:00")!!
-        set(value) = preferences.edit { it.putString("transaction_reminder_time", value) }
+    var transactionReminderTime: LocalTime
+        get() {
+            val string = preferences.getString("transaction_reminder_time", "20:00:00")!!
+            return LocalTime.parse(string)
+        }
+        set(value) = preferences.edit { it.putString("transaction_reminder_time", value.toString()) }
 
     var transactionReminderWeekdays: Set<String>
         get() = preferences.getStringSet("transaction_reminder_weekdays", emptySet())!!

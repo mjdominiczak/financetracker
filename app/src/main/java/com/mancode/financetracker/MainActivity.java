@@ -25,6 +25,9 @@ import com.mancode.financetracker.database.DatabaseJson;
 import com.mancode.financetracker.database.viewmodel.BalanceViewModel;
 import com.mancode.financetracker.database.workers.FetchECBRatesWorker;
 import com.mancode.financetracker.notifications.ReminderFunctionsKt;
+import com.mancode.financetracker.ui.prefs.PreferenceAccessor;
+
+import org.threeten.bp.LocalDate;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -186,6 +189,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchExchangeRates() {
+        LocalDate date = PreferenceAccessor.INSTANCE.getRatesFetchDate();
+        if (date != null && date.isEqual(LocalDate.now())) return;
+
         Constraints constraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build();
