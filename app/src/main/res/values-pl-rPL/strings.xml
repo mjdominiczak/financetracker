@@ -73,6 +73,7 @@
     <string name="pref_transaction_reminder_enabled_summary">Włącz codzienne przypomnienia</string>
     <string name="pref_transaction_reminder_time">Ustaw czas</string>
     <string name="pref_transaction_reminder_weekdays">Wybierz dni tygodnia</string>
+    <string name="pref_default_currency">Waluta domyślna</string>
     <string name="question_transaction_reminder_decision">Czy chcesz ustawić codzienne przypomnienie o wprowadzeniu transakcji?</string>
 
     <string-array name="transaction_filter_type">

@@ -9,14 +9,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.ListPreference
 import androidx.preference.MultiSelectListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.mancode.financetracker.notifications.CHANNEL_ID_REMINDER
 import com.mancode.financetracker.notifications.cancelTransactionReminder
 import com.mancode.financetracker.notifications.registerTransactionReminder
+import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 import com.mancode.financetracker.ui.prefs.TimePreference
 import com.mancode.financetracker.ui.prefs.TimePreferenceDialogFragment
+import org.joda.money.CurrencyUnit
 import org.threeten.bp.LocalTime
 
 class SettingsActivity : AppCompatActivity() {
@@ -69,6 +72,14 @@ class SettingsActivity : AppCompatActivity() {
                 true
             }
             transactionReminderWeekdaysPref?.setSummaryFromValues()
+
+            val defaultCurrencyPref = findPreference<ListPreference>(getString(R.string.default_currency))
+            with(defaultCurrencyPref as ListPreference) {
+                entries = CurrencyUnit.registeredCurrencies().map { it.code }.toTypedArray()
+                entryValues = entries
+                value = PreferenceAccessor.defaultCurrency
+                summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
+            }
             return super.onCreateView(inflater, container, savedInstanceState)
         }
 

@@ -14,7 +14,7 @@
         <com.mancode.financetracker.ui.prefs.TimePreference
             android:defaultValue="20:00:00"
             android:dependency="@string/transaction_reminder_enabled"
-            android:key="transaction_reminder_time"
+            android:key="@string/transaction_reminder_time"
             android:title="@string/pref_transaction_reminder_time" />
 
         <MultiSelectListPreference
@@ -22,7 +22,7 @@
             android:dependency="@string/transaction_reminder_enabled"
             android:entries="@array/days_of_week"
             android:entryValues="@array/days_of_week_values"
-            android:key="transaction_reminder_weekdays"
+            android:key="@string/transaction_reminder_weekdays"
             android:title="@string/pref_transaction_reminder_weekdays" />
     </PreferenceCategory>
 
@@ -35,4 +35,11 @@
             <!--android:title="Enable balances reminder" />-->
 
     <!--</PreferenceCategory>-->
+
+    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+
+        <ListPreference
+            android:key="@string/default_currency"
+            android:title="@string/pref_default_currency" />
+    </PreferenceCategory>
 </androidx.preference.PreferenceScreen>

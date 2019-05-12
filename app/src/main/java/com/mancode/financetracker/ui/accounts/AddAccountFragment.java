@@ -14,23 +14,23 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.mancode.financetracker.AddItemFragment;
 import com.mancode.financetracker.R;
 import com.mancode.financetracker.database.entity.AccountEntity;
 import com.mancode.financetracker.database.viewmodel.AccountViewModel;
 import com.mancode.financetracker.ui.SetDateView;
+import com.mancode.financetracker.ui.prefs.PreferenceAccessor;
 
 import org.joda.money.CurrencyUnit;
 import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProviders;
 
 
 public class AddAccountFragment extends AddItemFragment {
@@ -96,7 +96,7 @@ public class AddAccountFragment extends AddItemFragment {
                 currencyCodesList.add(currency.getCode());
             }
             int preselectionIndex = currencyCodesList.indexOf(
-                    CurrencyUnit.of(Locale.getDefault()).getCode());
+                    PreferenceAccessor.INSTANCE.getDefaultCurrency());
             availableCurrencyCodes = currencyCodesList.toArray(new String[0]);
             currencyAdapter = new ArrayAdapter<>(
                     getContext(),

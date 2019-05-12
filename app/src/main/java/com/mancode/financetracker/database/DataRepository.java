@@ -97,15 +97,17 @@ public class DataRepository {
 
     public void insertAccount(AccountEntity account) {
         AsyncTask.execute(() -> {
-            if (mCurrencyDao.getCurrencyCount(account.currency) == 0) {
-                mCurrencyDao.insertCurrency(new CurrencyEntity(
-                        account.currency,
-                        1.0,
-                        null
-                ));
-            }
+            mCurrencyDao.insertCurrency(new CurrencyEntity(
+                    account.currency,
+                    1.0,
+                    null
+            ));
             mAccountDao.insertAccount(account);
         });
+    }
+
+    public void insertCurrencies(List<CurrencyEntity> currencies) {
+        AsyncTask.execute(() -> mCurrencyDao.insertAll(currencies));
     }
 
     public void insertBalance(BalanceEntity balance) {

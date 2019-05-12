@@ -75,6 +75,7 @@
     <string name="pref_transaction_reminder_enabled_summary">Enable daily reminders</string>
     <string name="pref_transaction_reminder_time">Set time</string>
     <string name="pref_transaction_reminder_weekdays">Select days of week</string>
+    <string name="pref_default_currency">Default currency</string>
     <string name="question_transaction_reminder_decision">Do you want to set daily reminder about entering transactions?</string>
 
     <!--NON TRANSLATABLE KEYS-->
@@ -82,6 +83,7 @@
     <string name="transaction_reminder_time" translatable="false">transaction_reminder_time</string>
     <string name="transaction_reminder_weekdays" translatable="false">transaction_reminder_weekdays</string>
     <string name="transaction_reminder_decided" translatable="false">transaction_reminder_decided</string>
+    <string name="default_currency" translatable="false">default_currency</string>
 
     <!--ARRAYS-->
     <string-array name="transaction_filter_type">

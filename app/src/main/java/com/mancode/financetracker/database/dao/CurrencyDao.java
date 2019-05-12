@@ -16,16 +16,10 @@ import java.util.List;
 @Dao
 public interface CurrencyDao {
 
-    @Query("SELECT COUNT(*) FROM " + CurrencyEntity.TABLE_NAME)
-    int count();
-
     @Query("SELECT * FROM currencies")
     List<CurrencyEntity> getAllCurrencies();
 
-    @Query("SELECT COUNT(*) FROM currencies WHERE currency_symbol = :code")
-    int getCurrencyCount(String code);
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertCurrency(CurrencyEntity currency);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

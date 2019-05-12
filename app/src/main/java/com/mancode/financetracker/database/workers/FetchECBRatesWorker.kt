@@ -1,11 +1,12 @@
 package com.mancode.financetracker.database.workers
 
+import android.app.Application
 import android.content.Context
 import android.util.Log
 import android.util.Xml
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.mancode.financetracker.database.FTDatabase
+import com.mancode.financetracker.database.DataRepository
 import com.mancode.financetracker.database.entity.CurrencyEntity
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 import okhttp3.*
@@ -35,9 +36,10 @@ class FetchECBRatesWorker(context: Context, params: WorkerParameters)
                 if (response.isSuccessful) {
                     val responseStream = response.body()?.charStream()
                     if (responseStream != null) {
-                        val dao = FTDatabase.getInstance(applicationContext).currencyDao()
-                        dao.insertCurrency(CurrencyEntity("EUR", 1.0, null))
-                        dao.insertAll(ECBXmlParser().parse(responseStream))
+                        val repo = DataRepository.getInstance(applicationContext as Application)
+                        val currencyList = ECBXmlParser().parse(responseStream)
+                        currencyList.add(CurrencyEntity("EUR", 1.0, null))
+                        repo.insertCurrencies(currencyList)
                         PreferenceAccessor.ratesFetchDate = LocalDate.now()
                     }
                 }
@@ -51,7 +53,7 @@ class FetchECBRatesWorker(context: Context, params: WorkerParameters)
         private val ns: String? = null
 
         @Throws(XmlPullParserException::class, IOException::class)
-        fun parse(stream: Reader): List<CurrencyEntity> {
+        fun parse(stream: Reader): MutableList<CurrencyEntity> {
             stream.use {
                 val parser: XmlPullParser = Xml.newPullParser()
                 parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
@@ -61,7 +63,7 @@ class FetchECBRatesWorker(context: Context, params: WorkerParameters)
             }
         }
 
-        private fun readXml(parser: XmlPullParser): List<CurrencyEntity> {
+        private fun readXml(parser: XmlPullParser): MutableList<CurrencyEntity> {
             val currencies = mutableListOf<CurrencyEntity>()
 
             parser.require(XmlPullParser.START_TAG, ns, "gesmes:Envelope")

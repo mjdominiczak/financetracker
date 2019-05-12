@@ -4,8 +4,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import com.mancode.financetracker.R
+import org.joda.money.CurrencyUnit
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
+import java.util.*
 
 object PreferenceAccessor {
 
@@ -21,6 +23,11 @@ object PreferenceAccessor {
         operation(editor)
         editor.apply()
     }
+
+    var defaultCurrency: String
+        get() = preferences.getString("default_currency",
+                CurrencyUnit.of(Locale.getDefault()).code)!!
+        set(value) = preferences.edit { it.putString("default_currency", value) }
 
     var ratesFetchDate: LocalDate?
         get() {
