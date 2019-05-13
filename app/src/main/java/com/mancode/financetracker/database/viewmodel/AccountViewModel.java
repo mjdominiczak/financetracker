@@ -2,15 +2,15 @@ package com.mancode.financetracker.database.viewmodel;
 
 import android.app.Application;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+
 import com.mancode.financetracker.database.DataRepository;
 import com.mancode.financetracker.database.entity.AccountEntity;
 import com.mancode.financetracker.database.views.AccountExtended;
 
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 
 /**
  * Created by Manveru on 02.02.2018.
@@ -23,7 +23,7 @@ public class AccountViewModel extends AndroidViewModel {
 
     public AccountViewModel(@NonNull Application application) {
         super(application);
-        mRepository = DataRepository.getInstance(application);
+        mRepository = DataRepository.Companion.getInstance(application);
         mAllAccounts = mRepository.getAllAccounts();
     }
 
