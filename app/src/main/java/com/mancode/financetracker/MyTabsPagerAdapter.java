@@ -3,15 +3,15 @@ package com.mancode.financetracker;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
-import com.mancode.financetracker.ui.accounts.AccountFragment;
-import com.mancode.financetracker.ui.balances.BalanceFragment;
-import com.mancode.financetracker.ui.reports.ReportMonthlyFragment;
-import com.mancode.financetracker.ui.transactions.TransactionFragment;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+
+import com.mancode.financetracker.ui.accounts.AccountFragment;
+import com.mancode.financetracker.ui.balances.BalanceFragment;
+import com.mancode.financetracker.ui.reports.ReportMonthlyFragment;
+import com.mancode.financetracker.ui.transactions.TransactionFragment;
 
 public class MyTabsPagerAdapter extends FragmentStatePagerAdapter {
 
@@ -38,7 +38,7 @@ public class MyTabsPagerAdapter extends FragmentStatePagerAdapter {
                 fragment = AccountFragment.newInstance();
                 break;
             case BALANCE_FRAGMENT:
-                fragment = BalanceFragment.newInstance();
+                fragment = BalanceFragment.Companion.newInstance();
                 break;
             case TRANSACTION_FRAGMENT:
                 fragment = TransactionFragment.newInstance();
