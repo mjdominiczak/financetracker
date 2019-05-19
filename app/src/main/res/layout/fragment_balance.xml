@@ -25,14 +25,14 @@
             android:layout_margin="@dimen/spacing_double">
 
             <TextView
-                android:id="@+id/balance_date"
+                android:id="@+id/balanceDate"
                 android:layout_width="@dimen/list_date_width"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:textAppearance="?android:attr/textAppearanceListItem" />
 
             <TextView
-                android:id="@+id/balance_daily"
+                android:id="@+id/balanceDaily"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"

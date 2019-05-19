@@ -1,17 +1,19 @@
 package com.mancode.financetracker.ui.balances;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mancode.financetracker.R;
 import com.mancode.financetracker.database.viewmodel.BalanceViewModel;
 import com.mancode.financetracker.ui.UIUtils;
@@ -22,7 +24,7 @@ import com.mancode.financetracker.ui.UIUtils;
 
 public class BalanceFragment extends Fragment {
 
-    public BalanceRecyclerViewAdapter mAdapter;
+    private BalanceRecyclerViewAdapter mAdapter;
 
     public BalanceFragment() { }
 
@@ -35,13 +37,13 @@ public class BalanceFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         BalanceViewModel balanceViewModel =
                 ViewModelProviders.of(getActivity()).get(BalanceViewModel.class);
-        balanceViewModel.getAllBalances().observe(this,
-                balances -> mAdapter.setBalances(balances));
+        balanceViewModel.getNetValues().observe(this,
+                netValues -> mAdapter.submitList(netValues));
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_account_list, container, false); // TODO layout to change?
         View recyclerView = view.findViewById(R.id.list);

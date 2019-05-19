@@ -4,7 +4,10 @@ import android.app.Application
 import android.os.AsyncTask
 import androidx.lifecycle.LiveData
 import com.mancode.financetracker.database.dao.*
-import com.mancode.financetracker.database.entity.*
+import com.mancode.financetracker.database.entity.AccountEntity
+import com.mancode.financetracker.database.entity.CategoryEntity
+import com.mancode.financetracker.database.entity.CurrencyEntity
+import com.mancode.financetracker.database.entity.TransactionEntity
 import com.mancode.financetracker.database.pojos.AccountMini
 import com.mancode.financetracker.database.pojos.BalanceExtended
 import com.mancode.financetracker.database.pojos.TransactionFull
@@ -64,16 +67,8 @@ class DataRepository private constructor(application: Application) {
         AsyncTask.execute { currencyDao.insertAll(currencies) }
     }
 
-    fun insertBalance(balance: BalanceEntity) {
-        AsyncTask.execute { balanceDao.insertBalance(balance) }
-    }
-
     fun insertTransaction(transaction: TransactionEntity) {
         AsyncTask.execute { transactionDao.insertTransaction(transaction) }
-    }
-
-    fun removeLastBalance() {
-        AsyncTask.execute { balanceDao.removeLast() }
     }
 
     fun updateTransaction(transaction: TransactionEntity) {

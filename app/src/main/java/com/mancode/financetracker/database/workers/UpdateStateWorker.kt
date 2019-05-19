@@ -5,11 +5,14 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.mancode.financetracker.database.FTDatabase
 import com.mancode.financetracker.database.entity.NetValue
+import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 import org.threeten.bp.LocalDate
 
 class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
 
     override fun doWork(): Result {
+
+        val start = System.currentTimeMillis()
 
         val db = FTDatabase.getInstance(applicationContext)
         val dateKeys: List<LocalDate> = db.balanceDao().dateKeys
@@ -17,6 +20,8 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
 
         val datesDaily: ArrayList<LocalDate> =
                 generateDatesDaily(dateKeys[0], LocalDate.now())
+        val currency = PreferenceAccessor.defaultCurrency
+        val rateEuroToDefault = db.currencyDao().getExchangeRateForCurrency(currency)
 
         val netValues = ArrayList<NetValue>()
         for (date in datesDaily) {
@@ -25,7 +30,10 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
             if (date in dateKeys) {
                 val balances = db.balanceDao().getBalancesForDate(date)
                 for (balance in balances) {
-                    value += balance.accountType.toDouble() * balance.value
+                    val conversionRate = if (balance.accountCurrency == currency) 1.0 else {
+                        rateEuroToDefault / db.currencyDao().getExchangeRateForCurrency(balance.accountCurrency)
+                    }
+                    value += balance.accountType.toDouble() * balance.value * conversionRate
                 }
                 calculated = false
             } else {
@@ -38,10 +46,11 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
             }
             netValues.add(NetValue(date, value, calculated))
         }
-        // TODO check why executed twice
 
         db.netValueDao().clear()
         db.netValueDao().insertAll(netValues)
+
+        println("${(System.currentTimeMillis() - start) / 1000}s")
 
         return Result.success()
     }

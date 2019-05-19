@@ -19,6 +19,9 @@ public interface CurrencyDao {
     @Query("SELECT * FROM currencies")
     List<CurrencyEntity> getAllCurrencies();
 
+    @Query("SELECT currency_exchange_rate FROM currencies WHERE currency_symbol=:symbol")
+    double getExchangeRateForCurrency(String symbol);
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertCurrency(CurrencyEntity currency);
 
