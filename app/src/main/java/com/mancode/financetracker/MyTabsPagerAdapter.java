@@ -35,7 +35,7 @@ public class MyTabsPagerAdapter extends FragmentStatePagerAdapter {
         switch (i) {
             default:
             case ACCOUNT_FRAGMENT:
-                fragment = AccountFragment.newInstance();
+                fragment = AccountFragment.Companion.newInstance();
                 break;
             case BALANCE_FRAGMENT:
                 fragment = BalanceFragment.Companion.newInstance();
