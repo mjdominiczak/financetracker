@@ -30,7 +30,6 @@ public class SetDateView extends AppCompatButton {
         mDateSetListener = (view, year, month, dayOfMonth) -> setDate(year, month + 1, dayOfMonth);
         this.setOnClickListener(v -> new DatePickerDialog(
                 getContext(),
-                R.style.AppTheme_Picker,
                 mDateSetListener,
                 mDate.getYear(),
                 mDate.getMonthValue() - 1,

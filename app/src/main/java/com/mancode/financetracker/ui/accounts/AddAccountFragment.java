@@ -9,10 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,7 +36,7 @@ import java.util.List;
 public class AddAccountFragment extends AddItemFragment {
 
     private EditText nameField;
-    private Spinner currencySpinner;
+    private AutoCompleteTextView dropdownCurrency;
     private RadioGroup radioGroupType;
     private SetDateView openDate;
     private SetDateView closeDate;
@@ -46,7 +46,8 @@ public class AddAccountFragment extends AddItemFragment {
 
     private AccountViewModel accountViewModel;
 
-    public AddAccountFragment() { }
+    public AddAccountFragment() {
+    }
 
     static AddAccountFragment newInstance() {
         return new AddAccountFragment();
@@ -82,7 +83,7 @@ public class AddAccountFragment extends AddItemFragment {
                 }
             }
         });
-        currencySpinner = view.findViewById(R.id.sp_currency);
+        dropdownCurrency = view.findViewById(R.id.dropdownCurrency);
         radioGroupType = view.findViewById(R.id.rg_account_type);
         openDate = view.findViewById(R.id.sd_account_open_date);
         closeDate = view.findViewById(R.id.sd_account_close_date);
@@ -95,16 +96,18 @@ public class AddAccountFragment extends AddItemFragment {
             for (CurrencyUnit currency : currencies) {
                 currencyCodesList.add(currency.getCode());
             }
+            String defaultCurrency = PreferenceAccessor.INSTANCE.getDefaultCurrency();
             int preselectionIndex = currencyCodesList.indexOf(
-                    PreferenceAccessor.INSTANCE.getDefaultCurrency());
+                    defaultCurrency);
             availableCurrencyCodes = currencyCodesList.toArray(new String[0]);
             currencyAdapter = new ArrayAdapter<>(
                     getContext(),
-                    android.R.layout.simple_spinner_dropdown_item,
+                    R.layout.dropdown_menu_popup_item,
                     availableCurrencyCodes
             );
-            currencySpinner.setAdapter(currencyAdapter);
-            currencySpinner.setSelection(preselectionIndex);
+            dropdownCurrency.setAdapter(currencyAdapter);
+            dropdownCurrency.setText(defaultCurrency, false);
+            dropdownCurrency.setOnClickListener(v -> dropdownCurrency.setListSelection(preselectionIndex));
         }
         checkBoxClosed.setOnClickListener(v -> closeDate.setEnabled(checkBoxClosed.isChecked()));
 
@@ -116,7 +119,7 @@ public class AddAccountFragment extends AddItemFragment {
                         1 : -1;
                 LocalDate openDate = this.openDate.getDate();
                 LocalDate closeDate = this.closeDate.getDate();
-                String currency = currencyAdapter.getItem(currencySpinner.getSelectedItemPosition());
+                String currency = currencyAdapter.getItem(dropdownCurrency.getListSelection());
 
                 if (!TextUtils.isEmpty(name)) {
                     AccountEntity account = new AccountEntity(

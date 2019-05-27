@@ -5,7 +5,6 @@
     style="@style/AppTheme.Dialog"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_below="@id/add_account_toolbar"
     android:layout_marginTop="0dp"
     android:padding="16dp"
     tools:showIn="@layout/fragment_add_account">
@@ -15,7 +14,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/sp_currency"
+        app:layout_constraintEnd_toStartOf="@+id/currency_input_layout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -28,13 +27,22 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Spinner
-        android:id="@+id/sp_currency"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/currency_input_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@+id/account_name_input_layout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/account_name_input_layout" />
+        app:layout_constraintTop_toTopOf="@+id/account_name_input_layout">
+
+        <AutoCompleteTextView
+            android:id="@+id/dropdownCurrency"
+            android:editable="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/currency" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"

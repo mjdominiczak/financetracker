@@ -25,7 +25,7 @@
     <string name="hint_account_open_date">Data otwarcia konta</string>
     <string name="hint_account_close_date">Data zamknięcia konta</string>
     <string name="hint_balance_value">Wartość bilansu</string>
-    <string name="hint_balance_currency">Waluta</string>
+    <string name="currency">Waluta</string>
     <string name="toolbar_action_save">Zapisz</string>
     <string name="check_date">Bilans na dzień</string>
     <string name="hint_transaction_date">Data transakcji</string>

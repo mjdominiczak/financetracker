@@ -9,7 +9,6 @@ import android.text.format.DateFormat
 import android.view.View
 import android.widget.TimePicker
 import androidx.preference.PreferenceDialogFragmentCompat
-import com.mancode.financetracker.R
 import org.threeten.bp.LocalTime
 
 class TimePreferenceDialogFragment : PreferenceDialogFragmentCompat(),
@@ -43,7 +42,6 @@ class TimePreferenceDialogFragment : PreferenceDialogFragmentCompat(),
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return TimePickerDialog(
                 context,
-                R.style.AppTheme_Picker,
                 this,
                 lastTime.hour,
                 lastTime.minute,

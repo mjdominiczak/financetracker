@@ -20,13 +20,11 @@
 
     <Button
         android:id="@+id/btn_report_range"
-        style="?android:attr/buttonStyle"
+        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textAlignment="center"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium"
-        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/btn_next_report"
         app:layout_constraintStart_toEndOf="@+id/btn_prev_report"
         app:layout_constraintTop_toTopOf="parent"

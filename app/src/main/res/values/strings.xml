@@ -27,7 +27,7 @@
     <string name="hint_account_open_date">Account open date</string>
     <string name="hint_account_close_date">Account close date</string>
     <string name="hint_balance_value">Balance value</string>
-    <string name="hint_balance_currency">Currency</string>
+    <string name="currency">Currency</string>
     <string name="toolbar_action_save">Save</string>
     <string name="check_date">Balance check date</string>
     <string name="hint_transaction_date">Transaction date</string>

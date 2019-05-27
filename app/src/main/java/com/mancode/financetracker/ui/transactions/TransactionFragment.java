@@ -1,6 +1,5 @@
 package com.mancode.financetracker.ui.transactions;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,6 +18,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mancode.financetracker.R;
 import com.mancode.financetracker.database.entity.TransactionEntity;
@@ -119,10 +119,10 @@ public class TransactionFragment extends Fragment
         private Spinner mTransactionTimespanSpinner;
         private SetDateView mFromDate;
         private SetDateView mToDate;
-        private AlertDialog.Builder mBuilder;
+        private MaterialAlertDialogBuilder mBuilder;
 
         void show() {
-            mBuilder = new AlertDialog.Builder(getContext());
+            mBuilder = new MaterialAlertDialogBuilder(getContext());
             View dialogView = getLayoutInflater().inflate(R.layout.fragment_transaction_filter, null);
             mTransactionTypeSpinner = dialogView.findViewById(R.id.sp_transaction_filter_type);
             mTransactionTimespanSpinner = dialogView.findViewById(R.id.sp_transaction_filter_timespan);

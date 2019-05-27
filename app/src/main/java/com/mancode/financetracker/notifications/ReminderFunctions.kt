@@ -4,8 +4,8 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mancode.financetracker.R
 import com.mancode.financetracker.SettingsActivity
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor
@@ -57,7 +57,7 @@ fun resetRemindersAndShowDecisionDialog(context: Context) {
         return
     }
 
-    val builder = AlertDialog.Builder(context)
+    val builder = MaterialAlertDialogBuilder(context)
     builder.setMessage(context.getString(R.string.question_transaction_reminder_decision))
             .setPositiveButton(context.getString(R.string.yes)) { _, _ ->
                 registerReminderWithProperty(context)
