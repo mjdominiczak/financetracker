@@ -4,7 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
 import com.mancode.financetracker.R;
 
@@ -14,9 +14,10 @@ import org.threeten.bp.LocalDate;
  * Created by Manveru on 04.11.2017.
  */
 
-public class SetDateView extends AppCompatButton {
+public class SetDateView extends AppCompatAutoCompleteTextView {
 
     private boolean mDateSet = false;
+    private boolean isShowingDialog = false;
     private LocalDate mDate;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
@@ -28,13 +29,18 @@ public class SetDateView extends AppCompatButton {
         super(context, attrs, R.attr.setDateViewStyle);
         setDate(LocalDate.now());
         mDateSetListener = (view, year, month, dayOfMonth) -> setDate(year, month + 1, dayOfMonth);
-        this.setOnClickListener(v -> new DatePickerDialog(
-                getContext(),
-                mDateSetListener,
-                mDate.getYear(),
-                mDate.getMonthValue() - 1,
-                mDate.getDayOfMonth())
-                .show());
+        setOnClickListener(v -> {
+            if (isShowingDialog) return;
+            DatePickerDialog dialog = new DatePickerDialog(
+                    SetDateView.this.getContext(),
+                    mDateSetListener,
+                    mDate.getYear(),
+                    mDate.getMonthValue() - 1,
+                    mDate.getDayOfMonth());
+            dialog.setOnDismissListener(d -> isShowingDialog = false);
+            dialog.show();
+            isShowingDialog = true;
+        });
     }
 
     public LocalDate getDate() {
@@ -60,9 +66,9 @@ public class SetDateView extends AppCompatButton {
 
     private void updateText() {
         if (mDateSet) {
-            this.setText(mDate.toString());
+            setText(mDate.toString());
         } else {
-            this.setText("");
+            setText("");
         }
     }
 }
