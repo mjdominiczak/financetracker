@@ -3,9 +3,9 @@ package com.mancode.financetracker.ui;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.widget.AutoCompleteTextView;
 
-import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
-
+import com.google.android.material.textfield.TextInputLayout;
 import com.mancode.financetracker.R;
 
 import org.threeten.bp.LocalDate;
@@ -14,8 +14,9 @@ import org.threeten.bp.LocalDate;
  * Created by Manveru on 04.11.2017.
  */
 
-public class SetDateView extends AppCompatAutoCompleteTextView {
+public class SetDateView extends TextInputLayout {
 
+    private AutoCompleteTextView innerTextView;
     private boolean mDateSet = false;
     private boolean isShowingDialog = false;
     private LocalDate mDate;
@@ -27,9 +28,10 @@ public class SetDateView extends AppCompatAutoCompleteTextView {
 
     public SetDateView(Context context, AttributeSet attrs) {
         super(context, attrs, R.attr.setDateViewStyle);
+        innerTextView = new AutoCompleteTextView(getContext(), null, R.attr.innerSetDateViewStyle);
         setDate(LocalDate.now());
         mDateSetListener = (view, year, month, dayOfMonth) -> setDate(year, month + 1, dayOfMonth);
-        setOnClickListener(v -> {
+        innerTextView.setOnClickListener(v -> {
             if (isShowingDialog) return;
             DatePickerDialog dialog = new DatePickerDialog(
                     SetDateView.this.getContext(),
@@ -41,6 +43,7 @@ public class SetDateView extends AppCompatAutoCompleteTextView {
             dialog.show();
             isShowingDialog = true;
         });
+        addView(innerTextView);
     }
 
     public LocalDate getDate() {
@@ -66,9 +69,9 @@ public class SetDateView extends AppCompatAutoCompleteTextView {
 
     private void updateText() {
         if (mDateSet) {
-            setText(mDate.toString());
+            innerTextView.setText(mDate.toString());
         } else {
-            setText("");
+            innerTextView.setText("");
         }
     }
 }

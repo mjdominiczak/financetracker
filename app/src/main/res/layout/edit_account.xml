@@ -85,31 +85,14 @@
 
     </RadioGroup>
 
-    <!--<TextView-->
-    <!--android:id="@+id/label_account_open_date"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="@string/account_open_date"-->
-    <!--app:layout_constraintBaseline_toBaselineOf="@+id/open_date_input_layout"-->
-    <!--app:layout_constraintStart_toStartOf="parent"-->
-    <!--tools:text="@string/account_open_date" />-->
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/open_date_input_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+    <com.mancode.financetracker.ui.SetDateView
+        android:id="@+id/sd_account_open_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:endIconMode="none"
+        android:hint="@string/hint_account_open_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rg_account_type">
-
-        <com.mancode.financetracker.ui.SetDateView
-            android:id="@+id/sd_account_open_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_account_open_date" />
-    </com.google.android.material.textfield.TextInputLayout>
+        app:layout_constraintTop_toBottomOf="@+id/rg_account_type" />
 
     <CheckBox
         android:id="@+id/cb_account_closed"
@@ -119,32 +102,16 @@
         android:checked="false"
         android:text="@string/account_closed"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/open_date_input_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/sd_account_open_date" />
 
-    <!--<TextView-->
-    <!--android:id="@+id/label_account_close_date"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="@string/account_close_date"-->
-    <!--app:layout_constraintBaseline_toBaselineOf="@+id/sd_account_close_date"-->
-    <!--app:layout_constraintStart_toStartOf="parent"-->
-    <!--tools:text="@string/account_close_date" />-->
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/close_date_input_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+    <com.mancode.financetracker.ui.SetDateView
+        android:id="@+id/sd_account_close_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:endIconMode="none"
+        android:enabled="false"
+        android:hint="@string/hint_account_close_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cb_account_closed">
-
-        <com.mancode.financetracker.ui.SetDateView
-            android:id="@+id/sd_account_close_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_account_close_date" />
-    </com.google.android.material.textfield.TextInputLayout>
+        app:layout_constraintTop_toBottomOf="@+id/cb_account_closed" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

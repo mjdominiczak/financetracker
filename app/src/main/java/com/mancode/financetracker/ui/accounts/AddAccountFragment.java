@@ -110,6 +110,7 @@ public class AddAccountFragment extends AddItemFragment {
             dropdownCurrency.setOnClickListener(v -> dropdownCurrency.setListSelection(preselectionIndex));
         }
         checkBoxClosed.setOnClickListener(v -> closeDate.setEnabled(checkBoxClosed.isChecked()));
+        closeDate.setEnabled(false);
 
         Toolbar toolbar = view.findViewById(R.id.add_account_toolbar);
         toolbar.setOnMenuItemClickListener(item -> {
