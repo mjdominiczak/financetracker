@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.mancode.financetracker.AddItemFragment;
 import com.mancode.financetracker.R;
 import com.mancode.financetracker.database.entity.AccountEntity;
@@ -65,6 +66,7 @@ public class AddAccountFragment extends AddItemFragment {
         View view = inflater.inflate(R.layout.fragment_add_account, container, false);
 
         nameField = view.findViewById(R.id.tf_account_name);
+        TextInputLayout nameInputLayout = view.findViewById(R.id.account_name_input_layout);
         nameField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -79,7 +81,9 @@ public class AddAccountFragment extends AddItemFragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (TextUtils.isEmpty(s)) {
-                    nameField.setError(getString(R.string.error_name_empty));
+                    nameInputLayout.setError(getString(R.string.error_name_empty));
+                } else {
+                    nameInputLayout.setError(null);
                 }
             }
         });
@@ -120,7 +124,7 @@ public class AddAccountFragment extends AddItemFragment {
                         1 : -1;
                 LocalDate openDate = this.openDate.getDate();
                 LocalDate closeDate = this.closeDate.getDate();
-                String currency = currencyAdapter.getItem(dropdownCurrency.getListSelection());
+                String currency = dropdownCurrency.getText().toString();
 
                 if (!TextUtils.isEmpty(name)) {
                     AccountEntity account = new AccountEntity(
@@ -134,7 +138,7 @@ public class AddAccountFragment extends AddItemFragment {
                     accountViewModel.insert(account);
                     dismiss();
                 } else {
-                    nameField.setError(getString(R.string.error_name_empty));
+                    nameInputLayout.setError(getString(R.string.error_name_empty));
                 }
             }
             return false;

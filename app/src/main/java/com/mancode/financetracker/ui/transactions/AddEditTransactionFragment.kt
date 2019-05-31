@@ -91,7 +91,9 @@ class AddEditTransactionFragment : AddItemFragment() {
 
             override fun afterTextChanged(s: Editable) {
                 if (TextUtils.isEmpty(s))
-                    descriptionField.error = getString(R.string.error_description_empty)
+                    descriptionInputLayout.error = getString(R.string.error_description_empty)
+                else
+                    descriptionInputLayout.error = null
             }
         })
         valueField.addTextChangedListener(object : TextWatcher {
@@ -105,7 +107,9 @@ class AddEditTransactionFragment : AddItemFragment() {
 
             override fun afterTextChanged(s: Editable) {
                 if (TextUtils.isEmpty(s))
-                    valueField.error = getString(R.string.error_value_empty)
+                    valueInputLayout.error = getString(R.string.error_value_empty)
+                else
+                    valueInputLayout.error = null
             }
         })
         accountSpinner.adapter = accountSpinnerAdapter
@@ -161,10 +165,10 @@ class AddEditTransactionFragment : AddItemFragment() {
                     dismiss()
                 } else {
                     if (description.isEmpty()) {
-                        descriptionField.error = getString(R.string.error_description_empty)
+                        descriptionInputLayout.error = getString(R.string.error_description_empty)
                     }
                     if (valueString.isEmpty()) {
-                        valueField.error = getString(R.string.error_value_empty)
+                        valueInputLayout.error = getString(R.string.error_value_empty)
                     }
                 }
             }

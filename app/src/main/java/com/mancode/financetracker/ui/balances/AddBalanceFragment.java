@@ -9,8 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
+import com.google.android.material.textfield.TextInputLayout;
 import com.mancode.financetracker.AddItemFragment;
 import com.mancode.financetracker.R;
 import com.mancode.financetracker.database.entity.BalanceEntity;
@@ -23,14 +31,6 @@ import com.mancode.financetracker.ui.SetDateView;
 import org.threeten.bp.LocalDate;
 
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
 
 /**
  * Created by Manveru on 07.09.2017.
@@ -72,6 +72,7 @@ public class AddBalanceFragment extends AddItemFragment {
         checkDate = view.findViewById(R.id.tf_balance_check_date);
         accountSpinner = view.findViewById(R.id.spinner_balance_account);
         valueField = view.findViewById(R.id.tf_balance);
+        TextInputLayout valueInputLayout = view.findViewById(R.id.balance_value_input_layout);
         valueField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -86,7 +87,9 @@ public class AddBalanceFragment extends AddItemFragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (TextUtils.isEmpty(s)) {
-                    valueField.setError(getString(R.string.error_value_empty));
+                    valueInputLayout.setError(getString(R.string.error_value_empty));
+                } else {
+                    valueInputLayout.setError(null);
                 }
             }
         });
@@ -124,7 +127,7 @@ public class AddBalanceFragment extends AddItemFragment {
                     WorkManager.getInstance().enqueue(request);
                     dismiss();
                 } else {
-                    valueField.setError(getString(R.string.error_value_empty));
+                    valueInputLayout.setError(getString(R.string.error_value_empty));
                 }
             }
             return false;
