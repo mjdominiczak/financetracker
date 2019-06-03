@@ -67,9 +67,8 @@
         android:id="@+id/rg_account_type"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:checkedButton="@id/rb_assets"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/account_name_input_layout">
 
@@ -91,6 +90,7 @@
         android:id="@+id/sd_account_open_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:hint="@string/hint_account_open_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -103,13 +103,14 @@
         android:layout_marginTop="8dp"
         android:checked="false"
         android:text="@string/account_closed"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sd_account_open_date" />
 
     <com.mancode.financetracker.ui.SetDateView
         android:id="@+id/sd_account_close_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:enabled="false"
         android:hint="@string/hint_account_close_date"
         app:layout_constraintEnd_toEndOf="parent"

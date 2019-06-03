@@ -29,7 +29,6 @@
     <string name="hint_balance_value">Balance value</string>
     <string name="currency">Currency</string>
     <string name="toolbar_action_save">Save</string>
-    <string name="check_date">Balance check date</string>
     <string name="hint_transaction_date">Transaction date</string>
     <string name="hint_transaction_description">Description</string>
     <string name="hint_transaction_value">Value</string>
@@ -55,9 +54,7 @@
     <string name="label_account">Account</string>
     <string name="label_category">Category</string>
     <string name="label_date">Date</string>
-    <string name="error_description_empty">Description field cannot be empty</string>
-    <string name="error_value_empty">Value field cannot be empty</string>
-    <string name="error_name_empty">Name field cannot be empty</string>
+    <string name="error_field_empty">Field cannot be empty</string>
     <string name="total_label">Total:</string>
     <string name="registered_outcome">Registered outcome</string>
     <string name="registered_income">Registered income</string>

@@ -1,10 +1,8 @@
 package com.mancode.financetracker.ui.transactions
 
-import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +14,8 @@ import com.mancode.financetracker.AddItemFragment
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.CategoryEntity
 import com.mancode.financetracker.database.entity.TransactionEntity
+import com.mancode.financetracker.database.entity.TransactionEntity.TYPE_INCOME
+import com.mancode.financetracker.database.entity.TransactionEntity.TYPE_OUTCOME
 import com.mancode.financetracker.database.pojos.AccountMini
 import com.mancode.financetracker.database.viewmodel.AddEditTransactionViewModel
 import kotlinx.android.synthetic.main.edit_transaction.*
@@ -36,6 +36,7 @@ class AddEditTransactionFragment : AddItemFragment() {
     private var argAccountId: Int? = null
     private var argCategoryId: Int? = null
 
+    private val categories by lazy { ArrayList<CategoryEntity>() }
     private val incomeCategories by lazy { ArrayList<CategoryEntity>() }
     private val outcomeCategories by lazy { ArrayList<CategoryEntity>() }
     private val accountsNamesAndIds by lazy { ArrayList<AccountMini>() }
@@ -50,8 +51,14 @@ class AddEditTransactionFragment : AddItemFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AsyncTask.execute {
-            incomeCategories.addAll(viewModel.incomeCategories)
-            outcomeCategories.addAll(viewModel.outcomeCategories)
+            categories.addAll(viewModel.categories)
+            incomeCategories.addAll(categories.filter { it.categoryType == TYPE_INCOME })
+            outcomeCategories.addAll(categories.filter { it.categoryType == TYPE_OUTCOME })
+            if (categoryDropdown != null && categoryDropdown.text.isEmpty() && categoryDropdown.adapter != null) {
+                categoryDropdown.setText(
+                        (categoryDropdown.adapter.getItem(0) as CategoryEntity).category,
+                        false)
+            }
             accountsNamesAndIds.addAll(viewModel.accountsNamesAndIds)
         }
 
@@ -76,8 +83,18 @@ class AddEditTransactionFragment : AddItemFragment() {
 
         radioGroupType.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
-                R.id.rb_income -> categorySpinner.adapter = incomeSpinnerAdapter
-                R.id.rb_outcome -> categorySpinner.adapter = outcomeSpinnerAdapter
+                R.id.rb_income -> {
+                    with(categoryDropdown) {
+                        setAdapter(incomeSpinnerAdapter)
+                        if (text.isNotEmpty()) setText(incomeSpinnerAdapter.getItem(0)?.category, false)
+                    }
+                }
+                R.id.rb_outcome -> {
+                    with(categoryDropdown) {
+                        setAdapter(outcomeSpinnerAdapter)
+                        if (text.isNotEmpty()) setText(outcomeSpinnerAdapter.getItem(0)?.category, false)
+                    }
+                }
             }
         }
         descriptionField.addTextChangedListener(object : TextWatcher {
@@ -90,8 +107,8 @@ class AddEditTransactionFragment : AddItemFragment() {
             }
 
             override fun afterTextChanged(s: Editable) {
-                if (TextUtils.isEmpty(s))
-                    descriptionInputLayout.error = getString(R.string.error_description_empty)
+                if (s.isEmpty())
+                    descriptionInputLayout.error = getString(R.string.error_field_empty)
                 else
                     descriptionInputLayout.error = null
             }
@@ -106,18 +123,35 @@ class AddEditTransactionFragment : AddItemFragment() {
             }
 
             override fun afterTextChanged(s: Editable) {
-                if (TextUtils.isEmpty(s))
-                    valueInputLayout.error = getString(R.string.error_value_empty)
+                if (s.isEmpty())
+                    valueInputLayout.error = getString(R.string.error_field_empty)
                 else
                     valueInputLayout.error = null
             }
         })
-        accountSpinner.adapter = accountSpinnerAdapter
-        categorySpinner.adapter = outcomeSpinnerAdapter
+        with(accountDropdown) {
+            setAdapter(accountSpinnerAdapter)
+            if (!accountSpinnerAdapter.isEmpty)
+                setText((adapter.getItem(0) as AccountMini).accountName, false)
+            setOnClickListener {
+                listSelection = accountsNamesAndIds.map { it.accountName }.indexOf(text.toString())
+            }
+        }
+        with(categoryDropdown) {
+            setAdapter(outcomeSpinnerAdapter)
+            if (!adapter.isEmpty)
+                setText((adapter.getItem(0) as CategoryEntity).category, false)
+            setOnClickListener {
+                listSelection =
+                        if (radioGroupType.checkedRadioButtonId == R.id.rb_income)
+                            incomeCategories.map { it.category }.indexOf(text.toString())
+                        else outcomeCategories.map { it.category }.indexOf(text.toString())
+            }
+        }
 
         if (arguments != null) {
             transactionDate.date = argDate
-            if (argType == 1) {
+            if (argType == TYPE_INCOME) {
                 radioGroupType.check(R.id.rb_income)
             } else {
                 radioGroupType.check(R.id.rb_outcome)
@@ -125,13 +159,13 @@ class AddEditTransactionFragment : AddItemFragment() {
             descriptionField.setText(argDescription)
             valueField.setText(argValue.toString())
             val accountIndex = accountsNamesAndIds.map { it.id }.indexOf(argAccountId)
-            accountSpinner.setSelection(accountIndex)
-            val categoryIndex = if (argType == 1) {
+            accountDropdown.setText(accountsNamesAndIds[accountIndex].accountName, false)
+            val categoryIndex = if (argType == TYPE_INCOME) {
                 incomeCategories.map { it.id }.indexOf(argCategoryId)
             } else {
                 outcomeCategories.map { it.id }.indexOf(argCategoryId)
             }
-            categorySpinner.setSelection(categoryIndex)
+            categoryDropdown.setText(categories[categoryIndex].category, false)
         }
 
         val toolbar = view.findViewById<Toolbar>(R.id.add_transaction_toolbar)
@@ -139,14 +173,20 @@ class AddEditTransactionFragment : AddItemFragment() {
             if (item.itemId == R.id.action_menu_save) {
                 val description = descriptionField.text.toString()
                 val valueString = valueField.text.toString()
-                val date = transactionDate.date
-                val type = if (radioGroupType.checkedRadioButtonId == R.id.rb_income) 1 else -1
-                val account = (accountSpinner.adapter.getItem(
-                        accountSpinner.selectedItemPosition) as AccountMini).id
-                val category = (categorySpinner.adapter.getItem(
-                        categorySpinner.selectedItemPosition) as CategoryEntity).id
+                val accountString = accountDropdown.text.toString()
+                val categoryString = categoryDropdown.text.toString()
 
-                if (description.isNotEmpty() && valueString.isNotEmpty()) {
+                if (description.isNotEmpty() && valueString.isNotEmpty()
+                        && accountString.isNotEmpty() && categoryString.isNotEmpty()) {
+                    val date = transactionDate.date
+                    val type = if (radioGroupType.checkedRadioButtonId == R.id.rb_income) TYPE_INCOME else TYPE_OUTCOME
+                    val account = accountsNamesAndIds[accountsNamesAndIds.map { it.accountName }
+                            .indexOf(accountString)].id
+                    val category = categories[if (type == TYPE_INCOME) {
+                        incomeCategories.map { it.category }.indexOf(categoryString)
+                    } else {
+                        outcomeCategories.map { it.category }.indexOf(categoryString)
+                    }].id
                     val value = valueString.toDouble()
                     val transaction = TransactionEntity(
                             argId,
@@ -165,10 +205,16 @@ class AddEditTransactionFragment : AddItemFragment() {
                     dismiss()
                 } else {
                     if (description.isEmpty()) {
-                        descriptionInputLayout.error = getString(R.string.error_description_empty)
+                        descriptionInputLayout.error = getString(R.string.error_field_empty)
                     }
                     if (valueString.isEmpty()) {
-                        valueInputLayout.error = getString(R.string.error_value_empty)
+                        valueInputLayout.error = getString(R.string.error_field_empty)
+                    }
+                    if (accountString.isEmpty()) {
+                        accountInputLayout.error = getString(R.string.error_field_empty)
+                    }
+                    if (categoryString.isEmpty()) {
+                        categoryInputLayout.error = getString(R.string.error_field_empty)
                     }
                 }
             }
@@ -179,37 +225,31 @@ class AddEditTransactionFragment : AddItemFragment() {
         toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
     }
 
-    private fun obtainAccountAdapter(): ArrayAdapter<AccountMini>? {
-        return if (context == null)
-            null
-        else
-            ArrayAdapter(
-                    context as Context,
-                    android.R.layout.simple_spinner_dropdown_item,
-                    accountsNamesAndIds
-            )
+    private fun obtainAccountAdapter(): ArrayAdapter<AccountMini> {
+        return ArrayAdapter(
+                context
+                        ?: throw IllegalStateException("Context null when trying to obtain adapter"),
+                R.layout.dropdown_menu_popup_item,
+                accountsNamesAndIds
+        )
     }
 
-    private fun obtainIncomeAdapter(): ArrayAdapter<CategoryEntity>? {
-        return if (context == null)
-            null
-        else
-            ArrayAdapter(
-                    context as Context,
-                    android.R.layout.simple_spinner_dropdown_item,
-                    incomeCategories
-            )
+    private fun obtainIncomeAdapter(): ArrayAdapter<CategoryEntity> {
+        return ArrayAdapter(
+                context
+                        ?: throw IllegalStateException("Context null when trying to obtain adapter"),
+                R.layout.dropdown_menu_popup_item,
+                incomeCategories
+        )
     }
 
-    private fun obtainOutcomeAdapter(): ArrayAdapter<CategoryEntity>? {
-        return if (context == null)
-            null
-        else
-            ArrayAdapter(
-                    context as Context,
-                    android.R.layout.simple_spinner_dropdown_item,
-                    outcomeCategories
-            )
+    private fun obtainOutcomeAdapter(): ArrayAdapter<CategoryEntity> {
+        return ArrayAdapter(
+                context
+                        ?: throw IllegalStateException("Context null when trying to obtain adapter"),
+                R.layout.dropdown_menu_popup_item,
+                outcomeCategories
+        )
     }
 
     companion object {

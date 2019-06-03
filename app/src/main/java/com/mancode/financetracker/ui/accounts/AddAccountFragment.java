@@ -81,7 +81,7 @@ public class AddAccountFragment extends AddItemFragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (TextUtils.isEmpty(s)) {
-                    nameInputLayout.setError(getString(R.string.error_name_empty));
+                    nameInputLayout.setError(getString(R.string.error_field_empty));
                 } else {
                     nameInputLayout.setError(null);
                 }
@@ -101,8 +101,6 @@ public class AddAccountFragment extends AddItemFragment {
                 currencyCodesList.add(currency.getCode());
             }
             String defaultCurrency = PreferenceAccessor.INSTANCE.getDefaultCurrency();
-            int preselectionIndex = currencyCodesList.indexOf(
-                    defaultCurrency);
             availableCurrencyCodes = currencyCodesList.toArray(new String[0]);
             currencyAdapter = new ArrayAdapter<>(
                     getContext(),
@@ -111,7 +109,10 @@ public class AddAccountFragment extends AddItemFragment {
             );
             dropdownCurrency.setAdapter(currencyAdapter);
             dropdownCurrency.setText(defaultCurrency, false);
-            dropdownCurrency.setOnClickListener(v -> dropdownCurrency.setListSelection(preselectionIndex));
+            dropdownCurrency.setOnClickListener(v -> {
+                int preselectionIndex = currencyCodesList.indexOf(dropdownCurrency.getText().toString());
+                dropdownCurrency.setListSelection(preselectionIndex);
+            });
         }
         checkBoxClosed.setOnClickListener(v -> closeDate.setEnabled(checkBoxClosed.isChecked()));
         closeDate.setEnabled(false);
@@ -138,7 +139,7 @@ public class AddAccountFragment extends AddItemFragment {
                     accountViewModel.insert(account);
                     dismiss();
                 } else {
-                    nameInputLayout.setError(getString(R.string.error_name_empty));
+                    nameInputLayout.setError(getString(R.string.error_field_empty));
                 }
             }
             return false;

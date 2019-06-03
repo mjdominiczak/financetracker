@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -30,7 +31,9 @@ import com.mancode.financetracker.ui.SetDateView;
 
 import org.threeten.bp.LocalDate;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Manveru on 07.09.2017.
@@ -39,10 +42,11 @@ import java.util.List;
 public class AddBalanceFragment extends AddItemFragment {
 
     private SetDateView checkDate;
-    private Spinner accountSpinner;
+    private AutoCompleteTextView accountDropdown;
     private EditText valueField;
 
-    private ArrayAdapter<AccountExtended> accountSpinnerAdapter;
+    private Map<String, Integer> accountsMap;
+    private ArrayAdapter<String> accountDropdownAdapter;
 
     // TODO refactor to 1 ViewModel
     private AccountViewModel accountViewModel;
@@ -70,7 +74,7 @@ public class AddBalanceFragment extends AddItemFragment {
         View view = inflater.inflate(R.layout.fragment_add_balance, container, false);
 
         checkDate = view.findViewById(R.id.tf_balance_check_date);
-        accountSpinner = view.findViewById(R.id.spinner_balance_account);
+        accountDropdown = view.findViewById(R.id.dropdownBalanceAccount);
         valueField = view.findViewById(R.id.tf_balance);
         TextInputLayout valueInputLayout = view.findViewById(R.id.balance_value_input_layout);
         valueField.addTextChangedListener(new TextWatcher() {
@@ -87,7 +91,7 @@ public class AddBalanceFragment extends AddItemFragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (TextUtils.isEmpty(s)) {
-                    valueInputLayout.setError(getString(R.string.error_value_empty));
+                    valueInputLayout.setError(getString(R.string.error_field_empty));
                 } else {
                     valueInputLayout.setError(null);
                 }
@@ -96,23 +100,27 @@ public class AddBalanceFragment extends AddItemFragment {
 
         List<AccountExtended> accountEntityList = accountViewModel.getAllAccounts().getValue();
         if (accountEntityList != null && getContext() != null) {
-            accountSpinnerAdapter = new ArrayAdapter<>(
+            accountsMap = new LinkedHashMap<>();
+            for (AccountExtended account : accountEntityList) {
+                accountsMap.put(account.accountName, account.id);
+            }
+            accountDropdownAdapter = new ArrayAdapter<>(
                     getContext(),
-                    android.R.layout.simple_spinner_dropdown_item,
-                    accountEntityList
+                    R.layout.dropdown_menu_popup_item,
+                    accountsMap.keySet().toArray(new String[0])
             );
         }
-        accountSpinner.setAdapter(accountSpinnerAdapter);
+        accountDropdown.setAdapter(accountDropdownAdapter);
+        accountDropdown.setText(accountDropdownAdapter.getItem(0), false);
 
         Toolbar toolbar = view.findViewById(R.id.add_balance_toolbar);
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_menu_save) {
                 LocalDate date = checkDate.getDate();
-                int accountId = ((AccountExtended) accountSpinner.getAdapter().getItem(
-                        accountSpinner.getSelectedItemPosition())).id;
+                Integer accountId = accountsMap.get(accountDropdown.getText().toString());
                 String valueString = valueField.getText().toString();
 
-                if (!TextUtils.isEmpty(valueString)) {
+                if (!TextUtils.isEmpty(valueString) && accountId != null) {
                     double value = Double.parseDouble(valueString);
                     BalanceEntity balance = new BalanceEntity(
                             0, // not set
@@ -126,9 +134,9 @@ public class AddBalanceFragment extends AddItemFragment {
                             new OneTimeWorkRequest.Builder(UpdateStateWorker.class).build();
                     WorkManager.getInstance().enqueue(request);
                     dismiss();
-                } else {
-                    valueInputLayout.setError(getString(R.string.error_value_empty));
-                }
+                } else if (TextUtils.isEmpty(valueString)) {
+                    valueInputLayout.setError(getString(R.string.error_field_empty));
+                } else throw new IllegalStateException("accountId is null!");
             }
             return false;
         });

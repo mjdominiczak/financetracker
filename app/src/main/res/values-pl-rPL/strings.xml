@@ -27,7 +27,6 @@
     <string name="hint_balance_value">Wartość bilansu</string>
     <string name="currency">Waluta</string>
     <string name="toolbar_action_save">Zapisz</string>
-    <string name="check_date">Bilans na dzień</string>
     <string name="hint_transaction_date">Data transakcji</string>
     <string name="hint_transaction_description">Opis</string>
     <string name="hint_transaction_value">Wartość</string>
@@ -55,9 +54,7 @@
     <string name="label_account">Konto</string>
     <string name="label_category">Kategoria</string>
     <string name="label_date">Data</string>
-    <string name="error_description_empty">Pole opisu nie może być puste</string>
-    <string name="error_value_empty">Pole wartości nie może być puste</string>
-    <string name="error_name_empty">Pole nazwy nie może być puste</string>
+    <string name="error_field_empty">Pole nie może być puste</string>
     <string name="total_label">Suma:</string>
     <string name="previous_report">Poprzedni raport</string>
     <string name="next_report">Następny raport</string>

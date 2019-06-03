@@ -7,14 +7,50 @@
     android:padding="16dp"
     tools:showIn="@layout/fragment_add_transaction">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/valueInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:errorEnabled="true"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/valueField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_transaction_value"
+            android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.mancode.financetracker.ui.SetDateView
+        android:id="@+id/transactionDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:hint="@string/hint_transaction_date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/valueInputLayout" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/descriptionInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/valueInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/descriptionField"
@@ -25,50 +61,23 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/valueInputLayout"
+        android:id="@+id/accountInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/descriptionInputLayout">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/valueField"
+        <AutoCompleteTextView
+            android:id="@+id/accountDropdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_transaction_value"
-            android:inputType="numberDecimal" />
+            android:editable="false"
+            android:hint="@string/label_account" />
     </com.google.android.material.textfield.TextInputLayout>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="120dp" />
-
-    <TextView
-        android:id="@+id/label_transaction_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hint_transaction_date"
-        app:layout_constraintBottom_toBottomOf="@+id/transactionDate"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/transactionDate"
-        tools:text="@string/hint_transaction_date" />
-
-    <com.mancode.financetracker.ui.SetDateView
-        android:id="@+id/transactionDate"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="@string/hint_transaction_date"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/value_input_layout"
-        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/label_transaction_type"
@@ -84,11 +93,11 @@
         android:id="@+id/radioGroupType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="32dp"
         android:checkedButton="@id/rb_outcome"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/transactionDate">
+        android:orientation="horizontal"
+        app:layout_constraintStart_toEndOf="@+id/label_transaction_type"
+        app:layout_constraintTop_toBottomOf="@+id/accountInputLayout">
 
         <RadioButton
             android:id="@+id/rb_income"
@@ -104,44 +113,23 @@
 
     </RadioGroup>
 
-    <TextView
-        android:id="@+id/label_transaction_account"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/label_account"
-        app:layout_constraintBottom_toBottomOf="@+id/accountSpinner"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/accountSpinner"
-        tools:text="@string/label_account" />
-
-    <Spinner
-        android:id="@+id/accountSpinner"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/categoryInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:spinnerMode="dropdown"
+        app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroupType" />
-
-    <TextView
-        android:id="@+id/label_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/label_category"
-        app:layout_constraintBottom_toBottomOf="@+id/categorySpinner"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/categorySpinner"
-        tools:text="@string/label_category" />
+        app:layout_constraintTop_toBottomOf="@id/radioGroupType">
 
-    <Spinner
-        android:id="@+id/categorySpinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:spinnerMode="dropdown"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/accountSpinner" />
+        <AutoCompleteTextView
+            android:id="@+id/categoryDropdown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:editable="false"
+            android:hint="@string/label_category" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,8 +15,7 @@ class AddEditTransactionViewModel(application: Application) : AndroidViewModel(a
 
     private val repository: DataRepository = DataRepository.getInstance(application)
     val accountsNamesAndIds: List<AccountMini> by lazy { repository.accountsNamesAndIds }
-    val incomeCategories: List<CategoryEntity> by lazy { repository.incomeCategories }
-    val outcomeCategories: List<CategoryEntity> by lazy { repository.outcomeCategories }
+    val categories: List<CategoryEntity> by lazy { repository.allCategories }
 
     fun insertTransaction(transaction: TransactionEntity) {
         repository.insertTransaction(transaction)

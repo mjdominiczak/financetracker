@@ -14,7 +14,6 @@
         <item name="colorOnBackground">@color/colorOnBackground</item>
         <item name="colorOnSurface">@color/colorOnSurface</item>
 
-        <item name="android:spinnerStyle">@style/Spinner</item>
         <item name="setDateViewStyle">@style/SetDateView</item>
         <item name="innerSetDateViewStyle">@style/InnerSetDateView</item>
     </style>
@@ -30,7 +29,5 @@
     <style name="InnerSetDateView" parent="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox">
         <item name="android:editable">false</item>
     </style>
-
-    <style name="Spinner" parent="@style/Widget.AppCompat.Spinner" />
 
 </resources>

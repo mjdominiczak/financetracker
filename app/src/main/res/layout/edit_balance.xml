@@ -31,41 +31,33 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="120dp" />
 
-    <TextView
-        android:id="@+id/label_account"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/label_account"
-        app:layout_constraintBottom_toBottomOf="@+id/spinner_balance_account"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/spinner_balance_account" />
-
-    <Spinner
-        android:id="@+id/spinner_balance_account"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/balanceAccountInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:spinnerMode="dropdown"
+        android:layout_marginTop="8dp"
+        app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/balance_value_input_layout" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/balance_value_input_layout">
 
-    <TextView
-        android:id="@+id/label_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/label_date"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tf_balance_check_date"
-        app:layout_constraintStart_toStartOf="parent" />
+        <AutoCompleteTextView
+            android:id="@+id/dropdownBalanceAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:editable="false"
+            android:hint="@string/label_account" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.mancode.financetracker.ui.SetDateView
         android:id="@+id/tf_balance_check_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="@string/check_date"
+        android:layout_marginTop="8dp"
+        android:hint="@string/label_date"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_balance_account" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/balanceAccountInputLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

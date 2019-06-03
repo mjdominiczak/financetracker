@@ -27,17 +27,13 @@ class DataRepository private constructor(application: Application) {
 
     val allAccounts: LiveData<List<AccountExtended>>
     val allBalances: LiveData<List<BalanceExtended>>
-    val allCategories: LiveData<List<CategoryEntity>>
     val allTransactions: LiveData<List<TransactionFull>>
 
     val accountsNamesAndIds: List<AccountMini>
         get() = accountDao.accountsNamesAndIds
 
-    val incomeCategories: List<CategoryEntity>
-        get() = categoryDao.incomeCategoriesLive
-
-    val outcomeCategories: List<CategoryEntity>
-        get() = categoryDao.outcomeCategoriesLive
+    val allCategories: List<CategoryEntity>
+        get() = categoryDao.allCategories
 
     init {
         val database = FTDatabase.getInstance(application)
@@ -46,7 +42,6 @@ class DataRepository private constructor(application: Application) {
         balanceDao = database.balanceDao()
         allBalances = balanceDao.balancesForDisplay
         categoryDao = database.categoryDao()
-        allCategories = categoryDao.allCategoriesLive
         currencyDao = database.currencyDao()
         transactionDao = database.transactionDao()
         allTransactions = transactionDao.allTransactionsLive
