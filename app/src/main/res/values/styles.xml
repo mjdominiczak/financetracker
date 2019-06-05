@@ -14,6 +14,8 @@
         <item name="colorOnBackground">@color/colorOnBackground</item>
         <item name="colorOnSurface">@color/colorOnSurface</item>
 
+        <item name="textInputStyle">@style/AppTextInputStyle</item>
+        <item name="dropdownInputStyle">@style/DropdownInputStyle</item>
         <item name="setDateViewStyle">@style/SetDateView</item>
         <item name="innerSetDateViewStyle">@style/InnerSetDateView</item>
     </style>
@@ -22,7 +24,11 @@
         <item name="android:background">@color/background</item>
     </style>
 
-    <style name="SetDateView" parent="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
+    <style name="AppTextInputStyle" parent="@style/Widget.MaterialComponents.TextInputLayout.FilledBox" />
+
+    <style name="DropdownInputStyle" parent="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu" />
+
+    <style name="SetDateView" parent="@style/DropdownInputStyle">
         <item name="endIconMode">none</item>
     </style>
 

@@ -31,9 +31,8 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="120dp" />
 
-    <com.google.android.material.textfield.TextInputLayout
+    <com.mancode.financetracker.ui.DropdownInputLayout
         android:id="@+id/balanceAccountInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -48,7 +47,7 @@
             android:layout_height="wrap_content"
             android:editable="false"
             android:hint="@string/label_account" />
-    </com.google.android.material.textfield.TextInputLayout>
+    </com.mancode.financetracker.ui.DropdownInputLayout>
 
     <com.mancode.financetracker.ui.SetDateView
         android:id="@+id/tf_balance_check_date"
