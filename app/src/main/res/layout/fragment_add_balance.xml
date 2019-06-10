@@ -9,7 +9,7 @@
     tools:context="com.mancode.financetracker.ui.balances.AddBalanceFragment">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/add_balance_toolbar"
+        android:id="@+id/toolbar"
         style="@style/Widget.MaterialComponents.Toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,6 +21,6 @@
         layout="@layout/edit_balance"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/add_balance_toolbar" />
+        android:layout_below="@id/toolbar" />
 
 </RelativeLayout>
