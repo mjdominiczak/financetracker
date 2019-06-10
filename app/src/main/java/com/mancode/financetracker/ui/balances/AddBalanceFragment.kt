@@ -106,7 +106,6 @@ class AddBalanceFragment : AddItemFragment() {
                 R.layout.dropdown_menu_popup_item,
                 accountsMap.keys.toTypedArray()
         )
-
     }
 
     companion object {

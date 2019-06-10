@@ -14,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:navigationIcon="@drawable/ic_close_white_24dp"
         app:title="@string/title_add_transaction" />
 
     <include
