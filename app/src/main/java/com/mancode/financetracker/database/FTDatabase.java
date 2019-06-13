@@ -25,8 +25,8 @@ import com.mancode.financetracker.database.entity.CurrencyEntity;
 import com.mancode.financetracker.database.entity.NetValue;
 import com.mancode.financetracker.database.entity.TransactionEntity;
 import com.mancode.financetracker.database.views.AccountExtended;
-import com.mancode.financetracker.database.workers.PrepopulateDatabaseWorker;
-import com.mancode.financetracker.database.workers.UpdateStateWorker;
+import com.mancode.financetracker.workers.PrepopulateDatabaseWorker;
+import com.mancode.financetracker.workers.UpdateStateWorker;
 
 /**
  * Created by Manveru on 31.01.2018.

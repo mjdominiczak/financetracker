@@ -1,7 +1,11 @@
-package com.mancode.financetracker.database.workers;
+package com.mancode.financetracker.workers;
 
 import android.content.Context;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -15,10 +19,6 @@ import org.threeten.bp.LocalDate;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
-import androidx.annotation.NonNull;
-import androidx.work.Worker;
-import androidx.work.WorkerParameters;
 
 public class PrepopulateDatabaseWorker extends Worker {
 

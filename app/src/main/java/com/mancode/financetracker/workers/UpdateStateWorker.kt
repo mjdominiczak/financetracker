@@ -1,4 +1,4 @@
-package com.mancode.financetracker.database.workers
+package com.mancode.financetracker.workers
 
 import android.content.Context
 import androidx.work.Worker

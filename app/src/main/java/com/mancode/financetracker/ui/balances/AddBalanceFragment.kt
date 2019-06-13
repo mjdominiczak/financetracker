@@ -14,9 +14,9 @@ import androidx.work.WorkManager
 import com.mancode.financetracker.AddItemFragment
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.BalanceEntity
-import com.mancode.financetracker.database.workers.UpdateStateWorker
 import com.mancode.financetracker.viewmodel.AccountViewModel
 import com.mancode.financetracker.viewmodel.BalanceViewModel
+import com.mancode.financetracker.workers.UpdateStateWorker
 import kotlinx.android.synthetic.main.edit_balance.*
 import kotlinx.android.synthetic.main.fragment_add_balance.*
 

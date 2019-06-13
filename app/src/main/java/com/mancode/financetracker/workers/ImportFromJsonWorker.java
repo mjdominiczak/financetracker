@@ -1,7 +1,11 @@
-package com.mancode.financetracker.database.workers;
+package com.mancode.financetracker.workers;
 
 import android.content.Context;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -13,10 +17,6 @@ import org.threeten.bp.LocalDate;
 
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-
-import androidx.annotation.NonNull;
-import androidx.work.Worker;
-import androidx.work.WorkerParameters;
 
 import static com.mancode.financetracker.database.DatabaseJson.JSON_FILE;
 
