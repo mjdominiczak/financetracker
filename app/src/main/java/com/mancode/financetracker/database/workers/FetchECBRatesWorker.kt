@@ -6,8 +6,8 @@ import android.util.Log
 import android.util.Xml
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.mancode.financetracker.database.DataRepository
 import com.mancode.financetracker.database.entity.CurrencyEntity
+import com.mancode.financetracker.repository.DataRepository
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 import okhttp3.*
 import org.threeten.bp.LocalDate

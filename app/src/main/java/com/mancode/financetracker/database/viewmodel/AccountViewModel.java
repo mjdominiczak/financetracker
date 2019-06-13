@@ -6,9 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.mancode.financetracker.database.DataRepository;
 import com.mancode.financetracker.database.entity.AccountEntity;
 import com.mancode.financetracker.database.views.AccountExtended;
+import com.mancode.financetracker.repository.DataRepository;
 
 import java.util.List;
 

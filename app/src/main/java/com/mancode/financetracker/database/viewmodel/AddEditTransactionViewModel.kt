@@ -2,10 +2,10 @@ package com.mancode.financetracker.database.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import com.mancode.financetracker.database.DataRepository
 import com.mancode.financetracker.database.entity.CategoryEntity
 import com.mancode.financetracker.database.entity.TransactionEntity
 import com.mancode.financetracker.database.pojos.AccountMini
+import com.mancode.financetracker.repository.DataRepository
 
 /**
  * Created by Manveru on 12.02.2018.

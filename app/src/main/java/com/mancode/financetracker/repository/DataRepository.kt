@@ -1,8 +1,9 @@
-package com.mancode.financetracker.database
+package com.mancode.financetracker.repository
 
 import android.app.Application
 import android.os.AsyncTask
 import androidx.lifecycle.LiveData
+import com.mancode.financetracker.database.FTDatabase
 import com.mancode.financetracker.database.dao.*
 import com.mancode.financetracker.database.entity.AccountEntity
 import com.mancode.financetracker.database.entity.CategoryEntity
