@@ -22,9 +22,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mancode.financetracker.R;
 import com.mancode.financetracker.database.entity.TransactionEntity;
-import com.mancode.financetracker.database.viewmodel.TransactionViewModel;
 import com.mancode.financetracker.ui.SetDateView;
 import com.mancode.financetracker.ui.UIUtils;
+import com.mancode.financetracker.viewmodel.TransactionViewModel;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.temporal.TemporalAdjusters;

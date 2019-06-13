@@ -22,10 +22,10 @@ import androidx.work.WorkManager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.mancode.financetracker.database.DatabaseJson;
-import com.mancode.financetracker.database.viewmodel.BalanceViewModel;
 import com.mancode.financetracker.database.workers.FetchECBRatesWorker;
 import com.mancode.financetracker.notifications.ReminderFunctionsKt;
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor;
+import com.mancode.financetracker.viewmodel.BalanceViewModel;
 
 import org.threeten.bp.LocalDate;
 

@@ -17,7 +17,7 @@ import com.mancode.financetracker.database.entity.TransactionEntity
 import com.mancode.financetracker.database.entity.TransactionEntity.TYPE_INCOME
 import com.mancode.financetracker.database.entity.TransactionEntity.TYPE_OUTCOME
 import com.mancode.financetracker.database.pojos.AccountMini
-import com.mancode.financetracker.database.viewmodel.AddEditTransactionViewModel
+import com.mancode.financetracker.viewmodel.AddEditTransactionViewModel
 import kotlinx.android.synthetic.main.edit_transaction.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter

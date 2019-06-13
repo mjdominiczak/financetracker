@@ -1,4 +1,4 @@
-package com.mancode.financetracker.database.viewmodel
+package com.mancode.financetracker.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

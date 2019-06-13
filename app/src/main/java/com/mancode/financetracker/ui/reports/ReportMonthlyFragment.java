@@ -8,23 +8,23 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.mancode.financetracker.R;
-import com.mancode.financetracker.database.entity.NetValue;
-import com.mancode.financetracker.database.entity.TransactionEntity;
-import com.mancode.financetracker.database.pojos.Report;
-import com.mancode.financetracker.database.viewmodel.ReportMonthlyViewModel;
-import com.mancode.financetracker.ui.UIUtils;
-
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.temporal.TemporalAdjusters;
-
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
+
+import com.mancode.financetracker.R;
+import com.mancode.financetracker.database.entity.NetValue;
+import com.mancode.financetracker.database.entity.TransactionEntity;
+import com.mancode.financetracker.database.pojos.Report;
+import com.mancode.financetracker.ui.UIUtils;
+import com.mancode.financetracker.viewmodel.ReportMonthlyViewModel;
+
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.temporal.TemporalAdjusters;
+
+import java.util.List;
 
 public class ReportMonthlyFragment extends Fragment {
 

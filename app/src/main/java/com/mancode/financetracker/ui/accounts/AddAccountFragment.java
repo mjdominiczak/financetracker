@@ -23,9 +23,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.mancode.financetracker.AddItemFragment;
 import com.mancode.financetracker.R;
 import com.mancode.financetracker.database.entity.AccountEntity;
-import com.mancode.financetracker.database.viewmodel.AccountViewModel;
 import com.mancode.financetracker.ui.SetDateView;
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor;
+import com.mancode.financetracker.viewmodel.AccountViewModel;
 
 import org.joda.money.CurrencyUnit;
 import org.threeten.bp.LocalDate;

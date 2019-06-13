@@ -9,8 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mancode.financetracker.R
-import com.mancode.financetracker.database.viewmodel.BalanceViewModel
 import com.mancode.financetracker.ui.UIUtils
+import com.mancode.financetracker.viewmodel.BalanceViewModel
 import kotlinx.android.synthetic.main.fragment_account_list.*
 
 /**
