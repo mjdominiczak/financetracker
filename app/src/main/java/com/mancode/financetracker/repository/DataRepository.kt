@@ -10,7 +10,6 @@ import com.mancode.financetracker.database.entity.CategoryEntity
 import com.mancode.financetracker.database.entity.CurrencyEntity
 import com.mancode.financetracker.database.entity.TransactionEntity
 import com.mancode.financetracker.database.pojos.AccountMini
-import com.mancode.financetracker.database.pojos.BalanceExtended
 import com.mancode.financetracker.database.pojos.TransactionFull
 import com.mancode.financetracker.database.views.AccountExtended
 
@@ -27,7 +26,6 @@ class DataRepository private constructor(application: Application) {
     private val transactionDao: TransactionDao
 
     val allAccounts: LiveData<List<AccountExtended>>
-    val allBalances: LiveData<List<BalanceExtended>>
     val allTransactions: LiveData<List<TransactionFull>>
 
     val accountsNamesAndIds: List<AccountMini>
@@ -41,7 +39,6 @@ class DataRepository private constructor(application: Application) {
         accountDao = database.accountDao()
         allAccounts = accountDao.allAccountsLive
         balanceDao = database.balanceDao()
-        allBalances = balanceDao.balancesForDisplay
         categoryDao = database.categoryDao()
         currencyDao = database.currencyDao()
         transactionDao = database.transactionDao()

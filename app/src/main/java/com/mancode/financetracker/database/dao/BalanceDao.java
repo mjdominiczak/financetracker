@@ -1,5 +1,13 @@
 package com.mancode.financetracker.database.dao;
 
+import androidx.lifecycle.LiveData;
+import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
+import androidx.room.Query;
+import androidx.room.TypeConverters;
+import androidx.room.Update;
+
 import com.mancode.financetracker.database.converter.DateConverter;
 import com.mancode.financetracker.database.entity.BalanceEntity;
 import com.mancode.financetracker.database.pojos.BalanceExtended;
@@ -8,13 +16,6 @@ import com.mancode.financetracker.database.pojos.BalanceMini;
 import org.threeten.bp.LocalDate;
 
 import java.util.List;
-
-import androidx.lifecycle.LiveData;
-import androidx.room.Dao;
-import androidx.room.Insert;
-import androidx.room.OnConflictStrategy;
-import androidx.room.Query;
-import androidx.room.TypeConverters;
 
 /**
  * Created by Manveru on 25.01.2018.
@@ -30,11 +31,11 @@ public interface BalanceDao {
     @Query("SELECT * FROM balances")
     List<BalanceEntity> getAllBalances();
 
-    @Query("SELECT balances._id, balance_check_date, balance_value, account_name, account_type, " +
-            "account_currency " +
+    @Query("SELECT balances._id, balance_check_date, balance_value, balance_account_id, " +
+            "account_name, account_type, account_currency " +
             "FROM balances INNER JOIN accounts ON balance_account_id = accounts._id " +
-            "ORDER BY date(balance_check_date) DESC, balance_account_id ASC")
-    LiveData<List<BalanceExtended>> getBalancesForDisplay();
+            "WHERE balance_check_date = :date ORDER BY balance_account_id ASC")
+    LiveData<List<BalanceExtended>> getFullBalancesForDate(LocalDate date);
 
     @Query("SELECT DISTINCT balance_check_date FROM balances ORDER BY balance_check_date ASC")
     List<LocalDate> getDateKeys();
@@ -49,6 +50,9 @@ public interface BalanceDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<BalanceEntity> balanceList);
+
+    @Update
+    void updateBalance(BalanceEntity balance);
 
     @Query("DELETE FROM balances WHERE _id = (SELECT MAX(_id) FROM balances)")
     void removeLast();

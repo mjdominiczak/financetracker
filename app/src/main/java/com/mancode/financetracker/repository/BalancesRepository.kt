@@ -7,6 +7,7 @@ import com.mancode.financetracker.database.dao.NetValueDao
 import com.mancode.financetracker.database.entity.BalanceEntity
 import com.mancode.financetracker.database.entity.NetValue
 import com.mancode.financetracker.database.pojos.BalanceExtended
+import org.threeten.bp.LocalDate
 
 class BalancesRepository private constructor(
         private val netValueDao: NetValueDao,
@@ -14,10 +15,14 @@ class BalancesRepository private constructor(
 
     fun getKeyedNetValues(): LiveData<List<NetValue>> = netValueDao.keyedValues
 
-    fun getBalances(): LiveData<List<BalanceExtended>> = balanceDao.balancesForDisplay
+    fun getBalancesForDate(date: LocalDate): LiveData<List<BalanceExtended>> = balanceDao.getFullBalancesForDate(date)
 
     fun insertBalance(balance: BalanceEntity) {
         AsyncTask.execute { balanceDao.insertBalance(balance) }
+    }
+
+    fun updateBalance(balance: BalanceEntity) {
+        AsyncTask.execute { balanceDao.updateBalance(balance) }
     }
 
     fun removeLastBalance() {

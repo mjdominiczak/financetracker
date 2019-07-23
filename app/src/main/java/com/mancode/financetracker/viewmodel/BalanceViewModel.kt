@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import com.mancode.financetracker.database.FTDatabase
 import com.mancode.financetracker.database.entity.BalanceEntity
 import com.mancode.financetracker.database.entity.NetValue
-import com.mancode.financetracker.database.pojos.BalanceExtended
 import com.mancode.financetracker.repository.BalancesRepository
 
 /**
@@ -19,7 +18,6 @@ class BalanceViewModel(application: Application) : AndroidViewModel(application)
             FTDatabase.getInstance(application).netValueDao(),
             FTDatabase.getInstance(application).balanceDao())
 
-    val balances: LiveData<List<BalanceExtended>> = balancesRepository.getBalances()
     val netValues: LiveData<List<NetValue>> = balancesRepository.getKeyedNetValues()
 
     fun insert(balance: BalanceEntity) {
