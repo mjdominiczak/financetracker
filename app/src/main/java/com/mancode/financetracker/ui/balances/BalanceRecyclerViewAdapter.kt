@@ -12,6 +12,7 @@ import com.mancode.financetracker.ui.UIUtils
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_balance.view.*
+import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.*
 
@@ -19,7 +20,8 @@ import java.util.*
  * Created by Manveru on 06.09.2017.
  */
 
-class BalanceRecyclerViewAdapter : ListAdapter<NetValue, BalanceRecyclerViewAdapter.ViewHolder>(DiffCallback()) {
+class BalanceRecyclerViewAdapter(private val modifyRequestListener: ModifyRequestListener) :
+        ListAdapter<NetValue, BalanceRecyclerViewAdapter.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -42,9 +44,20 @@ class BalanceRecyclerViewAdapter : ListAdapter<NetValue, BalanceRecyclerViewAdap
     inner class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
             LayoutContainer {
 
+        init {
+            containerView.setOnClickListener { modifyRequestListener.onEditRequested(balanceDate)}
+        }
+
+        private lateinit var balanceDate: LocalDate
+
         fun bindTo(netValue: NetValue) {
-            containerView.balanceDate.text = netValue.date.format(DateTimeFormatter.ISO_LOCAL_DATE.withLocale(Locale.getDefault()))
+            balanceDate = netValue.date
+            containerView.balanceDate.text = balanceDate.format(DateTimeFormatter.ISO_LOCAL_DATE.withLocale(Locale.getDefault()))
             containerView.balanceDaily.text = UIUtils.getFormattedMoney(netValue.value, PreferenceAccessor.defaultCurrency)
         }
+    }
+
+    interface ModifyRequestListener {
+        fun onEditRequested(date: LocalDate)
     }
 }

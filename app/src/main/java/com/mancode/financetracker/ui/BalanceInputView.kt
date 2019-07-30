@@ -15,6 +15,7 @@ class BalanceInputView : ConstraintLayout {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     private lateinit var account: AccountNameCurrency
+    var balanceId: Int? = null
 
     init {
         LayoutInflater.from(context).inflate(R.layout.single_balance, this, true)

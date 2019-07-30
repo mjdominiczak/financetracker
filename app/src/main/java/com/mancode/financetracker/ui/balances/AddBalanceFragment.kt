@@ -23,11 +23,11 @@ import org.threeten.bp.LocalDate
 private val ViewGroup.views: List<View>
     get() = (0 until childCount).map { getChildAt(it) }
 
-class AddBalanceFragment : AddItemFragment() {
+class AddBalanceFragment(private val date: LocalDate) : AddItemFragment() {
 
     private val viewModel by lazy {
         ViewModelProviders.of(this,
-                InjectorUtils.provideAddBalancesViewModelFactory(requireContext(), LocalDate.now()))
+                InjectorUtils.provideAddBalancesViewModelFactory(requireContext(), date))
                 .get(AddBalancesViewModel::class.java)
     }
 
@@ -66,7 +66,7 @@ class AddBalanceFragment : AddItemFragment() {
                     noneActive = false
 
                     val balance = BalanceEntity(
-                            0, // not set
+                            balanceInputView.balanceId ?: 0,
                             viewModel.date,
                             balanceInputView.getAccountId(),
                             balanceInputView.getValue(),
@@ -97,6 +97,7 @@ class AddBalanceFragment : AddItemFragment() {
         for (balance in balances) {
             if (balanceView.getAccountId() == balance.accountId) {
                 balanceView.setValue(balance.value) // TODO needs validation?
+                balanceView.balanceId = balance.id
                 balanceFound = true
                 break
             }
@@ -108,8 +109,8 @@ class AddBalanceFragment : AddItemFragment() {
 
     companion object {
 
-        internal fun newInstance(): AddBalanceFragment {
-            return AddBalanceFragment()
+        internal fun newInstance(date: LocalDate): AddBalanceFragment {
+            return AddBalanceFragment(date)
         }
     }
 }

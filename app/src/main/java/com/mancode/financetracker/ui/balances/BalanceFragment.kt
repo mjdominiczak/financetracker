@@ -12,14 +12,15 @@ import com.mancode.financetracker.R
 import com.mancode.financetracker.ui.UIUtils
 import com.mancode.financetracker.viewmodel.BalanceViewModel
 import kotlinx.android.synthetic.main.fragment_account_list.*
+import org.threeten.bp.LocalDate
 
 /**
  * Created by Manveru on 03.09.2017.
  */
 
-class BalanceFragment : Fragment() {
+class BalanceFragment : Fragment(), BalanceRecyclerViewAdapter.ModifyRequestListener {
 
-    private val adapter: BalanceRecyclerViewAdapter by lazy { BalanceRecyclerViewAdapter() }
+    private val adapter: BalanceRecyclerViewAdapter by lazy { BalanceRecyclerViewAdapter(this) }
     private val viewModel: BalanceViewModel by lazy {
         ViewModelProviders.of(this).get(BalanceViewModel::class.java)
     }
@@ -39,8 +40,12 @@ class BalanceFragment : Fragment() {
         list.layoutManager = LinearLayoutManager(context)
         list.adapter = adapter
         fab.setOnClickListener {
-            UIUtils.showFullScreenDialog(fragmentManager, AddBalanceFragment.newInstance())
+            UIUtils.showFullScreenDialog(fragmentManager, AddBalanceFragment.newInstance(LocalDate.now()))
         }
+    }
+
+    override fun onEditRequested(date: LocalDate) {
+        UIUtils.showFullScreenDialog(fragmentManager, AddBalanceFragment.newInstance(date))
     }
 
     companion object {
