@@ -113,14 +113,14 @@ class TransactionRecyclerViewAdapter
 
         void init(TransactionFull transaction) {
             mTransaction = transaction;
-            tvDate.setText(DateConverter.toString(mTransaction.getTransaction().date));
+            tvDate.setText(DateConverter.toString(mTransaction.getTransaction().getDate()));
             tvValue.setText(UIUtils.getFormattedMoney(
-                    mTransaction.getTransaction().value, mTransaction.getCurrency()));
-            int color = mTransaction.getTransaction().type == TransactionEntity.TYPE_INCOME ?
+                    mTransaction.getTransaction().getValue(), mTransaction.getCurrency()));
+            int color = mTransaction.getTransaction().getType() == TransactionEntity.TYPE_INCOME ?
                     ContextCompat.getColor(context, R.color.colorPositiveValue) :
                     ContextCompat.getColor(context, R.color.colorNegativeValue);
             tvValue.setTextColor(color);
-            tvDescription.setText(mTransaction.getTransaction().description);
+            tvDescription.setText(mTransaction.getTransaction().getDescription());
             menuButton.setOnClickListener(this::showTransactionPopup);
         }
 

@@ -27,11 +27,11 @@ public class FilterQuery {
     }
 
     FilterQuery(Integer type, LocalDate from, LocalDate to) {
-        mQuery = String.valueOf(type) +
+        mQuery = type +
                 SEPARATOR +
-                DateConverter.INSTANCE.toString(from) +
+                DateConverter.toString(from) +
                 SEPARATOR +
-                DateConverter.INSTANCE.toString(to);
+                DateConverter.toString(to);
         tokenize();
     }
 
@@ -57,11 +57,11 @@ public class FilterQuery {
     }
 
     LocalDate getFromDate() {
-        return DateConverter.INSTANCE.toDate(mTokens[TOKEN_FROM_DATE]);
+        return DateConverter.toDate(mTokens[TOKEN_FROM_DATE]);
     }
 
     LocalDate getToDate() {
-        return DateConverter.INSTANCE.toDate(mTokens[TOKEN_TO_DATE]);
+        return DateConverter.toDate(mTokens[TOKEN_TO_DATE]);
     }
 
     boolean isMatch(TransactionFull transaction) {
@@ -69,8 +69,8 @@ public class FilterQuery {
         LocalDate fromDate = getFromDate();
         LocalDate toDate = getToDate();
 
-        return (type == TYPE_ALL || type == transaction.getTransaction().type) &&
-                (fromDate == null || !transaction.getTransaction().date.isBefore(fromDate)) &&
-                (toDate == null || !transaction.getTransaction().date.isAfter(toDate));
+        return (type == TYPE_ALL || type == transaction.getTransaction().getType()) &&
+                (fromDate == null || !transaction.getTransaction().getDate().isBefore(fromDate)) &&
+                (toDate == null || !transaction.getTransaction().getDate().isAfter(toDate));
     }
 }

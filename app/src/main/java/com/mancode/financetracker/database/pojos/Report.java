@@ -105,8 +105,8 @@ public class Report {
     private double sumTransactions(int type) {
         double sum = 0;
         for (TransactionEntity t : transactions) {
-            if (t.type == type) {
-                sum += t.value;
+            if (t.getType() == type) {
+                sum += t.getValue();
             }
         }
         return sum;

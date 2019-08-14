@@ -14,8 +14,8 @@ import com.mancode.financetracker.AddItemFragment
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.CategoryEntity
 import com.mancode.financetracker.database.entity.TransactionEntity
-import com.mancode.financetracker.database.entity.TransactionEntity.TYPE_INCOME
-import com.mancode.financetracker.database.entity.TransactionEntity.TYPE_OUTCOME
+import com.mancode.financetracker.database.entity.TransactionEntity.Companion.TYPE_INCOME
+import com.mancode.financetracker.database.entity.TransactionEntity.Companion.TYPE_OUTCOME
 import com.mancode.financetracker.database.pojos.AccountMini
 import com.mancode.financetracker.viewmodel.AddEditTransactionViewModel
 import kotlinx.android.synthetic.main.edit_transaction.*
