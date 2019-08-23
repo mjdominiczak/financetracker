@@ -34,7 +34,7 @@ class FetchECBRatesWorker(context: Context, params: WorkerParameters)
 
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
-                    val responseStream = response.body()?.charStream()
+                    val responseStream = response.body?.charStream()
                     if (responseStream != null) {
                         val repo = DataRepository.getInstance(applicationContext as Application)
                         val currencyList = ECBXmlParser().parse(responseStream)

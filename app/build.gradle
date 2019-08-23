@@ -52,10 +52,10 @@ android {
 dependencies {
     def appcompat_version = '1.1.0-rc01'
     def legacy_support_version = '1.0.0'
-    def recyclerview_version = '1.1.0-beta01'
+    def recyclerview_version = '1.1.0-beta03'
     def cardview_version = '1.0.0'
     def material_version = '1.1.0-alpha09'
-    def room_version = '2.2.0-alpha01'
+    def room_version = '2.2.0-alpha02'
     def lifecycle_version = '2.0.0'
     def constraint_layout_version = '1.1.3'
     def expandable_layout_version = "2.9.2"
@@ -65,11 +65,11 @@ dependencies {
 
     def gson_version = "2.8.5"
     def junit_version = "4.12"
-    def truth_version = "0.42"
-    def espresso_version = '3.1.0-alpha4'
+    def truth_version = '1.0'
+    def espresso_version = '3.3.0-alpha02'
     def joda_money_version = "1.0.1"
-    def threetenabp_version = "1.1.1"
-    def okhttp_version = "3.14.1"
+    def threetenabp_version = '1.2.1'
+    def okhttp_version = '4.1.0'
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     androidTestImplementation("androidx.test.espresso:espresso-core:$espresso_version", {
