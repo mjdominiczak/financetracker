@@ -29,6 +29,8 @@ class TransactionEntity(
         var description: String,
         @ColumnInfo(name = "transaction_value")
         var value: Double,
+        @ColumnInfo(name = "transaction_flags", defaultValue = "0")
+        var flags: Int,
         @ColumnInfo(name = "transaction_account")
         var accountId: Int,
         @ColumnInfo(name = "transaction_category")

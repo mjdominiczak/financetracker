@@ -26,8 +26,8 @@ import java.util.List;
 public interface TransactionDao {
 
     @Query("SELECT transactions._id, transaction_date, transaction_type, transaction_description, " +
-            "transaction_value, transaction_account, transaction_category, account_name, " +
-            "account_type, account_currency, account_open_date, account_close_date, " +
+            "transaction_value, transaction_flags, transaction_account, transaction_category," +
+            "account_name, account_type, account_currency, account_open_date, account_close_date, " +
             "category, category_type " +
             "FROM transactions LEFT JOIN accounts ON transaction_account = accounts._id " +
             "LEFT JOIN categories ON transaction_category = categories._id " +
@@ -38,8 +38,8 @@ public interface TransactionDao {
     List<TransactionEntity> getAllTransactions();
 
     @Query("SELECT transactions._id, transaction_date, transaction_type, transaction_description, " +
-            "transaction_value, transaction_account, transaction_category, account_name, " +
-            "account_type, account_currency, account_open_date, account_close_date, " +
+            "transaction_value, transaction_flags, transaction_account, transaction_category," +
+            "account_name, account_type, account_currency, account_open_date, account_close_date, " +
             "category, category_type " +
             "FROM transactions LEFT JOIN accounts ON transaction_account = accounts._id " +
             "LEFT JOIN categories ON transaction_category = categories._id " +

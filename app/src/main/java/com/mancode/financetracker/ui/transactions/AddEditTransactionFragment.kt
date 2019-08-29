@@ -194,6 +194,7 @@ class AddEditTransactionFragment : AddItemFragment() {
                             type,
                             description,
                             value,
+                            0,
                             account,
                             category
                     )
