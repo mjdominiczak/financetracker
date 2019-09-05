@@ -14,8 +14,8 @@ class ReportTest {
         val dateFrom = LocalDate.of(2019, 1, 1)
         val dateTo = LocalDate.of(2019, 1, 11)
         val transactions: List<TransactionEntity> = arrayListOf(
-                TransactionEntity(1, LocalDate.of(2019, 1, 3), TransactionEntity.TYPE_INCOME, "", 3000.0, 1, 1),
-                TransactionEntity(1, LocalDate.of(2019, 1, 10), TransactionEntity.TYPE_OUTCOME, "", 700.0, 1, 1)
+                TransactionEntity(1, LocalDate.of(2019, 1, 3), TransactionEntity.TYPE_INCOME, "", 3000.0, 0, 1, 1),
+                TransactionEntity(1, LocalDate.of(2019, 1, 10), TransactionEntity.TYPE_OUTCOME, "", 700.0, 0, 1, 1)
         )
         val nv1 = NetValue(
                 dateFrom, 1000.0, false)

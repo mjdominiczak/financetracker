@@ -99,12 +99,13 @@
     {
       "accountId": 1,
       "categoryId": 11,
-      "date": "1900-01-01",
+      "date": "1990-01-01",
       "description": "test",
+      "flags": 0,
       "id": 1,
       "type": 1,
       "value": 0.0
     }
   ],
-  "version": 3
+  "version": 4
 }

@@ -66,6 +66,7 @@ dependencies {
     def gson_version = "2.8.5"
     def junit_version = "4.12"
     def truth_version = '1.0'
+    def test_core_version = '1.2.0'
     def espresso_version = '3.3.0-alpha02'
     def joda_money_version = "1.0.1"
     def threetenabp_version = '1.2.1'
@@ -94,6 +95,7 @@ dependencies {
     testImplementation "junit:junit:$junit_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     androidTestImplementation "androidx.room:room-testing:$room_version"
+    androidTestImplementation "androidx.test:core:$test_core_version"
     testImplementation "com.google.truth:truth:$truth_version"
     implementation "android.arch.navigation:navigation-fragment:$nav_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

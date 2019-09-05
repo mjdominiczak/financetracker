@@ -3,6 +3,7 @@ package com.mancode.financetracker.database;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Database;
 import androidx.room.Room;
@@ -42,7 +43,7 @@ import com.mancode.financetracker.workers.UpdateStateWorker;
         version = FTDatabase.DATABASE_VERSION)
 public abstract class FTDatabase extends RoomDatabase {
 
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "database.db";
     private static FTDatabase sInstance;
 
@@ -88,6 +89,81 @@ public abstract class FTDatabase extends RoomDatabase {
         }
     };
 
+    @VisibleForTesting
+    public static final Migration MIGRATION_3_4 = new Migration(3, 4) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase db) {
+            db.beginTransaction();
+            try {
+                db.execSQL("PRAGMA foreign_keys=off;");
+                db.execSQL("ALTER TABLE accounts RENAME TO old;");
+                db.execSQL("CREATE TABLE accounts (" +
+                        "    _id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                        "    account_name TEXT NOT NULL," +
+                        "    account_type INTEGER NOT NULL," +
+                        "    account_currency TEXT NOT NULL," +
+                        "    account_open_date TEXT NOT NULL," +
+                        "    account_close_date TEXT," +
+                        "    FOREIGN KEY(account_currency) REFERENCES currencies(currency_symbol)" +
+                        "    ON UPDATE NO ACTION ON DELETE NO ACTION" +
+                        ");");
+                db.execSQL("INSERT INTO accounts " +
+                        "SELECT _id, account_name, account_type, account_currency, " +
+                        "account_open_date, account_close_date FROM old;");
+                db.execSQL("DROP TABLE old;");
+
+                db.execSQL("ALTER TABLE balances RENAME TO old;");
+                db.execSQL("CREATE TABLE balances (" +
+                        "    _id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                        "    balance_check_date TEXT NOT NULL," +
+                        "    balance_account_id INTEGER NOT NULL," +
+                        "    balance_value REAL NOT NULL," +
+                        "    balance_fixed INTEGER NOT NULL," +
+                        "    FOREIGN KEY(balance_account_id) REFERENCES accounts(_id)" +
+                        "    ON UPDATE NO ACTION ON DELETE NO ACTION" +
+                        ");");
+                db.execSQL("INSERT INTO balances " +
+                        "SELECT _id, balance_check_date, balance_account_id, balance_value, " +
+                        "balance_fixed FROM old;");
+                db.execSQL("DROP TABLE old;");
+
+                db.execSQL("ALTER TABLE categories RENAME TO old;");
+                db.execSQL("CREATE TABLE categories (" +
+                        "    _id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                        "    category TEXT NOT NULL," +
+                        "    category_type INTEGER NOT NULL)");
+                db.execSQL("INSERT INTO categories " +
+                        "SELECT _id, category, category_type FROM old;");
+                db.execSQL("DROP TABLE old;");
+
+                db.execSQL("ALTER TABLE transactions RENAME TO old;");
+                db.execSQL("CREATE TABLE transactions (" +
+                        "    _id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                        "    transaction_date TEXT NOT NULL," +
+                        "    transaction_type INTEGER NOT NULL," +
+                        "    transaction_description TEXT NOT NULL," +
+                        "    transaction_value REAL NOT NULL," +
+                        "    transaction_flags INTEGER NOT NULL DEFAULT 0," +
+                        "    transaction_account INTEGER NOT NULL," +
+                        "    transaction_category INTEGER NOT NULL," +
+                        "    FOREIGN KEY(transaction_account) REFERENCES accounts(_id)" +
+                        "    ON UPDATE NO ACTION ON DELETE NO ACTION," +
+                        "    FOREIGN KEY(transaction_category) REFERENCES categories(_id)" +
+                        "    ON UPDATE NO ACTION ON DELETE NO ACTION" +
+                        ");");
+                db.execSQL("INSERT INTO transactions(_id, transaction_date, transaction_type, " +
+                        "transaction_description, transaction_value, transaction_account, transaction_category) " +
+                        "SELECT _id, transaction_date, transaction_type, transaction_description, " +
+                        "transaction_value, transaction_account, transaction_category FROM old;");
+                db.execSQL("DROP TABLE old;");
+                db.execSQL("PRAGMA foreign_keys=on;");
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
+        }
+    };
+
     public static FTDatabase getInstance(final Context context) {
         if (sInstance == null) {
             synchronized (FTDatabase.class) {
@@ -103,6 +179,7 @@ public abstract class FTDatabase extends RoomDatabase {
         return Room.databaseBuilder(applicationContext, FTDatabase.class, DATABASE_NAME)
                 .addMigrations(MIGRATION_1_2)
                 .addMigrations(MIGRATION_2_3)
+                .addMigrations(MIGRATION_3_4)
                 .addCallback(new Callback() {
                     @Override
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {
