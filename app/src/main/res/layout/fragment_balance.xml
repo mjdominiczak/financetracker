@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -14,13 +13,8 @@
     android:background="?android:attr/selectableItemBackground"
     card_view:cardCornerRadius="@dimen/cardview_default_radius" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/spacing_double">
 
@@ -39,23 +33,5 @@
                 android:textAppearance="?android:attr/textAppearanceListItem" />
 
         </RelativeLayout>
-
-        <net.cachapa.expandablelayout.ExpandableLayout
-            android:id="@+id/balances_list_expandable"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:el_duration="300"
-            app:el_expanded="false">
-
-            <LinearLayout
-                android:id="@+id/balances_list"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_double"
-                android:layout_marginStart="@dimen/balance_margin"
-                android:orientation="vertical"/>
-        </net.cachapa.expandablelayout.ExpandableLayout>
-
-    </LinearLayout>
 
 </androidx.cardview.widget.CardView>
