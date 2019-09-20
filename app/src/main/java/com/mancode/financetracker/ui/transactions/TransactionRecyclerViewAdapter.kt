@@ -27,7 +27,7 @@ class TransactionRecyclerViewAdapter(
         private val modifyRequestListener: ModifyRequestListener?) :
         ListAdapter<TransactionFull, TransactionRecyclerViewAdapter.ViewHolder>(DiffCallback()), Filterable {
 
-    private var allTransactions: MutableList<TransactionFull>? = null
+    private var allTransactions: List<TransactionFull>? = null
 
     private var filteredTransactions: List<TransactionFull>? = null
     var filterQuery: FilterQuery? = null
@@ -47,7 +47,7 @@ class TransactionRecyclerViewAdapter(
         }
     }
 
-    fun setTransactions(transactions: MutableList<TransactionFull>) {
+    fun setTransactions(transactions: List<TransactionFull>) {
         allTransactions = transactions
         filteredTransactions = transactions  // TODO think through
         submitList(transactions)
@@ -116,19 +116,19 @@ class TransactionRecyclerViewAdapter(
     private inner class TransactionFilter : Filter() {
         override fun performFiltering(charSequence: CharSequence): FilterResults {
             val query = charSequence.toString()
-            var filteredList: MutableList<TransactionFull>? = ArrayList()
+            val filterResults = FilterResults()
             if (query.isEmpty()) {
-                filteredList = allTransactions
+                filterResults.values = allTransactions
             } else {
                 filterQuery = FilterQuery(query)
+                val filteredList: MutableList<TransactionFull> = ArrayList()
                 for (transaction in allTransactions!!) {
                     if (filterQuery!!.isMatch(transaction)) {
-                        filteredList!!.add(transaction)
+                        filteredList.add(transaction)
                     }
                 }
+                filterResults.values = filteredList
             }
-            val filterResults = FilterResults()
-            filterResults.values = filteredList
             return filterResults
         }
 

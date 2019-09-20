@@ -41,7 +41,7 @@ public class MyTabsPagerAdapter extends FragmentStatePagerAdapter {
                 fragment = BalanceFragment.Companion.newInstance();
                 break;
             case TRANSACTION_FRAGMENT:
-                fragment = TransactionFragment.newInstance();
+                fragment = TransactionFragment.Companion.newInstance();
                 break;
             case REPORTS_FRAGMENT:
                 fragment = ReportMonthlyFragment.newInstance();
