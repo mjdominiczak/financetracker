@@ -8,15 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.TransactionEntity
 import com.mancode.financetracker.ui.SetDateView
 import com.mancode.financetracker.ui.UIUtils
 import com.mancode.financetracker.ui.transactions.FilterQuery.*
 import com.mancode.financetracker.viewmodel.TransactionViewModel
+import kotlinx.android.synthetic.main.fragment_account_list.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.temporal.TemporalAdjusters
 
@@ -49,43 +48,37 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        return when (item.itemId) {
             R.id.app_bar_filter -> {
                 FilterDialog().show()
-                return true
+                true
             }
-            else -> return super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_account_list, container, false) // TODO layout to change?
-        val recyclerView = view.findViewById<View>(R.id.list)
+        return inflater.inflate(R.layout.fragment_account_list, container, false)
+    }
 
-        // Set the adapter
-        if (recyclerView is RecyclerView) {
-            val context = view.context
-            recyclerView.layoutManager = LinearLayoutManager(context)
-            recyclerView.adapter = adapter
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        list.layoutManager = LinearLayoutManager(context)
+        list.adapter = adapter
+        fab.setOnClickListener {UIUtils.showFullScreenDialog(
+                parentFragmentManager, AddEditTransactionFragment())
         }
-
-        val fab = view.findViewById<FloatingActionButton>(R.id.fab)
-        fab.setOnClickListener { view1 ->
-            UIUtils.showFullScreenDialog(
-                    fragmentManager!!, AddEditTransactionFragment())
-        }
-        return view
+        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onEditRequested(transaction: TransactionEntity) {
         UIUtils.showFullScreenDialog(
-                fragmentManager!!, AddEditTransactionFragment.newInstance(transaction)
+                parentFragmentManager, AddEditTransactionFragment.newInstance(transaction)
         )
     }
 
     override fun onDeleteRequested(transaction: TransactionEntity) {
-        viewModel!!.deleteTransaction(transaction)
+        viewModel.deleteTransaction(transaction)
     }
 
     private inner class FilterDialog {
@@ -98,11 +91,11 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
 
         private val type: Int
             get() {
-                when (mTransactionTypeSpinner!!.selectedItemPosition) {
-                    1 -> return TYPE_INCOME
-                    2 -> return TYPE_OUTCOME
-                    0 -> return TYPE_ALL
-                    else -> return TYPE_ALL
+                return when (mTransactionTypeSpinner!!.selectedItemPosition) {
+                    1 -> TYPE_INCOME
+                    2 -> TYPE_OUTCOME
+                    0 -> TYPE_ALL
+                    else -> TYPE_ALL
                 }
             }
 
@@ -128,7 +121,7 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
             }
             mFromDate = dialogView.findViewById(R.id.sd_transaction_filter_from)
             mToDate = dialogView.findViewById(R.id.sd_transaction_filter_to)
-            val query = adapter!!.filterQuery
+            val query = adapter.filterQuery
             if (query != null) {
                 mTransactionTypeSpinner!!.setSelection(getTypePosition(query.type))
                 val fromDate = query.fromDate
@@ -138,21 +131,21 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
             }
             mBuilder!!.setTitle(R.string.title_transaction_filter)
                     .setView(dialogView)
-                    .setNeutralButton(R.string.neutral_filter) { dialog, which -> adapter!!.filter.filter(FilterQuery.getEmptyQuery()) }
-                    .setNegativeButton(R.string.negative_filter) { dialog, which -> }
-                    .setPositiveButton(R.string.positive_filter) { dialog, which ->
-                        val newQuery = adapter!!.buildFilterQuery(type, fromDate, toDate)
-                        adapter!!.filter.filter(newQuery)
+                    .setNeutralButton(R.string.neutral_filter) { _, _ -> adapter.filter.filter(getEmptyQuery()) }
+                    .setNegativeButton(R.string.negative_filter) { _, _ -> }
+                    .setPositiveButton(R.string.positive_filter) { _, _ ->
+                        val newQuery = adapter.buildFilterQuery(type, fromDate, toDate)
+                        adapter.filter.filter(newQuery)
                     }
                     .show()
         }
 
         private fun getTypePosition(type: Int): Int {
-            when (type) {
-                TYPE_INCOME -> return 1
-                TYPE_OUTCOME -> return 2
-                TYPE_ALL -> return 0
-                else -> return 0
+            return when (type) {
+                TYPE_INCOME -> 1
+                TYPE_OUTCOME -> 2
+                TYPE_ALL -> 0
+                else -> 0
             }
         }
 
