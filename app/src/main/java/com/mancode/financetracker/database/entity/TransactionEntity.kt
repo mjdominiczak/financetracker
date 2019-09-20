@@ -17,7 +17,7 @@ import org.threeten.bp.LocalDate
                     parentColumns = ["_id"],
                     childColumns = ["transaction_category"])])
 @TypeConverters(DateConverter::class)
-class TransactionEntity(
+data class TransactionEntity(
         @PrimaryKey(autoGenerate = true)
         @ColumnInfo(name = "_id")
         val id: Int,

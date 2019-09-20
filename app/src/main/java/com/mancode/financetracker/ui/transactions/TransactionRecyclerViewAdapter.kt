@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.converter.DateConverter
@@ -20,17 +22,16 @@ import java.util.*
  * Created by Manveru on 18.12.2017.
  */
 
-internal class TransactionRecyclerViewAdapter(
+class TransactionRecyclerViewAdapter(
         private val context: Context,
         private val modifyRequestListener: ModifyRequestListener?) :
-        RecyclerView.Adapter<TransactionRecyclerViewAdapter.ViewHolder>(), Filterable {
+        ListAdapter<TransactionFull, TransactionRecyclerViewAdapter.ViewHolder>(DiffCallback()), Filterable {
 
     private var allTransactions: MutableList<TransactionFull>? = null
+
     private var filteredTransactions: List<TransactionFull>? = null
-    private var isFiltered = false
     var filterQuery: FilterQuery? = null
         private set
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.fragment_transaction, parent, false)
@@ -46,14 +47,10 @@ internal class TransactionRecyclerViewAdapter(
         }
     }
 
-    override fun getItemCount(): Int {
-        return filteredTransactions?.size ?: 0
-    }
-
     fun setTransactions(transactions: MutableList<TransactionFull>) {
         allTransactions = transactions
         filteredTransactions = transactions  // TODO think through
-        notifyDataSetChanged()
+        submitList(transactions)
     }
 
     override fun getFilter(): Filter {
@@ -65,7 +62,15 @@ internal class TransactionRecyclerViewAdapter(
         return filterQuery!!.query
     }
 
-    internal inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    private class DiffCallback : DiffUtil.ItemCallback<TransactionFull>() {
+        override fun areItemsTheSame(oldItem: TransactionFull, newItem: TransactionFull): Boolean =
+                oldItem.transaction.id == newItem.transaction.id
+
+        override fun areContentsTheSame(oldItem: TransactionFull, newItem: TransactionFull): Boolean =
+                oldItem.transaction == newItem.transaction
+    }
+
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val tvDate: TextView = view.findViewById(R.id.transaction_date)
         private val tvValue: TextView = view.findViewById(R.id.transaction_value)
@@ -113,10 +118,8 @@ internal class TransactionRecyclerViewAdapter(
             val query = charSequence.toString()
             var filteredList: MutableList<TransactionFull>? = ArrayList()
             if (query.isEmpty()) {
-                isFiltered = false
                 filteredList = allTransactions
             } else {
-                isFiltered = true
                 filterQuery = FilterQuery(query)
                 for (transaction in allTransactions!!) {
                     if (filterQuery!!.isMatch(transaction)) {
@@ -132,7 +135,7 @@ internal class TransactionRecyclerViewAdapter(
         @Suppress("UNCHECKED_CAST")
         override fun publishResults(charSequence: CharSequence, filterResults: FilterResults) {
             filteredTransactions = filterResults.values as ArrayList<TransactionFull>
-            notifyDataSetChanged()
+            submitList(filteredTransactions)
         }
     }
 
