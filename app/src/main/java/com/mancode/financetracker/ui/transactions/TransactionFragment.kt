@@ -81,6 +81,10 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
         viewModel.deleteTransaction(transaction)
     }
 
+    override fun onBookmarkToggleRequested(transaction: TransactionEntity) {
+        viewModel.toggleBookmark(transaction)
+    }
+
     private inner class FilterDialog {
 
         private var mTransactionTypeSpinner: Spinner? = null

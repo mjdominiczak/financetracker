@@ -50,6 +50,11 @@ public interface TransactionDao {
     @Query("SELECT * FROM transactions WHERE transaction_date = :date")
     List<TransactionEntity> getTransactionsForDate(LocalDate date);
 
+    @Query("UPDATE transactions " +
+            "SET transaction_flags = ~(transaction_flags & :flag) & (transaction_flags | :flag) " +
+            "WHERE _id = :id")
+    void toggleFlag(int id, int flag);
+
     @Insert
     void insertTransaction(TransactionEntity transaction);
 

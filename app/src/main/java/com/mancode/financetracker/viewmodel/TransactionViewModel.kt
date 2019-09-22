@@ -19,4 +19,8 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
     fun deleteTransaction(transaction: TransactionEntity) {
         repository.deleteTransaction(transaction)
     }
+
+    fun toggleBookmark(transaction: TransactionEntity) {
+        repository.toggleBookmark(transaction)
+    }
 }

@@ -39,5 +39,8 @@ data class TransactionEntity(
     companion object {
         const val TYPE_INCOME = 1
         const val TYPE_OUTCOME = -1
+
+        // FLAGS
+        const val BOOKMARKED = 1
     }
 }

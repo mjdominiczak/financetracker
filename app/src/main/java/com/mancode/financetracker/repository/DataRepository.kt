@@ -72,6 +72,10 @@ class DataRepository private constructor(application: Application) {
         AsyncTask.execute { transactionDao.deleteTransaction(transaction) }
     }
 
+    fun toggleBookmark(transaction: TransactionEntity) {
+        AsyncTask.execute { transactionDao.toggleFlag(transaction.id, TransactionEntity.BOOKMARKED) }
+    }
+
     companion object {
         @Volatile
         private var instance: DataRepository? = null

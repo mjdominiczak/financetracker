@@ -67,7 +67,10 @@ class TransactionRecyclerViewAdapter(
                 oldItem.transaction.id == newItem.transaction.id
 
         override fun areContentsTheSame(oldItem: TransactionFull, newItem: TransactionFull): Boolean =
-                oldItem.transaction == newItem.transaction
+                oldItem.transaction.id == newItem.transaction.id &&
+                oldItem.transaction.value == newItem.transaction.value &&
+                oldItem.transaction.date == newItem.transaction.date &&
+                oldItem.transaction.description == newItem.transaction.description
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -76,6 +79,7 @@ class TransactionRecyclerViewAdapter(
         private val tvValue: TextView = view.findViewById(R.id.transaction_value)
         private val tvDescription: TextView = view.findViewById(R.id.transaction_description)
         private val menuButton: ImageButton = view.findViewById(R.id.transaction_menu_button)
+        private val bookmark: CheckBox = view.findViewById(R.id.bookmarkButton)
         private var mTransaction: TransactionFull? = null
 
         fun init(transaction: TransactionFull) {
@@ -90,6 +94,9 @@ class TransactionRecyclerViewAdapter(
             tvValue.setTextColor(color)
             tvDescription.text = mTransaction!!.transaction.description
             menuButton.setOnClickListener { this.showTransactionPopup(it) }
+            bookmark.setOnClickListener {
+                modifyRequestListener?.onBookmarkToggleRequested(mTransaction!!.transaction) }
+            bookmark.isChecked = (mTransaction!!.transaction.flags and TransactionEntity.BOOKMARKED) == 1
         }
 
         private fun showTransactionPopup(view: View) {
@@ -142,6 +149,7 @@ class TransactionRecyclerViewAdapter(
     interface ModifyRequestListener {
         fun onEditRequested(transaction: TransactionEntity)
         fun onDeleteRequested(transaction: TransactionEntity)
+        fun onBookmarkToggleRequested(transaction: TransactionEntity)
     }
 
     companion object {
