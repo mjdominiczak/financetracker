@@ -160,11 +160,7 @@ class AddEditTransactionFragment : AddItemFragment() {
             valueField.setText(argValue.toString())
             val accountIndex = accountsNamesAndIds.map { it.id }.indexOf(argAccountId)
             accountDropdown.setText(accountsNamesAndIds[accountIndex].accountName, false)
-            val categoryIndex = if (argType == TYPE_INCOME) {
-                incomeCategories.map { it.id }.indexOf(argCategoryId)
-            } else {
-                outcomeCategories.map { it.id }.indexOf(argCategoryId)
-            }
+            val categoryIndex = categories.map { it.id }.indexOf(argCategoryId)
             categoryDropdown.setText(categories[categoryIndex].category, false)
         }
 
@@ -182,11 +178,8 @@ class AddEditTransactionFragment : AddItemFragment() {
                     val type = if (radioGroupType.checkedRadioButtonId == R.id.rb_income) TYPE_INCOME else TYPE_OUTCOME
                     val account = accountsNamesAndIds[accountsNamesAndIds.map { it.accountName }
                             .indexOf(accountString)].id
-                    val category = categories[if (type == TYPE_INCOME) {
-                        incomeCategories.map { it.category }.indexOf(categoryString)
-                    } else {
-                        outcomeCategories.map { it.category }.indexOf(categoryString)
-                    }].id
+                    val category = categories[
+                            categories.map { it.category }.indexOf(categoryString)].id
                     val value = valueString.toDouble()
                     val transaction = TransactionEntity(
                             argId,
