@@ -1,113 +1,80 @@
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/spacing_double"
-    >
+    android:padding="16dp"
+    android:theme="@style/AlertDialog">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
 
-        <LinearLayout
+    <com.mancode.financetracker.ui.DropdownInputLayout
+        android:id="@+id/timespanInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/transactionTypeInputLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/transactionTypeInputLayout">
+
+        <AutoCompleteTextView
+            android:id="@+id/timespanField"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:editable="false"
+            android:hint="@string/timespan" />
+    </com.mancode.financetracker.ui.DropdownInputLayout>
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="0dp"
-                android:layout_weight="0.4"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="@string/transactions_type" />
+    <com.mancode.financetracker.ui.DropdownInputLayout
+        android:id="@+id/transactionTypeInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/bookmarkFilter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-            <Spinner
-                android:id="@+id/sp_transaction_filter_type"
-                android:layout_width="0dp"
-                android:layout_weight="0.6"
-                android:layout_height="wrap_content"
-                android:entries="@array/transaction_filter_type" />
-        </LinearLayout>
-
-        <LinearLayout
+        <AutoCompleteTextView
+            android:id="@+id/transactionTypeField"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:editable="false"
+            android:hint="@string/transactions_type" />
+    </com.mancode.financetracker.ui.DropdownInputLayout>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="0.4"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="@string/timespan" />
+    <com.mancode.financetracker.ui.SetDateView
+        android:id="@+id/sd_transaction_filter_from"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:hint="@string/from_date"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timespanInputLayout" />
 
-            <Spinner
-                android:id="@+id/sp_transaction_filter_timespan"
-                android:layout_width="0dp"
-                android:layout_weight="0.6"
-                android:layout_height="wrap_content"
-                android:entries="@array/transaction_filter_timespan" />
-        </LinearLayout>
+    <com.mancode.financetracker.ui.SetDateView
+        android:id="@+id/sd_transaction_filter_to"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:hint="@string/to_date"
+        app:layout_constraintBottom_toBottomOf="@+id/sd_transaction_filter_from"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintTop_toTopOf="@+id/sd_transaction_filter_from" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+    <CheckBox
+        android:id="@+id/bookmarkFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/selector_bookmark"
+        app:layout_constraintBottom_toBottomOf="@+id/transactionTypeInputLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/transactionTypeInputLayout" />
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="0dp"
-                android:layout_weight="0.4"
-                android:layout_height="wrap_content"
-                android:text="@string/from_date" />
-
-            <com.mancode.financetracker.ui.SetDateView
-                android:id="@+id/sd_transaction_filter_from"
-                android:layout_width="0dp"
-                android:layout_weight="0.6"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="0dp"
-                android:layout_weight="0.4"
-                android:layout_height="wrap_content"
-                android:text="@string/to_date" />
-
-            <com.mancode.financetracker.ui.SetDateView
-                android:id="@+id/sd_transaction_filter_to"
-                android:layout_width="0dp"
-                android:layout_weight="0.6"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="0dp"
-                android:layout_weight="0.4"
-                android:layout_height="wrap_content"
-                android:text="@string/categories" />
-
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="0dp"
-                android:layout_weight="0.6"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

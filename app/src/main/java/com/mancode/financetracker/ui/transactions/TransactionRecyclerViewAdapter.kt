@@ -57,8 +57,8 @@ class TransactionRecyclerViewAdapter(
         return TransactionFilter()
     }
 
-    fun buildFilterQuery(type: Int, from: LocalDate?, to: LocalDate?): String {
-        filterQuery = FilterQuery(type, from, to)
+    fun buildFilterQuery(type: Int, from: LocalDate?, to: LocalDate?, timespan: Int, bookmarked: Boolean): String {
+        filterQuery = FilterQuery(type, from, to, timespan, bookmarked)
         return filterQuery!!.query
     }
 

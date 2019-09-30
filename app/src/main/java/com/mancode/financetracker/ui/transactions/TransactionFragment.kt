@@ -2,8 +2,9 @@ package com.mancode.financetracker.ui.transactions
 
 import android.os.Bundle
 import android.view.*
-import android.widget.AdapterView
-import android.widget.Spinner
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.CheckBox
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -65,8 +66,8 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         list.layoutManager = LinearLayoutManager(context)
         list.adapter = adapter
-        fab.setOnClickListener {UIUtils.showFullScreenDialog(
-                parentFragmentManager, AddEditTransactionFragment())
+        fab.setOnClickListener {
+            UIUtils.showFullScreenDialog(parentFragmentManager, AddEditTransactionFragment())
         }
         super.onViewCreated(view, savedInstanceState)
     }
@@ -87,64 +88,68 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
 
     private inner class FilterDialog {
 
-        private var mTransactionTypeSpinner: Spinner? = null
-        private var mTransactionTimespanSpinner: Spinner? = null
-        private var mFromDate: SetDateView? = null
-        private var mToDate: SetDateView? = null
-        private var mBuilder: MaterialAlertDialogBuilder? = null
+        private val typeAdapter: ArrayAdapter<String> =
+                ArrayAdapter(context!!, R.layout.dropdown_menu_popup_item,
+                        resources.getStringArray(R.array.transaction_filter_type))
+        private val timespanAdapter: ArrayAdapter<String> =
+                ArrayAdapter(context!!, R.layout.dropdown_menu_popup_item,
+                        resources.getStringArray(R.array.transaction_filter_timespan))
+        private val dropdownTransactionType: AutoCompleteTextView
+        private val dropdownTimespan: AutoCompleteTextView
+        private val fromDateView: SetDateView
+        private val toDateView: SetDateView
+        private val bookmarkFilter: CheckBox
+        private val dialogView: View =
+                layoutInflater.inflate(R.layout.fragment_transaction_filter, null)
 
-        private val type: Int
-            get() {
-                return when (mTransactionTypeSpinner!!.selectedItemPosition) {
-                    1 -> TYPE_INCOME
-                    2 -> TYPE_OUTCOME
-                    0 -> TYPE_ALL
-                    else -> TYPE_ALL
+        init {
+            dropdownTransactionType = dialogView.findViewById(R.id.transactionTypeField)
+            val query = adapter.filterQuery
+            with(dropdownTransactionType) {
+                setAdapter(typeAdapter)
+                setText(typeAdapter.getItem(typeToPosition(query?.type ?: TYPE_ALL)), false)
+                setOnClickListener {
+                    val index = typeAdapter.getPosition(text.toString())
+                    listSelection = index
                 }
             }
-
-        private val fromDate: LocalDate?
-            get() = mFromDate!!.date
-
-        private val toDate: LocalDate?
-            get() = mToDate!!.date
+            dropdownTimespan = dialogView.findViewById(R.id.timespanField)
+            with(dropdownTimespan) {
+                setAdapter(timespanAdapter)
+                setText(timespanAdapter.getItem(query?.timespan ?: UNCONSTRAINED), false)
+                setOnClickListener {
+                    val index = timespanAdapter.getPosition(text.toString())
+                    listSelection = index
+                }
+                setOnItemClickListener {
+                    _, _, position, _ -> handleTimespan(position) }
+            }
+            fromDateView = dialogView.findViewById(R.id.sd_transaction_filter_from)
+            toDateView = dialogView.findViewById(R.id.sd_transaction_filter_to)
+            bookmarkFilter = dialogView.findViewById(R.id.bookmarkFilter)
+            bookmarkFilter.isChecked = query?.bookmarked() ?: false
+            handleTimespan(query?.timespan ?: UNCONSTRAINED)
+        }
 
         internal fun show() {
-            mBuilder = MaterialAlertDialogBuilder(context!!)
-            val dialogView = layoutInflater.inflate(R.layout.fragment_transaction_filter, null)
-            mTransactionTypeSpinner = dialogView.findViewById(R.id.sp_transaction_filter_type)
-            mTransactionTimespanSpinner = dialogView.findViewById(R.id.sp_transaction_filter_timespan)
-            mTransactionTimespanSpinner!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                    handleTimespan(position)
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>) {
-
-                }
-            }
-            mFromDate = dialogView.findViewById(R.id.sd_transaction_filter_from)
-            mToDate = dialogView.findViewById(R.id.sd_transaction_filter_to)
-            val query = adapter.filterQuery
-            if (query != null) {
-                mTransactionTypeSpinner!!.setSelection(getTypePosition(query.type))
-                val fromDate = query.fromDate
-                if (fromDate != null) mFromDate!!.date = fromDate
-                val toDate = query.toDate
-                if (toDate != null) mToDate!!.date = toDate
-            }
-            mBuilder!!.setTitle(R.string.title_transaction_filter)
+            val builder = MaterialAlertDialogBuilder(context!!)
+            builder.setTitle(R.string.title_transaction_filter)
                     .setView(dialogView)
                     .setNeutralButton(R.string.neutral_filter) { _, _ -> adapter.filter.filter(getEmptyQuery()) }
                     .setNegativeButton(R.string.negative_filter) { _, _ -> }
                     .setPositiveButton(R.string.positive_filter) { _, _ ->
-                        val newQuery = adapter.buildFilterQuery(type, fromDate, toDate)
+                        val newQuery = adapter.buildFilterQuery(
+                                positionToType(typeAdapter.getPosition(dropdownTransactionType.text.toString())),
+                                fromDateView.date,
+                                toDateView.date,
+                                timespanAdapter.getPosition(dropdownTimespan.text.toString()),
+                                bookmarkFilter.isChecked)
                         adapter.filter.filter(newQuery)
                     }
                     .show()
         }
 
-        private fun getTypePosition(type: Int): Int {
+        private fun typeToPosition(type: Int): Int {
             return when (type) {
                 TYPE_INCOME -> 1
                 TYPE_OUTCOME -> 2
@@ -153,49 +158,51 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
             }
         }
 
+        private fun positionToType(position: Int): Int {
+            return when (position) {
+                1 -> TYPE_INCOME
+                2 -> TYPE_OUTCOME
+                0 -> TYPE_ALL
+                else -> TYPE_ALL
+            }
+        }
+
         private fun handleTimespan(position: Int) {
             when (position) {
-                0 // UNCONSTRAINED
-                -> {
-                    mToDate!!.resetDate()
-                    mFromDate!!.resetDate()
+                UNCONSTRAINED -> {
+                    toDateView.resetDate()
+                    fromDateView.resetDate()
                 }
-                1 // LAST WEEK
-                -> {
-                    mToDate!!.date = LocalDate.now()
-                    mFromDate!!.date = LocalDate.now().minusDays(7)
+                LAST_WEEK -> {
+                    toDateView.date = LocalDate.now()
+                    fromDateView.date = LocalDate.now().minusDays(7)
                 }
-                2 // LAST MONTH
-                -> {
-                    mToDate!!.date = LocalDate.now()
-                    mFromDate!!.date = LocalDate.now().minusMonths(1)
+                LAST_MONTH -> {
+                    toDateView.date = LocalDate.now()
+                    fromDateView.date = LocalDate.now().minusMonths(1)
                 }
-                3 // THIS MONTH
-                -> {
-                    mToDate!!.date = LocalDate.now()
-                    mFromDate!!.date = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth())
+                THIS_MONTH -> {
+                    toDateView.date = LocalDate.now()
+                    fromDateView.date = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth())
                 }
-                4 // PREVIOUS MONTH
-                -> {
-                    mToDate!!.date = LocalDate.now()
+                PREVIOUS_MONTH -> {
+                    toDateView.date = LocalDate.now()
                             .minusMonths(1).with(TemporalAdjusters.lastDayOfMonth())
-                    mFromDate!!.date = LocalDate.now()
+                    fromDateView.date = LocalDate.now()
                             .minusMonths(1).with(TemporalAdjusters.firstDayOfMonth())
                 }
-                5 // THIS YEAR
-                -> {
-                    mToDate!!.date = LocalDate.now()
-                    mFromDate!!.date = LocalDate.now().with(TemporalAdjusters.firstDayOfYear())
+                THIS_YEAR -> {
+                    toDateView.date = LocalDate.now()
+                    fromDateView.date = LocalDate.now().with(TemporalAdjusters.firstDayOfYear())
                 }
-                6 // CUSTOM
-                -> {
-                    mToDate!!.isEnabled = true
-                    mFromDate!!.isEnabled = true
+                CUSTOM -> {
+                    toDateView.isEnabled = true
+                    fromDateView.isEnabled = true
                     return
                 }
             }
-            mToDate!!.isEnabled = false
-            mFromDate!!.isEnabled = false
+            toDateView.isEnabled = false
+            fromDateView.isEnabled = false
         }
     }
 
@@ -204,5 +211,4 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
             return TransactionFragment()
         }
     }
-
 }

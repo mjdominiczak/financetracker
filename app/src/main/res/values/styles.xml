@@ -24,6 +24,12 @@
         <item name="android:background">@color/background</item>
     </style>
 
+    <style name="AlertDialog" parent="@style/ThemeOverlay.MaterialComponents.Dialog">
+        <item name="dropdownInputStyle">@style/DropdownInputStyleOutlined</item>
+        <item name="setDateViewStyle">@style/SetDateViewOutlined</item>
+        <item name="innerSetDateViewStyle">@style/InnerSetDateViewOutlined</item>
+    </style>
+
     <style name="AppTextInputStyle" parent="@style/Widget.MaterialComponents.TextInputLayout.FilledBox" />
 
     <style name="DropdownInputStyle" parent="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu" />
@@ -36,8 +42,16 @@
         <item name="android:editable">false</item>
     </style>
 
-<!--    <style name="Bookmark" parent="AppTheme">-->
-<!--        <item name="colorControlActivated">@color/colorError</item>-->
-<!--    </style>-->
+    <style name="AppTextInputStyleOutlined" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" />
+
+    <style name="DropdownInputStyleOutlined" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu" />
+
+    <style name="SetDateViewOutlined" parent="@style/DropdownInputStyleOutlined">
+        <item name="endIconMode">none</item>
+    </style>
+
+    <style name="InnerSetDateViewOutlined" parent="@style/Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox">
+        <item name="android:editable">false</item>
+    </style>
 
 </resources>
