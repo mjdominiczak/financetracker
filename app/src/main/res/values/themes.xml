@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="colorOnBackground">@color/colorOnBackground</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+
+        <item name="textInputStyle">@style/AppTextInputStyle</item>
+        <item name="dropdownInputStyle">@style/DropdownInputStyle</item>
+        <item name="setDateViewStyle">@style/SetDateView</item>
+        <item name="innerSetDateViewStyle">@style/InnerSetDateView</item>
+    </style>
+
+    <style name="AppTheme.Dialog">
+        <item name="android:background">@color/background</item>
+    </style>
+
+    <style name="AlertDialog" parent="@style/ThemeOverlay.MaterialComponents.Dialog">
+        <item name="dropdownInputStyle">@style/DropdownInputStyleOutlined</item>
+        <item name="setDateViewStyle">@style/SetDateViewOutlined</item>
+        <item name="innerSetDateViewStyle">@style/InnerSetDateViewOutlined</item>
+    </style>
+
+</resources>
