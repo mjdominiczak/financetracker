@@ -11,23 +11,23 @@ import java.util.List;
 
 import androidx.lifecycle.LiveData;
 
-public class ReportRepository {
+public class ReportMonthlyRepository {
 
-    private static ReportRepository instance;
+    private static ReportMonthlyRepository instance;
 
     private TransactionDao transactionDao;
     private NetValueDao netValueDao;
 
-    private ReportRepository(TransactionDao transactionDao, NetValueDao netValueDao) {
+    private ReportMonthlyRepository(TransactionDao transactionDao, NetValueDao netValueDao) {
         this.transactionDao = transactionDao;
         this.netValueDao = netValueDao;
     }
 
-    public static ReportRepository getInstance(TransactionDao transactionDao, NetValueDao netValueDao) {
+    public static ReportMonthlyRepository getInstance(TransactionDao transactionDao, NetValueDao netValueDao) {
         if (instance == null) {
-            synchronized (ReportRepository.class) {
+            synchronized (ReportMonthlyRepository.class) {
                 if (instance == null) {
-                    instance = new ReportRepository(transactionDao, netValueDao);
+                    instance = new ReportMonthlyRepository(transactionDao, netValueDao);
                 }
             }
         }

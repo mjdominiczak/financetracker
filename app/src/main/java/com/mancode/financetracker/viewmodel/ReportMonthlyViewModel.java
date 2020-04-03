@@ -10,7 +10,7 @@ import com.mancode.financetracker.database.FTDatabase;
 import com.mancode.financetracker.database.entity.NetValue;
 import com.mancode.financetracker.database.entity.TransactionEntity;
 import com.mancode.financetracker.database.pojos.Report;
-import com.mancode.financetracker.repository.ReportRepository;
+import com.mancode.financetracker.repository.ReportMonthlyRepository;
 
 import org.threeten.bp.LocalDate;
 
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ReportMonthlyViewModel extends AndroidViewModel {
 
-    private ReportRepository repository;
+    private ReportMonthlyRepository repository;
     private Report visibleReport;
 
     public void setVisibleReport(Report visibleReport) {
@@ -28,7 +28,7 @@ public class ReportMonthlyViewModel extends AndroidViewModel {
     public ReportMonthlyViewModel(@NonNull Application application) {
         super(application);
         FTDatabase db = FTDatabase.getInstance(application);
-        repository = ReportRepository.getInstance(db.transactionDao(), db.netValueDao());
+        repository = ReportMonthlyRepository.getInstance(db.transactionDao(), db.netValueDao());
     }
 
     public LiveData<List<TransactionEntity>> getTransactions() {
