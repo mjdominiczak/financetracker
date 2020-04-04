@@ -65,11 +65,13 @@ dependencies {
     implementation libs.androidx.preference
     implementation libs.androidx.work
     implementation libs.androidx.navigationfragment
+    implementation libs.androidx.navigationUI
     implementation libs.google.material
     implementation libs.google.gson
     implementation libs.jodamoney
     implementation libs.threetenabp
     implementation libs.okhttp
+    implementation libs.kellocharts
     implementation libs.kotlin.stdlib
 
     testImplementation libs.junit

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/dashboardFragment">
+
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.mancode.financetracker.ui.DashboardFragment"
+        android:label="@string/app_name">
+        <action
+            android:id="@+id/action_dashboardFragment_to_reportFragment"
+            app:destination="@id/reportFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reportFragment"
+        android:name="com.mancode.financetracker.ReportFragment"
+        android:label="@string/reports"
+        tools:layout="@layout/fragment_report" />
+    <fragment
+        android:id="@+id/balanceFragment"
+        android:name="com.mancode.financetracker.ui.balances.BalanceFragment"
+        android:label="@string/balances" >
+        <action
+            android:id="@+id/action_balanceFragment_to_addBalanceFragment"
+            app:destination="@id/addBalanceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/transactionFragment"
+        android:name="com.mancode.financetracker.ui.transactions.TransactionFragment"
+        android:label="@string/transactions" />
+    <fragment
+        android:id="@+id/addBalanceFragment"
+        android:name="com.mancode.financetracker.ui.balances.AddBalanceFragment"
+        android:label="@string/title_add_balance"
+        tools:layout="@layout/fragment_add_balance" />
+</navigation>

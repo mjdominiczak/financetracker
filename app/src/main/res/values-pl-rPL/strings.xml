@@ -16,10 +16,11 @@
     <string name="yes">Tak</string>
     <string name="no">Nie</string>
 
-    <string name="tab1_name">Konta</string>
-    <string name="tab2_name">Bilanse</string>
-    <string name="tab3_name">Transakcje</string>
-    <string name="tab4_name">Raporty</string>
+    <string name="accounts">Konta</string>
+    <string name="balances">Bilanse</string>
+    <string name="transactions">Transakcje</string>
+    <string name="reports">Raporty</string>
+    <string name="dashboard">Tablica</string>
     <string name="hint_account_name">Nazwa konta</string>
     <string name="hint_account_type">Typ konta</string>
     <string name="hint_account_open_date">Data otwarcia konta</string>
@@ -72,6 +73,7 @@
     <string name="pref_transaction_reminder_weekdays">Wybierz dni tygodnia</string>
     <string name="pref_default_currency">Waluta domyślna</string>
     <string name="question_transaction_reminder_decision">Czy chcesz ustawić codzienne przypomnienie o wprowadzeniu transakcji?</string>
+    <string name="your_net_value">Twoja wartość netto</string>
 
     <string-array name="transaction_filter_type">
         <item>Wszystkie</item>

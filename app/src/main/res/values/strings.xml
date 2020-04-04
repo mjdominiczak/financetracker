@@ -17,10 +17,11 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
-    <string name="tab1_name">Accounts</string>
-    <string name="tab2_name">Balances</string>
-    <string name="tab3_name">Transactions</string>
-    <string name="tab4_name">Reports</string>
+    <string name="accounts">Accounts</string>
+    <string name="balances">Balances</string>
+    <string name="transactions">Transactions</string>
+    <string name="reports">Reports</string>
+    <string name="dashboard">Dashboard</string>
 
     <string name="hint_account_name">Account name</string>
     <string name="hint_account_type">Account type</string>
@@ -74,6 +75,7 @@
     <string name="pref_transaction_reminder_weekdays">Select days of week</string>
     <string name="pref_default_currency">Default currency</string>
     <string name="question_transaction_reminder_decision">Do you want to set daily reminder about entering transactions?</string>
+    <string name="your_net_value">Your net value</string>
 
     <!--NON TRANSLATABLE KEYS-->
     <string name="transaction_reminder_enabled" translatable="false">transaction_reminder_enabled</string>

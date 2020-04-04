@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@id/dashboardFragment"
+        android:title="@string/dashboard"
+        android:icon="@drawable/ic_dashboard_black_24dp" />
+    <item android:id="@id/balanceFragment"
+        android:title="@string/balances"
+        android:icon="@drawable/ic_account_balance_wallet_black_24dp" />
+    <item android:id="@id/transactionFragment"
+        android:title="@string/transactions"
+        android:icon="@drawable/ic_receipt_black_24dp" />
+</menu>

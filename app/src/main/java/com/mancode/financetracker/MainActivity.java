@@ -52,10 +52,10 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         TabLayout tabLayout = findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab1_name));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab2_name));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab3_name));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab4_name));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.accounts));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.balances));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.transactions));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.reports));
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
