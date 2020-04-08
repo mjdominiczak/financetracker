@@ -7,9 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mancode.financetracker.R
-import com.mancode.financetracker.ui.UIUtils
 import com.mancode.financetracker.viewmodel.BalanceViewModel
 import kotlinx.android.synthetic.main.fragment_account_list.*
 import org.threeten.bp.LocalDate
@@ -20,6 +21,8 @@ import org.threeten.bp.LocalDate
 
 class BalanceFragment : Fragment(), BalanceRecyclerViewAdapter.ModifyRequestListener {
 
+    lateinit var navController: NavController
+
     private val adapter: BalanceRecyclerViewAdapter by lazy { BalanceRecyclerViewAdapter(this) }
     private val viewModel: BalanceViewModel by lazy {
         ViewModelProviders.of(this).get(BalanceViewModel::class.java)
@@ -27,7 +30,7 @@ class BalanceFragment : Fragment(), BalanceRecyclerViewAdapter.ModifyRequestList
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.netValues.observe(this, Observer { netValues -> adapter.submitList(netValues) })
+        viewModel.netValues.observe(viewLifecycleOwner, Observer { netValues -> adapter.submitList(netValues) })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -37,15 +40,17 @@ class BalanceFragment : Fragment(), BalanceRecyclerViewAdapter.ModifyRequestList
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        navController = findNavController()
         list.layoutManager = LinearLayoutManager(context)
         list.adapter = adapter
         fab.setOnClickListener {
-            UIUtils.showFullScreenDialog(fragmentManager, AddBalanceFragment.newInstance(LocalDate.now()))
+            navController.navigate(R.id.action_balanceFragment_to_addBalanceFragment)
         }
     }
 
     override fun onEditRequested(date: LocalDate) {
-        UIUtils.showFullScreenDialog(fragmentManager, AddBalanceFragment.newInstance(date))
+        val action = BalanceFragmentDirections.actionBalanceFragmentToAddBalanceFragment(date)
+        navController.navigate(action)
     }
 
     companion object {

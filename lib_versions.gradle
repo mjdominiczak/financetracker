@@ -18,6 +18,7 @@ androidx.espresso_core = "androidx.test.espresso:espresso-core:3.3.0-alpha02"
 def nav_version = "2.2.0-rc04"
 androidx.navigationfragment = "androidx.navigation:navigation-fragment-ktx:$nav_version"
 androidx.navigationUI = "androidx.navigation:navigation-ui-ktx:$nav_version"
+androidx.navigationsafeargs_gradleplugin = "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
 
 def room_version = "2.2.0-rc01"
 androidx.room = "androidx.room:room-runtime:$room_version"

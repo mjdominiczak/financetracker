@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 public class UIUtils {
 
+    @Deprecated
     public static void showFullScreenDialog (FragmentManager fragmentManager, Fragment fragment) {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 

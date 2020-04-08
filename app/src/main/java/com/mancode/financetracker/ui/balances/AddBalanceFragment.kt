@@ -5,11 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
-import com.mancode.financetracker.AddItemFragment
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.BalanceEntity
 import com.mancode.financetracker.database.pojos.BalanceExtended
@@ -23,7 +26,12 @@ import org.threeten.bp.LocalDate
 private val ViewGroup.views: List<View>
     get() = (0 until childCount).map { getChildAt(it) }
 
-class AddBalanceFragment(private val date: LocalDate) : AddItemFragment() {
+class AddBalanceFragment() : Fragment() {
+
+    lateinit var navController: NavController
+
+    private val args: AddBalanceFragmentArgs by navArgs()
+    val date: LocalDate by lazy { args.balanceDate ?: LocalDate.now() }
 
     private val viewModel by lazy {
         ViewModelProviders.of(this,
@@ -37,8 +45,9 @@ class AddBalanceFragment(private val date: LocalDate) : AddItemFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        navController = findNavController()
 
-        viewModel.accounts.observe(this, Observer { accounts ->
+        viewModel.accounts.observe(viewLifecycleOwner, Observer { accounts ->
             for (account in accounts) {
                 val balanceView = BalanceInputView(requireContext())
                 balanceView.setAccount(account)
@@ -47,7 +56,7 @@ class AddBalanceFragment(private val date: LocalDate) : AddItemFragment() {
             }
         })
 
-        viewModel.balances.observe(this, Observer { balances ->
+        viewModel.balances.observe(viewLifecycleOwner, Observer { balances ->
             if (container.childCount > 0) {
                 for (balanceView in container.views) {
                     updateBalanceWidget(balanceView as BalanceInputView, balances)
@@ -80,15 +89,16 @@ class AddBalanceFragment(private val date: LocalDate) : AddItemFragment() {
                 } else {
                     val request = OneTimeWorkRequest.Builder(UpdateStateWorker::class.java).build()
                     WorkManager.getInstance().enqueue(request)
-                    dismiss()
+                    navController.navigate(R.id.action_addBalanceFragment_to_balanceFragment)
                 }
             }
             false
         }
         toolbar.inflateMenu(R.menu.menu_dialog)
-        toolbar.setNavigationOnClickListener { dismiss() }
+        toolbar.setNavigationOnClickListener {
+            navController.navigate(R.id.action_addBalanceFragment_to_balanceFragment)
+        }
         toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
-
     }
 
     private fun updateBalanceWidget(balanceView: BalanceInputView, balances: List<BalanceExtended>) {
@@ -104,13 +114,6 @@ class AddBalanceFragment(private val date: LocalDate) : AddItemFragment() {
         }
         if (balanceFound) {
             balanceView.setActive(false)
-        }
-    }
-
-    companion object {
-
-        internal fun newInstance(date: LocalDate): AddBalanceFragment {
-            return AddBalanceFragment(date)
         }
     }
 }
