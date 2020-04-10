@@ -17,13 +17,14 @@ import android.widget.RadioGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.textfield.TextInputLayout;
-import com.mancode.financetracker.AddItemFragment;
 import com.mancode.financetracker.R;
 import com.mancode.financetracker.database.entity.AccountEntity;
 import com.mancode.financetracker.ui.SetDateView;
+import com.mancode.financetracker.ui.UIUtilsKt;
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor;
 import com.mancode.financetracker.viewmodel.AccountViewModel;
 
@@ -34,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class AddAccountFragment extends AddItemFragment {
+public class AddAccountFragment extends Fragment {
 
     private EditText nameField;
     private AutoCompleteTextView dropdownCurrency;
@@ -149,5 +150,10 @@ public class AddAccountFragment extends AddItemFragment {
         toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
 
         return view;
+    }
+
+    private void dismiss() {
+        UIUtilsKt.hideKeyboard(this);
+        getParentFragmentManager().popBackStack();
     }
 }
