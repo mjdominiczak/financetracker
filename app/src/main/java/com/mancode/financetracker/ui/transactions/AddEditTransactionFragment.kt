@@ -9,21 +9,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.mancode.financetracker.AddItemFragment
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.CategoryEntity
 import com.mancode.financetracker.database.entity.TransactionEntity
 import com.mancode.financetracker.database.entity.TransactionEntity.Companion.TYPE_INCOME
 import com.mancode.financetracker.database.entity.TransactionEntity.Companion.TYPE_OUTCOME
 import com.mancode.financetracker.database.pojos.AccountMini
+import com.mancode.financetracker.ui.hideKeyboard
 import com.mancode.financetracker.viewmodel.AddEditTransactionViewModel
 import kotlinx.android.synthetic.main.edit_transaction.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.*
 
-class AddEditTransactionFragment : AddItemFragment() {
+class AddEditTransactionFragment : Fragment() {
 
     /**
      * id not set if adding new transaction
@@ -244,6 +245,12 @@ class AddEditTransactionFragment : AddItemFragment() {
                 R.layout.dropdown_menu_popup_item,
                 outcomeCategories
         )
+    }
+
+    private fun dismiss() {
+        hideKeyboard()
+        parentFragmentManager.popBackStack()
+//        navController.navigate(R.id.action_addBalanceFragment_to_balanceFragment) TODO
     }
 
     companion object {

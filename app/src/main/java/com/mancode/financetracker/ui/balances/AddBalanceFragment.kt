@@ -17,6 +17,7 @@ import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.BalanceEntity
 import com.mancode.financetracker.database.pojos.BalanceExtended
 import com.mancode.financetracker.ui.BalanceInputView
+import com.mancode.financetracker.ui.hideKeyboard
 import com.mancode.financetracker.utils.InjectorUtils
 import com.mancode.financetracker.viewmodel.AddBalancesViewModel
 import com.mancode.financetracker.workers.UpdateStateWorker
@@ -89,15 +90,13 @@ class AddBalanceFragment() : Fragment() {
                 } else {
                     val request = OneTimeWorkRequest.Builder(UpdateStateWorker::class.java).build()
                     WorkManager.getInstance().enqueue(request)
-                    navController.navigate(R.id.action_addBalanceFragment_to_balanceFragment)
+                    dismiss()
                 }
             }
             false
         }
         toolbar.inflateMenu(R.menu.menu_dialog)
-        toolbar.setNavigationOnClickListener {
-            navController.navigate(R.id.action_addBalanceFragment_to_balanceFragment)
-        }
+        toolbar.setNavigationOnClickListener { dismiss() }
         toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
     }
 
@@ -115,5 +114,10 @@ class AddBalanceFragment() : Fragment() {
         if (balanceFound) {
             balanceView.setActive(false)
         }
+    }
+
+    private fun dismiss() {
+        hideKeyboard()
+        navController.navigate(R.id.action_addBalanceFragment_to_balanceFragment)
     }
 }
