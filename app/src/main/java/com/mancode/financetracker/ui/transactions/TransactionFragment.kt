@@ -6,8 +6,8 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.CheckBox
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,15 +32,7 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
     private val adapter: TransactionRecyclerViewAdapter by lazy {
         TransactionRecyclerViewAdapter(context!!, this)
     }
-    private val viewModel: TransactionViewModel by lazy {
-        ViewModelProviders.of(this).get(TransactionViewModel::class.java)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel.allTransactions.observe(viewLifecycleOwner,
-                Observer { transactions -> adapter.setTransactions(transactions) })
-    }
+    private val viewModel: TransactionViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -68,6 +60,8 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         navController = findNavController()
+        viewModel.allTransactions.observe(viewLifecycleOwner,
+                Observer { transactions -> adapter.setTransactions(transactions) })
         list.layoutManager = LinearLayoutManager(context)
         list.adapter = adapter
         fab.setOnClickListener {
