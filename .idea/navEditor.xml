@@ -19,7 +19,28 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_addBalanceFragment_to_balanceFragment2">
+                            <entry key="action_addBalanceFragment_to_balanceFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="addEditTransactionFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="260" />
+                            <option name="y" value="342" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_addEditTransactionFragment_to_transactionFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -91,6 +112,15 @@
                             <option name="x" value="33" />
                             <option name="y" value="342" />
                           </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_transactionFragment_to_addEditTransactionFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>

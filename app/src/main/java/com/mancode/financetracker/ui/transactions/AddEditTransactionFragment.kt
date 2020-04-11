@@ -10,7 +10,12 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.CategoryEntity
 import com.mancode.financetracker.database.entity.TransactionEntity
@@ -20,22 +25,13 @@ import com.mancode.financetracker.database.pojos.AccountMini
 import com.mancode.financetracker.ui.hideKeyboard
 import com.mancode.financetracker.viewmodel.AddEditTransactionViewModel
 import kotlinx.android.synthetic.main.edit_transaction.*
-import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeFormatter
-import java.util.*
 
 class AddEditTransactionFragment : Fragment() {
 
-    /**
-     * id not set if adding new transaction
-     */
-    private var argId: Int = 0
-    private var argDate: LocalDate? = null
-    private var argType: Int? = null
-    private var argDescription: String? = null
-    private var argValue: Double? = null
-    private var argAccountId: Int? = null
-    private var argCategoryId: Int? = null
+    private val args: AddEditTransactionFragmentArgs by navArgs()
+    private val transaction: LiveData<TransactionEntity> by lazy {
+        viewModel.getTransaction(args.transactionId)
+    }
 
     private val categories by lazy { ArrayList<CategoryEntity>() }
     private val incomeCategories by lazy { ArrayList<CategoryEntity>() }
@@ -44,6 +40,8 @@ class AddEditTransactionFragment : Fragment() {
     private val incomeSpinnerAdapter by lazy { obtainIncomeAdapter() }
     private val outcomeSpinnerAdapter by lazy { obtainOutcomeAdapter() }
     private val accountSpinnerAdapter by lazy { obtainAccountAdapter() }
+
+    private lateinit var navController: NavController
 
     private val viewModel by lazy {
         ViewModelProviders.of(this).get(AddEditTransactionViewModel::class.java)
@@ -62,16 +60,6 @@ class AddEditTransactionFragment : Fragment() {
             }
             accountsNamesAndIds.addAll(viewModel.accountsNamesAndIds)
         }
-
-        argId = arguments?.getInt(ARG_ID) ?: 0
-        if (arguments != null) {
-            argDate = LocalDate.parse(arguments?.getString(ARG_DATE))
-        }
-        argType = arguments?.getInt(ARG_TYPE)
-        argDescription = arguments?.getString(ARG_DESCRIPTION)
-        argValue = arguments?.getDouble(ARG_VALUE)
-        argAccountId = arguments?.getInt(ARG_ACCOUNT_ID)
-        argCategoryId = arguments?.getInt(ARG_CATEGORY_ID)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -81,6 +69,24 @@ class AddEditTransactionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        navController = findNavController()
+
+        if (args.transactionId != 0) {
+            transaction.observe(viewLifecycleOwner, Observer { transaction ->
+                transactionDate.date = transaction.date
+                if (transaction.type == TYPE_INCOME) {
+                    radioGroupType.check(R.id.rb_income)
+                } else {
+                    radioGroupType.check(R.id.rb_outcome)
+                }
+                descriptionField.setText(transaction.description)
+                valueField.setText(transaction.value.toString())
+                val accountIndex = accountsNamesAndIds.map { it.id }.indexOf(transaction.accountId)
+                accountDropdown.setText(accountsNamesAndIds[accountIndex].accountName, false)
+                val categoryIndex = categories.map { it.id }.indexOf(transaction.categoryId)
+                categoryDropdown.setText(categories[categoryIndex].category, false)
+            })
+        }
 
         radioGroupType.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
@@ -150,21 +156,6 @@ class AddEditTransactionFragment : Fragment() {
             }
         }
 
-        if (arguments != null) {
-            transactionDate.date = argDate
-            if (argType == TYPE_INCOME) {
-                radioGroupType.check(R.id.rb_income)
-            } else {
-                radioGroupType.check(R.id.rb_outcome)
-            }
-            descriptionField.setText(argDescription)
-            valueField.setText(argValue.toString())
-            val accountIndex = accountsNamesAndIds.map { it.id }.indexOf(argAccountId)
-            accountDropdown.setText(accountsNamesAndIds[accountIndex].accountName, false)
-            val categoryIndex = categories.map { it.id }.indexOf(argCategoryId)
-            categoryDropdown.setText(categories[categoryIndex].category, false)
-        }
-
         val toolbar = view.findViewById<Toolbar>(R.id.add_transaction_toolbar)
         toolbar.setOnMenuItemClickListener { item ->
             if (item.itemId == R.id.action_menu_save) {
@@ -182,17 +173,18 @@ class AddEditTransactionFragment : Fragment() {
                     val category = categories[
                             categories.map { it.category }.indexOf(categoryString)].id
                     val value = valueString.toDouble()
+                    val flags = if (args.transactionId == 0) 0 else transaction.value?.flags ?: 0
                     val transaction = TransactionEntity(
-                            argId,
+                            args.transactionId,
                             date,
                             type,
                             description,
                             value,
-                            0,
+                            flags,
                             account,
                             category
                     )
-                    if (argId == 0) {
+                    if (args.transactionId == 0) {
                         viewModel.insertTransaction(transaction)
                     } else {
                         viewModel.updateTransaction(transaction)
@@ -249,31 +241,6 @@ class AddEditTransactionFragment : Fragment() {
 
     private fun dismiss() {
         hideKeyboard()
-        parentFragmentManager.popBackStack()
-//        navController.navigate(R.id.action_addBalanceFragment_to_balanceFragment) TODO
-    }
-
-    companion object {
-
-        private const val ARG_ID = "id"
-        private const val ARG_DATE = "date"
-        private const val ARG_TYPE = "type"
-        private const val ARG_DESCRIPTION = "description"
-        private const val ARG_VALUE = "value"
-        private const val ARG_ACCOUNT_ID = "account_id"
-        private const val ARG_CATEGORY_ID = "category_id"
-
-        fun newInstance(transaction: TransactionEntity) =
-                AddEditTransactionFragment().apply {
-                    arguments = Bundle().apply {
-                        putInt(ARG_ID, transaction.id)
-                        putString(ARG_DATE, DateTimeFormatter.ISO_LOCAL_DATE.format(transaction.date))
-                        putInt(ARG_TYPE, transaction.type)
-                        putString(ARG_DESCRIPTION, transaction.description)
-                        putDouble(ARG_VALUE, transaction.value)
-                        putInt(ARG_ACCOUNT_ID, transaction.accountId)
-                        putInt(ARG_CATEGORY_ID, transaction.categoryId)
-                    }
-                }
+        navController.navigate(R.id.action_addEditTransactionFragment_to_transactionFragment)
     }
 }

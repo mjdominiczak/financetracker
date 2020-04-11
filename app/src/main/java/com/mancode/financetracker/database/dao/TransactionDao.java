@@ -50,6 +50,9 @@ public interface TransactionDao {
     @Query("SELECT * FROM transactions WHERE transaction_date = :date")
     List<TransactionEntity> getTransactionsForDate(LocalDate date);
 
+    @Query("SELECT * FROM transactions WHERE _id = :id")
+    LiveData<TransactionEntity> getTransaction(int id);
+
     @Query("UPDATE transactions " +
             "SET transaction_flags = ~(transaction_flags & :flag) & (transaction_flags | :flag) " +
             "WHERE _id = :id")

@@ -8,12 +8,13 @@ import android.widget.CheckBox
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.TransactionEntity
 import com.mancode.financetracker.ui.SetDateView
-import com.mancode.financetracker.ui.UIUtils
 import com.mancode.financetracker.ui.transactions.FilterQuery.*
 import com.mancode.financetracker.viewmodel.TransactionViewModel
 import kotlinx.android.synthetic.main.fragment_account_list.*
@@ -26,6 +27,8 @@ import org.threeten.bp.temporal.TemporalAdjusters
 
 class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyRequestListener {
 
+    private lateinit var navController: NavController
+
     private val adapter: TransactionRecyclerViewAdapter by lazy {
         TransactionRecyclerViewAdapter(context!!, this)
     }
@@ -35,7 +38,7 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.allTransactions.observe(this,
+        viewModel.allTransactions.observe(viewLifecycleOwner,
                 Observer { transactions -> adapter.setTransactions(transactions) })
     }
 
@@ -64,18 +67,19 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        navController = findNavController()
         list.layoutManager = LinearLayoutManager(context)
         list.adapter = adapter
         fab.setOnClickListener {
-            UIUtils.showFullScreenDialog(parentFragmentManager, AddEditTransactionFragment())
+            navController.navigate(R.id.action_transactionFragment_to_addEditTransactionFragment)
         }
         super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onEditRequested(transaction: TransactionEntity) {
-        UIUtils.showFullScreenDialog(
-                parentFragmentManager, AddEditTransactionFragment.newInstance(transaction)
-        )
+        val action = TransactionFragmentDirections
+                .actionTransactionFragmentToAddEditTransactionFragment(transaction.id)
+        navController.navigate(action)
     }
 
     override fun onDeleteRequested(transaction: TransactionEntity) {
@@ -121,8 +125,7 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
                     val index = timespanAdapter.getPosition(text.toString())
                     listSelection = index
                 }
-                setOnItemClickListener {
-                    _, _, position, _ -> handleTimespan(position) }
+                setOnItemClickListener { _, _, position, _ -> handleTimespan(position) }
             }
             fromDateView = dialogView.findViewById(R.id.sd_transaction_filter_from)
             toDateView = dialogView.findViewById(R.id.sd_transaction_filter_to)

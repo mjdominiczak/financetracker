@@ -29,7 +29,11 @@
     <fragment
         android:id="@+id/transactionFragment"
         android:name="com.mancode.financetracker.ui.transactions.TransactionFragment"
-        android:label="@string/transactions" />
+        android:label="@string/transactions" >
+        <action
+            android:id="@+id/action_transactionFragment_to_addEditTransactionFragment"
+            app:destination="@id/addEditTransactionFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addBalanceFragment"
         android:name="com.mancode.financetracker.ui.balances.AddBalanceFragment"
@@ -43,5 +47,18 @@
         <action
             android:id="@+id/action_addBalanceFragment_to_balanceFragment"
             app:destination="@id/balanceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addEditTransactionFragment"
+        android:name="com.mancode.financetracker.ui.transactions.AddEditTransactionFragment"
+        android:label="fragment_add_transaction"
+        tools:layout="@layout/fragment_add_transaction" >
+        <action
+            android:id="@+id/action_addEditTransactionFragment_to_transactionFragment"
+            app:destination="@id/transactionFragment" />
+        <argument
+            android:name="transactionId"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
 </navigation>

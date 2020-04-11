@@ -2,6 +2,7 @@ package com.mancode.financetracker.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import com.mancode.financetracker.database.entity.CategoryEntity
 import com.mancode.financetracker.database.entity.TransactionEntity
 import com.mancode.financetracker.database.pojos.AccountMini
@@ -16,6 +17,8 @@ class AddEditTransactionViewModel(application: Application) : AndroidViewModel(a
     private val repository: DataRepository = DataRepository.getInstance(application)
     val accountsNamesAndIds: List<AccountMini> by lazy { repository.accountsNamesAndIds }
     val categories: List<CategoryEntity> by lazy { repository.allCategories }
+
+    fun getTransaction(id: Int): LiveData<TransactionEntity> = repository.getTransaction(id)
 
     fun insertTransaction(transaction: TransactionEntity) {
         repository.insertTransaction(transaction)

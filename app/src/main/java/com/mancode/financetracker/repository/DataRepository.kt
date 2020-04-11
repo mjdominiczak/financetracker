@@ -60,6 +60,8 @@ class DataRepository private constructor(application: Application) {
         AsyncTask.execute { currencyDao.insertAll(currencies) }
     }
 
+    fun getTransaction(id: Int): LiveData<TransactionEntity> = transactionDao.getTransaction(id)
+
     fun insertTransaction(transaction: TransactionEntity) {
         AsyncTask.execute { transactionDao.insertTransaction(transaction) }
     }
