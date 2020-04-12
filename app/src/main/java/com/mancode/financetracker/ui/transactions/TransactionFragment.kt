@@ -17,7 +17,7 @@ import com.mancode.financetracker.database.entity.TransactionEntity
 import com.mancode.financetracker.ui.SetDateView
 import com.mancode.financetracker.ui.transactions.FilterQuery.*
 import com.mancode.financetracker.viewmodel.TransactionViewModel
-import kotlinx.android.synthetic.main.fragment_account_list.*
+import kotlinx.android.synthetic.main.fragment_transaction_list.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.temporal.TemporalAdjusters
 
@@ -55,15 +55,15 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_account_list, container, false)
+        return inflater.inflate(R.layout.fragment_transaction_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         navController = findNavController()
         viewModel.allTransactions.observe(viewLifecycleOwner,
                 Observer { transactions -> adapter.setTransactions(transactions) })
-        list.layoutManager = LinearLayoutManager(context)
-        list.adapter = adapter
+        transactions_list.layoutManager = LinearLayoutManager(context)
+        transactions_list.adapter = adapter
         fab.setOnClickListener {
             navController.navigate(R.id.action_transactionFragment_to_addEditTransactionFragment)
         }

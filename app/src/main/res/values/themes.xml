@@ -21,6 +21,7 @@
         <item name="innerSetDateViewStyle">@style/InnerSetDateView</item>
     </style>
 
+    <!-- TODO To be removed -->
     <style name="AppTheme.Dialog">
         <item name="android:background">@color/background</item>
     </style>
