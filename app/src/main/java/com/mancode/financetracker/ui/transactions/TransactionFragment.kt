@@ -34,25 +34,6 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
     }
     private val viewModel: TransactionViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setHasOptionsMenu(true)
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_transaction_fragment, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.app_bar_filter -> {
-                FilterDialog().show()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_transaction_list, container, false)
@@ -64,6 +45,16 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
                 Observer { transactions -> adapter.setTransactions(transactions) })
         transactions_list.layoutManager = LinearLayoutManager(context)
         transactions_list.adapter = adapter
+        transactions_toolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.app_bar_filter -> {
+                    FilterDialog().show()
+                    true
+                }
+                else -> false
+            }
+
+        }
         fab.setOnClickListener {
             navController.navigate(R.id.action_transactionFragment_to_addEditTransactionFragment)
         }
