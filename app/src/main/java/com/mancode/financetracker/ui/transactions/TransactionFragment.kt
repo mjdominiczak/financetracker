@@ -1,7 +1,9 @@
 package com.mancode.financetracker.ui.transactions
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.CheckBox
@@ -15,7 +17,17 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.TransactionEntity
 import com.mancode.financetracker.ui.SetDateView
-import com.mancode.financetracker.ui.transactions.FilterQuery.*
+import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.CUSTOM
+import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.LAST_MONTH
+import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.LAST_WEEK
+import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.PREVIOUS_MONTH
+import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.THIS_MONTH
+import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.THIS_YEAR
+import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.TYPE_ALL
+import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.TYPE_INCOME
+import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.TYPE_OUTCOME
+import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.UNCONSTRAINED
+import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.emptyQuery
 import com.mancode.financetracker.viewmodel.TransactionViewModel
 import kotlinx.android.synthetic.main.fragment_transaction_list.*
 import org.threeten.bp.LocalDate
@@ -123,7 +135,7 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
             val builder = MaterialAlertDialogBuilder(context!!)
             builder.setTitle(R.string.title_transaction_filter)
                     .setView(dialogView)
-                    .setNeutralButton(R.string.neutral_filter) { _, _ -> adapter.filter.filter(getEmptyQuery()) }
+                    .setNeutralButton(R.string.neutral_filter) { _, _ -> adapter.filter.filter(emptyQuery) }
                     .setNegativeButton(R.string.negative_filter) { _, _ -> }
                     .setPositiveButton(R.string.positive_filter) { _, _ ->
                         val newQuery = adapter.buildFilterQuery(
