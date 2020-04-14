@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.CheckBox
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -27,7 +28,6 @@ import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.TYPE_ALL
 import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.TYPE_INCOME
 import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.TYPE_OUTCOME
 import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.UNCONSTRAINED
-import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.emptyQuery
 import com.mancode.financetracker.viewmodel.TransactionViewModel
 import kotlinx.android.synthetic.main.fragment_transaction_list.*
 import org.threeten.bp.LocalDate
@@ -70,6 +70,19 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
         fab.setOnClickListener {
             navController.navigate(R.id.action_transactionFragment_to_addEditTransactionFragment)
         }
+        val searchView = transactions_toolbar.menu.findItem(R.id.search_transactions).actionView as SearchView
+        searchView.setIconifiedByDefault(false)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                adapter.updateFilterQueryDescription(query)
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter.updateFilterQueryDescription(newText)
+                return false
+            }
+        })
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -108,7 +121,7 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
             val query = adapter.filterQuery
             with(dropdownTransactionType) {
                 setAdapter(typeAdapter)
-                setText(typeAdapter.getItem(typeToPosition(query?.type ?: TYPE_ALL)), false)
+                setText(typeAdapter.getItem(typeToPosition(query.type)), false)
                 setOnClickListener {
                     val index = typeAdapter.getPosition(text.toString())
                     listSelection = index
@@ -117,7 +130,7 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
             dropdownTimespan = dialogView.findViewById(R.id.timespanField)
             with(dropdownTimespan) {
                 setAdapter(timespanAdapter)
-                setText(timespanAdapter.getItem(query?.timespan ?: UNCONSTRAINED), false)
+                setText(timespanAdapter.getItem(query.timespan), false)
                 setOnClickListener {
                     val index = timespanAdapter.getPosition(text.toString())
                     listSelection = index
@@ -127,24 +140,23 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
             fromDateView = dialogView.findViewById(R.id.sd_transaction_filter_from)
             toDateView = dialogView.findViewById(R.id.sd_transaction_filter_to)
             bookmarkFilter = dialogView.findViewById(R.id.bookmarkFilter)
-            bookmarkFilter.isChecked = query?.bookmarked() ?: false
-            handleTimespan(query?.timespan ?: UNCONSTRAINED)
+            bookmarkFilter.isChecked = query.bookmarked
+            handleTimespan(query.timespan)
         }
 
         internal fun show() {
             val builder = MaterialAlertDialogBuilder(context!!)
             builder.setTitle(R.string.title_transaction_filter)
                     .setView(dialogView)
-                    .setNeutralButton(R.string.neutral_filter) { _, _ -> adapter.filter.filter(emptyQuery) }
+                    .setNeutralButton(R.string.neutral_filter) { _, _ -> adapter.resetFilter() }
                     .setNegativeButton(R.string.negative_filter) { _, _ -> }
                     .setPositiveButton(R.string.positive_filter) { _, _ ->
-                        val newQuery = adapter.buildFilterQuery(
+                        adapter.updateFilterQuery(
                                 positionToType(typeAdapter.getPosition(dropdownTransactionType.text.toString())),
                                 fromDateView.date,
                                 toDateView.date,
                                 timespanAdapter.getPosition(dropdownTimespan.text.toString()),
                                 bookmarkFilter.isChecked)
-                        adapter.filter.filter(newQuery)
                     }
                     .show()
         }

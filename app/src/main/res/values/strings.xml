@@ -76,6 +76,7 @@
     <string name="pref_default_currency">Default currency</string>
     <string name="question_transaction_reminder_decision">Do you want to set daily reminder about entering transactions?</string>
     <string name="your_net_value">Your net value</string>
+    <string name="search">Search</string>
 
     <!--NON TRANSLATABLE KEYS-->
     <string name="transaction_reminder_enabled" translatable="false">transaction_reminder_enabled</string>

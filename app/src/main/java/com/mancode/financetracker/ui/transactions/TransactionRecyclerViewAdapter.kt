@@ -30,8 +30,7 @@ class TransactionRecyclerViewAdapter(
     private var allTransactions: List<TransactionFull>? = null
 
     private var filteredTransactions: List<TransactionFull>? = null
-    var filterQuery: FilterQuery? = null
-        private set
+    val filterQuery = FilterQuery()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.fragment_transaction, parent, false)
@@ -57,9 +56,19 @@ class TransactionRecyclerViewAdapter(
         return TransactionFilter()
     }
 
-    fun buildFilterQuery(type: Int, from: LocalDate?, to: LocalDate?, timespan: Int, bookmarked: Boolean): String {
-        filterQuery = FilterQuery(type, from, to, timespan, bookmarked)
-        return filterQuery!!.query
+    fun resetFilter() {
+        filterQuery.resetExceptDescription()
+        filter.filter("")
+    }
+
+    fun updateFilterQuery(type: Int, from: LocalDate?, to: LocalDate?, timespan: Int, bookmarked: Boolean) {
+        filterQuery.update(type = type, from = from, to = to, timespan = timespan, bookmark = bookmarked)
+        filter.filter("")
+    }
+
+    fun updateFilterQueryDescription(description: String?) {
+        filterQuery.update(description = description)
+        filter.filter("")
     }
 
     private class DiffCallback : DiffUtil.ItemCallback<TransactionFull>() {
@@ -122,15 +131,14 @@ class TransactionRecyclerViewAdapter(
 
     private inner class TransactionFilter : Filter() {
         override fun performFiltering(charSequence: CharSequence): FilterResults {
-            val query = charSequence.toString()
+            val query = filterQuery.query
             val filterResults = FilterResults()
             if (query.isEmpty()) {
                 filterResults.values = allTransactions
             } else {
-                filterQuery = FilterQuery(query)
                 val filteredList: MutableList<TransactionFull> = ArrayList()
                 for (transaction in allTransactions!!) {
-                    if (filterQuery!!.isMatch(transaction)) {
+                    if (filterQuery.isMatch(transaction)) {
                         filteredList.add(transaction)
                     }
                 }

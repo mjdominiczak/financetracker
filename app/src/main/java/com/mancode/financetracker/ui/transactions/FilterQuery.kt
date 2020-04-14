@@ -4,75 +4,89 @@ import com.mancode.financetracker.database.converter.DateConverter.toDate
 import com.mancode.financetracker.database.converter.DateConverter.toString
 import com.mancode.financetracker.database.pojos.TransactionFull
 import org.threeten.bp.LocalDate
+import java.util.Locale.ROOT
 
 class FilterQuery {
-    var query: String
-        private set
-    private lateinit var mTokens: Array<String>
-
-    internal constructor(query: String) {
-        this.query = query
-        tokenize()
+    init {
+        updateQuery()
     }
 
-    internal constructor(type: Int, from: LocalDate?, to: LocalDate?, timespan: Int, bookmark: Boolean) {
-        query = type.toString() +
+    // query might be removed
+    var query: String = ""
+    var description: String = ""
+        private set(value) {
+            field = value.trim().replace(SEPARATOR, "")
+        }
+    var type: Int = TYPE_ALL
+        private set
+    var fromDate: LocalDate? = null
+        private set
+    var toDate: LocalDate? = null
+        private set
+    var timespan: Int = UNCONSTRAINED
+        private set
+    var bookmarked: Boolean = false
+        private set
+
+    fun update(
+            description: String? = null,
+            type: Int? = null,
+            from: LocalDate? = null,
+            to: LocalDate? = null,
+            timespan: Int? = null,
+            bookmark: Boolean? = null
+    ) {
+        if (description != null) this.description = description
+        if (type != null) this.type = type
+        if (from != null) this.fromDate = from
+        if (to != null) this.toDate = to
+        if (timespan != null) this.timespan = timespan
+        if (bookmark != null) this.bookmarked = bookmark
+        updateQuery()
+    }
+
+    fun resetExceptDescription() {
+        update(
+                type = TYPE_ALL,
+                timespan = UNCONSTRAINED,
+                bookmark = false
+        )
+    }
+
+    private fun updateQuery() {
+        query = description +
                 SEPARATOR +
-                toString(from) +
+                type +
                 SEPARATOR +
-                toString(to) +
+                toString(fromDate) +
+                SEPARATOR +
+                toString(toDate) +
                 SEPARATOR +
                 timespan +
                 SEPARATOR +
-                bookmark
-        tokenize()
+                bookmarked
     }
 
-    private fun tokenize() {
-        mTokens = query.split(SEPARATOR).toTypedArray()
-    }
-
-    val type: Int
-        get() {
-            val token = mTokens[TOKEN_TYPE]
-            return if (token.isNotEmpty()) token.toInt() else TYPE_ALL
-        }
-
-    private val fromDate: LocalDate?
-        get() = toDate(mTokens[TOKEN_FROM_DATE])
-
-    private val toDate: LocalDate?
-        get() = toDate(mTokens[TOKEN_TO_DATE])
-
-    val timespan: Int
-        get() {
-            val token = mTokens[TOKEN_TIMESPAN]
-            return if (token.isNotEmpty()) token.toInt() else UNCONSTRAINED
-        }
-
-    fun bookmarked(): Boolean {
-        val token = mTokens[TOKEN_BOOKMARK]
-        return token.isNotEmpty() && java.lang.Boolean.parseBoolean(token)
+    private fun updateFields() {
+        val tokens = query.split(SEPARATOR)
+        description = tokens[0]
+        type = if (tokens[1].isNotEmpty()) tokens[1].toInt() else TYPE_ALL
+        fromDate = toDate(tokens[2])
+        toDate = toDate(tokens[3])
+        timespan = if (tokens[4].isNotEmpty()) tokens[4].toInt() else UNCONSTRAINED
+        bookmarked = tokens[5].isNotEmpty() && tokens[5].toBoolean()
     }
 
     fun isMatch(transaction: TransactionFull): Boolean {
-        val type = type
-        val fromDate = fromDate
-        val toDate = toDate
-        return (type == TYPE_ALL || type == transaction.transaction.type) &&
+        return (description.isEmpty() || transaction.transaction.description
+                .toLowerCase(ROOT).contains(description.toLowerCase(ROOT))) &&
+                (type == TYPE_ALL || type == transaction.transaction.type) &&
                 (fromDate == null || !transaction.transaction.date.isBefore(fromDate)) &&
                 (toDate == null || !transaction.transaction.date.isAfter(toDate)) &&
-                (!bookmarked() || transaction.transaction.flags == 1)
+                (!bookmarked || transaction.transaction.flags == 1)
     }
 
     companion object {
-        private const val TOKENS_COUNT = 5
-        private const val TOKEN_TYPE = 0
-        private const val TOKEN_FROM_DATE = 1
-        private const val TOKEN_TO_DATE = 2
-        private const val TOKEN_TIMESPAN = 3
-        private const val TOKEN_BOOKMARK = 4
-
         const val TYPE_ALL = 0
         const val TYPE_INCOME = 1
         const val TYPE_OUTCOME = -1
@@ -86,14 +100,5 @@ class FilterQuery {
         const val CUSTOM = 6
 
         private const val SEPARATOR = ","
-
-        val emptyQuery: String
-            get() {
-                val sb = StringBuilder()
-                for (i in 0 until TOKENS_COUNT - 1) {
-                    sb.append(SEPARATOR)
-                }
-                return sb.toString()
-            }
     }
 }
