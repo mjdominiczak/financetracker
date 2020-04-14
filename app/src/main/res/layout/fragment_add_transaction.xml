@@ -3,23 +3,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
     android:clickable="true"
     android:focusable="true"
     tools:context="com.mancode.financetracker.ui.transactions.AddEditTransactionFragment">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/add_transaction_toolbar"
-        style="@style/Widget.MaterialComponents.Toolbar"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbarlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        app:title="@string/title_add_transaction" />
+        android:layout_alignParentTop="true">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/add_transaction_toolbar"
+            style="@style/Widget.MaterialComponents.Toolbar.Surface"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="@string/title_add_transaction" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <include
         layout="@layout/edit_transaction"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/add_transaction_toolbar" />
+        android:layout_below="@id/appbarlayout" />
 
 </RelativeLayout>
