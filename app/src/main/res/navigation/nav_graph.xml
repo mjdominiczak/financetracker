@@ -21,7 +21,7 @@
     <fragment
         android:id="@+id/balanceFragment"
         android:name="com.mancode.financetracker.ui.balances.BalanceFragment"
-        android:label="@string/balances" >
+        android:label="@string/balances">
         <action
             android:id="@+id/action_balanceFragment_to_addBalanceFragment"
             app:destination="@id/addBalanceFragment" />
@@ -29,7 +29,7 @@
     <fragment
         android:id="@+id/transactionFragment"
         android:name="com.mancode.financetracker.ui.transactions.TransactionFragment"
-        android:label="@string/transactions" >
+        android:label="@string/transactions">
         <action
             android:id="@+id/action_transactionFragment_to_addEditTransactionFragment"
             app:destination="@id/addEditTransactionFragment" />
@@ -38,12 +38,12 @@
         android:id="@+id/addBalanceFragment"
         android:name="com.mancode.financetracker.ui.balances.AddBalanceFragment"
         android:label="@string/title_add_balance"
-        tools:layout="@layout/fragment_add_balance" >
+        tools:layout="@layout/fragment_add_balance">
         <argument
             android:name="balanceDate"
+            android:defaultValue="@null"
             app:argType="org.threeten.bp.LocalDate"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
         <action
             android:id="@+id/action_addBalanceFragment_to_balanceFragment"
             app:destination="@id/balanceFragment" />
@@ -52,13 +52,20 @@
         android:id="@+id/addEditTransactionFragment"
         android:name="com.mancode.financetracker.ui.transactions.AddEditTransactionFragment"
         android:label="fragment_add_transaction"
-        tools:layout="@layout/fragment_add_transaction" >
+        tools:layout="@layout/fragment_add_transaction">
         <action
             android:id="@+id/action_addEditTransactionFragment_to_transactionFragment"
             app:destination="@id/transactionFragment" />
         <argument
             android:name="transactionId"
-            app:argType="integer"
-            android:defaultValue="0" />
+            android:defaultValue="0"
+            app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.mancode.financetracker.SettingsFragment"
+        android:label="@string/action_settings" />
+    <action
+        android:id="@+id/action_global_settingsFragment"
+        app:destination="@id/settingsFragment" />
 </navigation>

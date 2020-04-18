@@ -19,6 +19,7 @@
         <item name="dropdownInputStyle">@style/DropdownInputStyle</item>
         <item name="setDateViewStyle">@style/SetDateView</item>
         <item name="innerSetDateViewStyle">@style/InnerSetDateView</item>
+        <item name="preferenceTheme">@style/AppTheme.PreferenceThemeOverlay</item>
     </style>
 
     <!-- TODO To be removed -->
