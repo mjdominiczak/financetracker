@@ -1,13 +1,11 @@
 package com.mancode.financetracker.notifications
 
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.mancode.financetracker.MainActivity
-import com.mancode.financetracker.MyTabsPagerAdapter
+import androidx.navigation.NavDeepLinkBuilder
 import com.mancode.financetracker.R
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 
@@ -17,12 +15,10 @@ class ReminderNotificationReceiver : BroadcastReceiver() {
         if (!PreferenceAccessor.isTransactionReminderValid())
             return
 
-        val tapIntent = Intent(context, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putExtra(MainActivity.EXTRA_VISIBLE_FRAGMENT, MyTabsPagerAdapter.TRANSACTION_FRAGMENT)
-        }
-        val pendingIntent = PendingIntent.getActivity(context, 0, tapIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = NavDeepLinkBuilder(context)
+                .setGraph(R.navigation.nav_graph)
+                .setDestination(R.id.addEditTransactionFragment)
+                .createPendingIntent()
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID_REMINDER)
                 .setContentTitle(context.getString(R.string.notification_title_reminder))
@@ -35,7 +31,7 @@ class ReminderNotificationReceiver : BroadcastReceiver() {
                 .setWhen(System.currentTimeMillis())
                 .setShowWhen(true)
                 .build()
-        val notificationManager = NotificationManagerCompat.from(context)
-        notificationManager.notify(0, notification)
+
+        NotificationManagerCompat.from(context).notify(0, notification)
     }
 }

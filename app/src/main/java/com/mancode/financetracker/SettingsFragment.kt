@@ -19,9 +19,12 @@ import androidx.preference.PreferenceFragmentCompat
 import com.mancode.financetracker.notifications.CHANNEL_ID_REMINDER
 import com.mancode.financetracker.notifications.cancelTransactionReminder
 import com.mancode.financetracker.notifications.registerTransactionReminder
+import com.mancode.financetracker.ui.MainActivityNav
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 import com.mancode.financetracker.ui.prefs.TimePreference
 import com.mancode.financetracker.ui.prefs.TimePreferenceDialogFragment
+import com.mancode.financetracker.utils.checkPermissionAndExport
+import com.mancode.financetracker.utils.checkPermissionAndImport
 import kotlinx.android.synthetic.main.fragment_settings.*
 import org.joda.money.CurrencyUnit
 import org.threeten.bp.LocalTime
@@ -59,6 +62,17 @@ class SettingsFragment : PreferenceFragmentCompat(),
             entryValues = entries
             value = PreferenceAccessor.defaultCurrency
             summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
+        }
+
+        val exportPref = findPreference<Preference>("key_export")
+        exportPref?.setOnPreferenceClickListener {
+            (activity as MainActivityNav).checkPermissionAndExport()
+            true
+        }
+        val importPref = findPreference<Preference>("key_import")
+        importPref?.setOnPreferenceClickListener {
+            (activity as MainActivityNav).checkPermissionAndImport()
+            true
         }
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -113,5 +127,4 @@ class SettingsFragment : PreferenceFragmentCompat(),
             notificationManager?.createNotificationChannel(channel)
         }
     }
-
 }

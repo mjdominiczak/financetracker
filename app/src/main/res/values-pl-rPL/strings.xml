@@ -3,8 +3,8 @@
     <string name="app_name">Finance Tracker</string>
     <string name="action_settings">Ustawienia</string>
     <string name="action_clearDB">Wyczyść bazę</string>
-    <string name="action_exportDB">Eksportuj dane do pliku</string>
-    <string name="action_restoreDB">Przywróć dane z pliku</string>
+    <string name="action_exportData">Eksportuj dane do pliku</string>
+    <string name="action_importData">Przywróć dane z pliku</string>
     <string name="action_clearLastBalance">Usuń ostatni bilans</string>
     <string name="title_add_account">Dodaj konto</string>
     <string name="title_add_balance">Dodaj bilans</string>

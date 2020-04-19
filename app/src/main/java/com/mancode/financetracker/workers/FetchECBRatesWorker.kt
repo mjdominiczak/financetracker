@@ -4,8 +4,8 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import android.util.Xml
-import androidx.work.Worker
-import androidx.work.WorkerParameters
+import androidx.appcompat.app.AppCompatActivity
+import androidx.work.*
 import com.mancode.financetracker.database.entity.CurrencyEntity
 import com.mancode.financetracker.repository.DataRepository
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor
@@ -15,6 +15,18 @@ import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import java.io.Reader
+
+fun AppCompatActivity.fetchExchangeRates() {
+    val date = PreferenceAccessor.ratesFetchDate
+    if (date != null && date.isEqual(LocalDate.now())) return
+    val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+    val fetchWork = OneTimeWorkRequest.Builder(FetchECBRatesWorker::class.java)
+            .setConstraints(constraints)
+            .build()
+    WorkManager.getInstance(applicationContext).enqueue(fetchWork)
+}
 
 class FetchECBRatesWorker(context: Context, params: WorkerParameters)
     : Worker(context, params) {

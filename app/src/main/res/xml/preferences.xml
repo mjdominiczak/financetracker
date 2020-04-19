@@ -42,4 +42,12 @@
             android:key="@string/default_currency"
             android:title="@string/pref_default_currency" />
     </PreferenceCategory>
+
+    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+
+        <Preference android:key="key_export"
+            android:title="@string/action_exportData" />
+        <Preference android:key="key_import"
+            android:title="@string/action_importData" />
+    </PreferenceCategory>
 </androidx.preference.PreferenceScreen>

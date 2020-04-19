@@ -4,15 +4,21 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mancode.financetracker.R
-import com.mancode.financetracker.SettingsActivity
+import com.mancode.financetracker.ui.MainActivityNav
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 import org.threeten.bp.LocalTime
 import org.threeten.bp.ZonedDateTime
 
 const val CHANNEL_ID_REMINDER = "channel_reminder"
+
+fun registerReminderWithProperty(context: Context) {
+    if (!PreferenceAccessor.transactionReminderEnabled) return
+
+    val time = PreferenceAccessor.transactionReminderTime
+    registerTransactionReminder(context, time)
+}
 
 fun registerTransactionReminder(context: Context?, time: LocalTime) {
     if (context == null) return
@@ -47,7 +53,8 @@ private fun constructPendingIntent(context: Context): PendingIntent {
     return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 }
 
-fun resetRemindersAndShowDecisionDialog(context: Context) {
+fun MainActivityNav.resetRemindersAndShowDecisionDialog() {
+    val context = this
     if (PreferenceAccessor.transactionReminderDecided) {
         if (PreferenceAccessor.transactionReminderEnabled) {
             registerReminderWithProperty(context)
@@ -61,8 +68,8 @@ fun resetRemindersAndShowDecisionDialog(context: Context) {
     builder.setMessage(context.getString(R.string.question_transaction_reminder_decision))
             .setPositiveButton(context.getString(R.string.yes)) { _, _ ->
                 registerReminderWithProperty(context)
-                val intent = Intent(context, SettingsActivity::class.java)
-                ContextCompat.startActivity(context, intent, null)
+                PreferenceAccessor.transactionReminderDecided = true
+                navController.navigate(R.id.action_global_settingsFragment)
             }
             .setNegativeButton(context.getString(R.string.no)) { _, _ ->
                 PreferenceAccessor.transactionReminderDecided = true
@@ -70,11 +77,4 @@ fun resetRemindersAndShowDecisionDialog(context: Context) {
                 cancelTransactionReminder(context)
             }
             .create().show()
-}
-
-fun registerReminderWithProperty(context: Context) {
-    if (!PreferenceAccessor.transactionReminderEnabled) return
-
-    val time = PreferenceAccessor.transactionReminderTime
-    registerTransactionReminder(context, time)
 }
