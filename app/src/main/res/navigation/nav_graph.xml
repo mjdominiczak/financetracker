@@ -46,7 +46,7 @@
             app:nullable="true" />
         <action
             android:id="@+id/action_addBalanceFragment_to_balanceFragment"
-            app:destination="@id/balanceFragment" />
+            app:popUpTo="@id/balanceFragment" />
     </fragment>
     <fragment
         android:id="@+id/addEditTransactionFragment"
@@ -55,7 +55,7 @@
         tools:layout="@layout/fragment_add_transaction">
         <action
             android:id="@+id/action_addEditTransactionFragment_to_transactionFragment"
-            app:destination="@id/transactionFragment" />
+            app:popUpTo="@id/transactionFragment" />
         <argument
             android:name="transactionId"
             android:defaultValue="0"
