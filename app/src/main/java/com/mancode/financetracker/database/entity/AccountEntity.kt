@@ -31,4 +31,9 @@ data class AccountEntity(
     override fun toString(): String {
         return accountName
     }
+
+    companion object {
+        const val TYPE_ASSETS = 1
+        const val TYPE_LIABILITIES = -1
+    }
 }

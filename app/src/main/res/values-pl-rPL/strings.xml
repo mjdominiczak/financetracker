@@ -33,6 +33,11 @@
     <string name="hint_transaction_value">Wartość</string>
     <string name="assets">Majątek</string>
     <string name="liabilities">Zobowiązania</string>
+    <plurals name="accounts_number_par">
+        <item quantity="one">(%1$d konto)</item>
+        <item quantity="few">(%1$d konta)</item>
+        <item quantity="many">(%1$d kont)</item>
+    </plurals>
     <string name="account_closed">Konto zamknięte</string>
     <string name="income">Przychody</string>
     <string name="outcome">Wydatki</string>

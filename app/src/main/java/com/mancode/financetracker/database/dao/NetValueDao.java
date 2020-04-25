@@ -30,6 +30,9 @@ public interface NetValueDao {
     @Query("SELECT * FROM net_values WHERE date >= :date ORDER BY date ASC LIMIT 1")
     LiveData<NetValue> getValueAfter(LocalDate date);
 
+    @Query("SELECT value FROM net_values WHERE date = DATE('now', 'localtime') LIMIT 1")
+    LiveData<Double> getActualNetValue();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<NetValue> netValues);
 

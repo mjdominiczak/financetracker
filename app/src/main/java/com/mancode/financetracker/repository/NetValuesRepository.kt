@@ -6,6 +6,7 @@ import com.mancode.financetracker.database.entity.NetValue
 
 class NetValuesRepository private constructor(netValueDao: NetValueDao) {
 
+    val actualNetValue: LiveData<Double> = netValueDao.actualNetValue
     val netValues: LiveData<List<NetValue>> = netValueDao.values
     val keyedNetValues: LiveData<List<NetValue>> = netValueDao.keyedValues
 

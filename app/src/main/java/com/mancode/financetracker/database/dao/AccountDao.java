@@ -41,6 +41,9 @@ public interface AccountDao {
             "WHERE account_open_date <= :date")
     LiveData<List<AccountNameCurrency>> getAccountsActiveOn(LocalDate date);
 
+    @Query("SELECT COUNT(*) FROM accounts WHERE account_type = :type")
+    LiveData<Integer> getActiveAccountsOfType(int type);
+
     @Insert
     void insertAccount(AccountEntity account);
 

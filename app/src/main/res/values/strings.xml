@@ -35,6 +35,11 @@
     <string name="hint_transaction_value">Value</string>
     <string name="assets">Assets</string>
     <string name="liabilities">Liabilities</string>
+    <plurals name="accounts_number_par">
+        <item quantity="zero">""</item>
+        <item quantity="one">(%1$d account)</item>
+        <item quantity="other">(%1$d accounts)</item>
+    </plurals>
     <string name="account_closed">Account closed</string>
     <string name="income">Income</string>
     <string name="outcome">Outcome</string>
