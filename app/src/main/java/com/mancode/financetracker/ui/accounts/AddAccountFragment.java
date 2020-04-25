@@ -1,6 +1,5 @@
 package com.mancode.financetracker.ui.accounts;
 
-
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -18,7 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.mancode.financetracker.R;
@@ -33,7 +33,6 @@ import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class AddAccountFragment extends Fragment {
 
@@ -51,14 +50,10 @@ public class AddAccountFragment extends Fragment {
     public AddAccountFragment() {
     }
 
-    static AddAccountFragment newInstance() {
-        return new AddAccountFragment();
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        accountViewModel = ViewModelProviders.of(this).get(AccountViewModel.class);
+        accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
     }
 
     @Override
@@ -123,7 +118,7 @@ public class AddAccountFragment extends Fragment {
             if (item.getItemId() == R.id.action_menu_save) {
                 String name = nameField.getText().toString();
                 int type = radioGroupType.getCheckedRadioButtonId() == R.id.rb_assets ?
-                        1 : -1;
+                        AccountEntity.TYPE_ASSETS : AccountEntity.TYPE_LIABILITIES;
                 LocalDate openDate = this.openDate.getDate();
                 LocalDate closeDate = this.closeDate.getDate();
                 String currency = dropdownCurrency.getText().toString();
@@ -154,6 +149,7 @@ public class AddAccountFragment extends Fragment {
 
     private void dismiss() {
         UIUtilsKt.hideKeyboard(this);
-        getParentFragmentManager().popBackStack();
+        NavHostFragment.findNavController(this).
+                navigate(R.id.action_addAccountFragment_to_accountFragment);
     }
 }

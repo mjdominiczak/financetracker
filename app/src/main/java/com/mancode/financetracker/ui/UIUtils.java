@@ -14,21 +14,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 public class UIUtils {
 
-    @Deprecated
-    public static void showFullScreenDialog (FragmentManager fragmentManager, Fragment fragment) {
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-//        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-//        transaction.addToBackStack(null);
-//        addAccountFragment.show(transaction, "addAccountFragment");
-//
-        transaction
-                .setCustomAnimations(
-                    android.R.animator.fade_in, android.R.animator.fade_out,
-                    android.R.animator.fade_in, android.R.animator.fade_out)
-                .add(android.R.id.content, fragment).addToBackStack(null).commit();
-    }
-
     public static String getFormattedMoney(double value, String currencyCode) {
         Currency currency = Currency.getInstance(currencyCode);
         NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
