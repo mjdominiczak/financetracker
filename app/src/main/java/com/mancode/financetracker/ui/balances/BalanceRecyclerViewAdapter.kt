@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.NetValue
-import com.mancode.financetracker.ui.UIUtils
-import com.mancode.financetracker.ui.prefs.PreferenceAccessor
+import com.mancode.financetracker.ui.setFormattedMoney
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_balance.view.*
 import org.threeten.bp.LocalDate
@@ -53,7 +52,7 @@ class BalanceRecyclerViewAdapter(private val modifyRequestListener: ModifyReques
         fun bindTo(netValue: NetValue) {
             balanceDate = netValue.date
             containerView.balanceDate.text = balanceDate.format(DateTimeFormatter.ISO_LOCAL_DATE.withLocale(Locale.getDefault()))
-            containerView.balanceDaily.text = UIUtils.getFormattedMoney(netValue.value, PreferenceAccessor.defaultCurrency)
+            containerView.balanceDaily.setFormattedMoney(netValue.value)
         }
     }
 

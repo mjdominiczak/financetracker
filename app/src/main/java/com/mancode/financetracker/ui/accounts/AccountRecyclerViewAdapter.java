@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.mancode.financetracker.R;
 import com.mancode.financetracker.database.views.AccountExtended;
-import com.mancode.financetracker.ui.UIUtils;
+import com.mancode.financetracker.ui.UIUtilsKt;
 
 import java.util.List;
 
@@ -82,9 +82,7 @@ public class AccountRecyclerViewAdapter
             mIdView.setText(String.valueOf(mAccount.id));
             mContentView.setText(mAccount.accountName);
             if (mAccount.balanceCheckDate != null) {
-                String balanceText = UIUtils.getFormattedMoney(
-                        mAccount.balanceValue, mAccount.accountCurrency);
-                mBalanceView.setText(balanceText);
+                UIUtilsKt.setFormattedMoney(mBalanceView, mAccount.balanceValue, mAccount.accountCurrency);
                 if (mAccount.balanceValue != 0) {
                     int color = mAccount.accountType == 1 ?
                             ContextCompat.getColor(mContext, R.color.colorPositiveValue) :

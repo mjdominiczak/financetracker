@@ -37,7 +37,7 @@ class DashboardFragment : Fragment(), View.OnClickListener, Toolbar.OnMenuItemCl
         })
         viewModel.actualNetValue.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                actualNetValue.text = UIUtils.getFormattedMoney(it, PreferenceAccessor.defaultCurrency)
+                actualNetValue.setFormattedMoney(it)
             }
         })
         netValueChart.setOnClickListener(this)

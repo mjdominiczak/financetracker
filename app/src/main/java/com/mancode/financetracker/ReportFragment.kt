@@ -13,7 +13,7 @@ import co.csadev.kellocharts.gesture.ContainerScrollType
 import co.csadev.kellocharts.model.*
 import com.mancode.financetracker.database.entity.NetValue
 import com.mancode.financetracker.database.entity.TransactionEntity
-import com.mancode.financetracker.ui.UIUtils
+import com.mancode.financetracker.ui.setFormattedMoney
 import com.mancode.financetracker.viewmodel.ReportViewModel
 import com.mancode.financetracker.viewmodel.ReportViewModel.Companion.MONTH_NEXT
 import com.mancode.financetracker.viewmodel.ReportViewModel.Companion.MONTH_PREVIOUS
@@ -122,10 +122,10 @@ class ReportFragment : Fragment() {
     private fun updateViews() {
         val reportRange = viewModel.report.from.toString() + " - " + viewModel.report.to.toString()
         btnRange.text = reportRange
-        tvIncome.text = UIUtils.getFormattedMoney(viewModel.report.income, "PLN") // TODO hardcoded currency
-        tvRegisteredOutcome.text = UIUtils.getFormattedMoney(viewModel.report.registeredOutcome, "PLN") // TODO hardcoded currency
-        tvUnregisteredOutcome.text = UIUtils.getFormattedMoney(viewModel.report.unregisteredOutcome, "PLN") // TODO hardcoded currency
-        tvBalance.text = UIUtils.getFormattedMoney(viewModel.report.balance, "PLN") // TODO hardcoded currency
+        tvIncome.setFormattedMoney(viewModel.report.income)
+        tvRegisteredOutcome.setFormattedMoney(viewModel.report.registeredOutcome)
+        tvUnregisteredOutcome.setFormattedMoney(viewModel.report.unregisteredOutcome)
+        tvBalance.setFormattedMoney(viewModel.report.balance)
         btnNext.isEnabled = !viewModel.report.to.isAfter(LocalDate.now())
         updateNetValueViews()
         adjustChartViewport()
@@ -136,8 +136,7 @@ class ReportFragment : Fragment() {
         val value2Set = viewModel.report.netValue2 != null
         if (value1Set) {
             tvNetValueDate1.text = viewModel.report.netValue1.date.toString()
-            tvNetValue1.text = UIUtils.getFormattedMoney(
-                    viewModel.report.netValue1.value, "PLN") // TODO hardcoded currency
+            tvNetValue1.setFormattedMoney(viewModel.report.netValue1.value)
             btnPrev.isEnabled = true
         } else {
             tvNetValueDate1.text = "n/a"
@@ -146,15 +145,13 @@ class ReportFragment : Fragment() {
         }
         if (value2Set) {
             tvNetValueDate2.text = viewModel.report.netValue2.date.toString()
-            tvNetValue2.text = UIUtils.getFormattedMoney(
-                    viewModel.report.netValue2.value, "PLN") // TODO hardcoded currency
+            tvNetValue2.setFormattedMoney(viewModel.report.netValue2.value)
         } else {
             tvNetValueDate2.text = "n/a"
             tvNetValue2.text = "n/a"
         }
         if (value1Set && value2Set) {
-            tvCalcOutcome.text = UIUtils.getFormattedMoney(
-                    viewModel.report.calculatedOutcome, "PLN") // TODO hardcoded currency
+            tvCalcOutcome.setFormattedMoney(viewModel.report.calculatedOutcome)
         } else {
             tvCalcOutcome.text = "n/a"
         }

@@ -14,7 +14,7 @@ import com.mancode.financetracker.R
 import com.mancode.financetracker.database.converter.DateConverter
 import com.mancode.financetracker.database.entity.TransactionEntity
 import com.mancode.financetracker.database.pojos.TransactionFull
-import com.mancode.financetracker.ui.UIUtils
+import com.mancode.financetracker.ui.setFormattedMoney
 import org.threeten.bp.LocalDate
 import java.util.*
 
@@ -94,8 +94,7 @@ class TransactionRecyclerViewAdapter(
         fun init(transaction: TransactionFull) {
             mTransaction = transaction
             tvDate.text = DateConverter.toString(mTransaction!!.transaction.date)
-            tvValue.text = UIUtils.getFormattedMoney(
-                    mTransaction!!.transaction.value, mTransaction!!.currency)
+            tvValue.setFormattedMoney(mTransaction!!.transaction.value, mTransaction!!.currency)
             val color = if (mTransaction!!.transaction.type == TransactionEntity.TYPE_INCOME)
                 ContextCompat.getColor(context, R.color.colorPositiveValue)
             else
