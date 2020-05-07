@@ -3,12 +3,15 @@ package com.mancode.financetracker.repository
 import androidx.lifecycle.LiveData
 import com.mancode.financetracker.database.dao.NetValueDao
 import com.mancode.financetracker.database.entity.NetValue
+import org.threeten.bp.LocalDate
 
-class NetValuesRepository private constructor(netValueDao: NetValueDao) {
+class NetValuesRepository private constructor(private val netValueDao: NetValueDao) {
 
     val actualNetValue: LiveData<Double> = netValueDao.actualNetValue
     val netValues: LiveData<List<NetValue>> = netValueDao.values
     val keyedNetValues: LiveData<List<NetValue>> = netValueDao.keyedValues
+
+    fun getNetValueBefore(date: LocalDate): LiveData<NetValue> = netValueDao.getValueBefore(date)
 
     companion object {
         @Volatile

@@ -27,12 +27,13 @@ public class Report {
     private double dailyAverage;
 
     public Report(LocalDate from, LocalDate to) {
-        resetDates(from, to);
+        init(from, to);
     }
 
-    public void resetDates(LocalDate from, LocalDate to) {
+    public void init(LocalDate from, LocalDate to) {
         this.from = from;
         this.to = to;
+        transactions = null;
         income = 0;
         registeredOutcome = 0;
         unregisteredOutcome = 0;
@@ -127,11 +128,15 @@ public class Report {
     }
 
     private void continueIfDataPresent() {
-        if (transactions != null && netValue1 != null && netValue2 != null) {
+        if (dataPresent()) {
             calculateOutcomeWithBalances();
             calculateDailyAverage();
             updateBalance();
         }
+    }
+
+    public boolean dataPresent() {
+        return transactions != null && netValue1 != null && netValue2 != null;
     }
 
     private void calculateDailyAverage() {

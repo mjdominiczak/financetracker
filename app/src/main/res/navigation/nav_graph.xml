@@ -17,7 +17,7 @@
         android:id="@+id/reportFragment"
         android:name="com.mancode.financetracker.ReportFragment"
         android:label="@string/reports"
-        tools:layout="@layout/fragment_report" />
+        tools:layout="@layout/fragment_report_monthly" />
     <fragment
         android:id="@+id/balanceFragment"
         android:name="com.mancode.financetracker.ui.balances.BalanceFragment"

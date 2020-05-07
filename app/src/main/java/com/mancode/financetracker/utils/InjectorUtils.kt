@@ -5,6 +5,7 @@ import com.mancode.financetracker.database.FTDatabase
 import com.mancode.financetracker.repository.AccountsRepository
 import com.mancode.financetracker.repository.BalancesRepository
 import com.mancode.financetracker.repository.NetValuesRepository
+import com.mancode.financetracker.repository.TransactionsRepository
 import com.mancode.financetracker.viewmodel.AddBalancesViewModelFactory
 import org.threeten.bp.LocalDate
 
@@ -21,6 +22,10 @@ object InjectorUtils {
 
     fun getNetValuesRepository(context: Context): NetValuesRepository {
         return NetValuesRepository.getInstance(FTDatabase.getInstance(context).netValueDao())
+    }
+
+    fun getTransactionsRepository(context: Context): TransactionsRepository {
+        return TransactionsRepository.getInstance(FTDatabase.getInstance(context).transactionDao())
     }
 
     fun provideAddBalancesViewModelFactory(
