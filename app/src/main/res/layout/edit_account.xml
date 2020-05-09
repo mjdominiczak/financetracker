@@ -10,7 +10,7 @@
     tools:showIn="@layout/fragment_add_account">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/account_name_input_layout"
+        android:id="@+id/accountNameInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tf_account_name"
+            android:id="@+id/accountName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_account_name"
@@ -33,7 +33,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:errorEnabled="true"
-        app:layout_constraintBaseline_toBaselineOf="@+id/account_name_input_layout"
+        app:layout_constraintBaseline_toBaselineOf="@+id/accountNameInputLayout"
         app:layout_constraintEnd_toEndOf="parent">
 
         <AutoCompleteTextView
@@ -56,28 +56,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/label_account_type"
-        app:layout_constraintBottom_toBottomOf="@+id/rg_account_type"
+        app:layout_constraintBottom_toBottomOf="@+id/accountType"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/rg_account_type"
+        app:layout_constraintTop_toTopOf="@+id/accountType"
         tools:text="@string/label_account_type" />
 
     <RadioGroup
-        android:id="@+id/rg_account_type"
+        android:id="@+id/accountType"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:checkedButton="@id/rb_assets"
+        android:checkedButton="@id/assets"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/account_name_input_layout">
+        app:layout_constraintTop_toBottomOf="@+id/accountNameInputLayout">
 
         <RadioButton
-            android:id="@+id/rb_assets"
+            android:id="@+id/assets"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/assets" />
 
         <RadioButton
-            android:id="@+id/rb_liabilities"
+            android:id="@+id/liabilities"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/liabilities" />
@@ -85,27 +85,27 @@
     </RadioGroup>
 
     <com.mancode.financetracker.ui.SetDateView
-        android:id="@+id/sd_account_open_date"
+        android:id="@+id/accountOpenDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:hint="@string/hint_account_open_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rg_account_type" />
+        app:layout_constraintTop_toBottomOf="@+id/accountType" />
 
     <CheckBox
-        android:id="@+id/cb_account_closed"
+        android:id="@+id/accountClosed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:checked="false"
         android:text="@string/account_closed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sd_account_open_date" />
+        app:layout_constraintTop_toBottomOf="@+id/accountOpenDate" />
 
     <com.mancode.financetracker.ui.SetDateView
-        android:id="@+id/sd_account_close_date"
+        android:id="@+id/accountCloseDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -113,6 +113,6 @@
         android:hint="@string/hint_account_close_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cb_account_closed" />
+        app:layout_constraintTop_toBottomOf="@+id/accountClosed" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

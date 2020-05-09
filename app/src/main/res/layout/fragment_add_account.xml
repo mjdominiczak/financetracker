@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
     android:clickable="true"
     android:focusable="true"
     tools:context="com.mancode.financetracker.ui.accounts.AddAccountFragment">
@@ -15,7 +14,7 @@
         android:layout_alignParentTop="true">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/add_account_toolbar"
+            android:id="@+id/toolbar"
             style="@style/Widget.MaterialComponents.Toolbar.Surface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
