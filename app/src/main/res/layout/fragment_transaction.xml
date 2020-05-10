@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_marginStart="@dimen/spacing_normal"
-    android:layout_marginEnd="@dimen/spacing_normal"
     android:layout_marginTop="@dimen/spacing_normal"
+    android:layout_marginEnd="@dimen/spacing_normal"
     android:clickable="true"
-    android:focusable="true"
-    android:background="?android:attr/selectableItemBackground"
-    card_view:cardCornerRadius="@dimen/cardview_default_radius" >
+    android:focusable="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -24,8 +21,8 @@
             android:layout_width="@dimen/list_date_width"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceListItem"
-            card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="1990-01-01" />
 
         <TextView
@@ -34,8 +31,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:textAppearance="?android:attr/textAppearanceListItem"
-            card_view:layout_constraintBaseline_toBaselineOf="@+id/transaction_date"
-            card_view:layout_constraintStart_toEndOf="@+id/transaction_date"
+            app:layout_constraintBaseline_toBaselineOf="@+id/transaction_date"
+            app:layout_constraintStart_toEndOf="@+id/transaction_date"
             tools:text="4500,00" />
 
         <ImageButton
@@ -48,8 +45,8 @@
             android:paddingTop="0dp"
             android:paddingEnd="0dp"
             android:paddingBottom="0dp"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/transaction_description"
@@ -57,9 +54,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
             android:textAppearance="?android:attr/textAppearanceListItem"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintStart_toStartOf="@+id/transaction_date"
-            card_view:layout_constraintTop_toBottomOf="@+id/transaction_date"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/transaction_date"
+            app:layout_constraintTop_toBottomOf="@+id/transaction_date"
             tools:text="Sample description" />
 
         <CheckBox
@@ -69,10 +66,10 @@
             android:background="?android:actionBarItemBackground"
             android:button="@drawable/selector_bookmark"
             android:checked="false"
-            card_view:layout_constraintBottom_toBottomOf="@+id/transaction_menu_button"
-            card_view:layout_constraintEnd_toStartOf="@+id/transaction_menu_button"
-            card_view:layout_constraintTop_toTopOf="@+id/transaction_menu_button" />
+            app:layout_constraintBottom_toBottomOf="@+id/transaction_menu_button"
+            app:layout_constraintEnd_toStartOf="@+id/transaction_menu_button"
+            app:layout_constraintTop_toTopOf="@+id/transaction_menu_button" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

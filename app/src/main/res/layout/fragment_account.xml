@@ -1,36 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/accountContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_marginStart="@dimen/spacing_normal"
     android:layout_marginTop="@dimen/spacing_normal"
-    android:layout_marginEnd="@dimen/spacing_normal"
-    card_view:cardCornerRadius="@dimen/cardview_default_radius">
+    android:layout_marginEnd="@dimen/spacing_normal">
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacing_double">
 
         <TextView
             android:id="@+id/id"
             android:layout_width="@dimen/list_id_width"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="@dimen/spacing_double"
-            android:layout_marginTop="@dimen/spacing_double"
-            android:layout_marginBottom="@dimen/spacing_double"
             android:textAppearance="?android:attr/textAppearanceListItem" />
 
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@id/id"
-            android:layout_margin="@dimen/spacing_double"
+            android:layout_toEndOf="@id/id"
             android:textAppearance="?android:attr/textAppearanceListItem" />
 
         <TextView
@@ -38,8 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_margin="@dimen/spacing_double"
             android:textAppearance="?android:attr/textAppearanceListItem" />
 
     </RelativeLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>
