@@ -12,7 +12,8 @@ import org.threeten.bp.LocalDate
 object InjectorUtils {
 
     fun getAccountsRepository(context: Context): AccountsRepository {
-        return AccountsRepository.getInstance(FTDatabase.getInstance(context).accountDao())
+        val db = FTDatabase.getInstance(context)
+        return AccountsRepository.getInstance(db.accountDao(), db.currencyDao())
     }
 
     private fun getBalancesRepository(context: Context): BalancesRepository {

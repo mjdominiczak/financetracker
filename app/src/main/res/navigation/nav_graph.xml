@@ -71,18 +71,22 @@
     <fragment
         android:id="@+id/accountFragment"
         android:name="com.mancode.financetracker.ui.accounts.AccountFragment"
-        android:label="AccountFragment" >
+        android:label="AccountFragment">
         <action
-            android:id="@+id/action_accountFragment_to_addAccountFragment"
-            app:destination="@id/addAccountFragment" />
+            android:id="@+id/action_accountFragment_to_addEditAccountFragment"
+            app:destination="@id/addEditAccountFragment" />
     </fragment>
     <fragment
-        android:id="@+id/addAccountFragment"
-        android:name="com.mancode.financetracker.ui.accounts.AddAccountFragment"
+        android:id="@+id/addEditAccountFragment"
+        android:name="com.mancode.financetracker.ui.accounts.AddEditAccountFragment"
         android:label="fragment_add_account"
-        tools:layout="@layout/fragment_add_account" >
+        tools:layout="@layout/fragment_add_account">
         <action
-            android:id="@+id/action_addAccountFragment_to_accountFragment"
+            android:id="@+id/action_addEditAccountFragment_to_accountFragment"
             app:popUpTo="@id/accountFragment" />
+        <argument
+            android:name="accountId"
+            android:defaultValue="0"
+            app:argType="integer" />
     </fragment>
 </navigation>

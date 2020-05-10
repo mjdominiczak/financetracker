@@ -6,6 +6,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.TypeConverters;
+import androidx.room.Update;
 
 import com.mancode.financetracker.database.converter.DateConverter;
 import com.mancode.financetracker.database.entity.AccountEntity;
@@ -35,7 +36,7 @@ public interface AccountDao {
     List<AccountMini> getAccountsNamesAndIds();
 
     @Query("SELECT * FROM accounts WHERE _id = :id")
-    AccountEntity getAccountById(int id);
+    LiveData<AccountEntity> getAccountById(int id);
 
     @Query("SELECT _id, account_name, account_currency FROM accounts " +
             "WHERE account_open_date <= :date")
@@ -46,6 +47,9 @@ public interface AccountDao {
 
     @Insert
     void insertAccount(AccountEntity account);
+
+    @Update
+    void update(AccountEntity account);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<AccountEntity> accountList);

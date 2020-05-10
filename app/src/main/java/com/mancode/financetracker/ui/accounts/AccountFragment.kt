@@ -18,10 +18,10 @@ import kotlinx.android.synthetic.main.fragment_account_list.*
  * Created by Manveru on 03.09.2017.
  */
 
-class AccountFragment : Fragment() {
+class AccountFragment : Fragment(), AccountRecyclerViewAdapter.ModifyRequestListener {
 
     lateinit var navController: NavController
-    private val adapter: AccountRecyclerViewAdapter by lazy { AccountRecyclerViewAdapter() }
+    private val adapter: AccountRecyclerViewAdapter by lazy { AccountRecyclerViewAdapter(this) }
     private val viewModel: AccountViewModel by lazy {
         ViewModelProvider(this).get(AccountViewModel::class.java)
     }
@@ -43,8 +43,13 @@ class AccountFragment : Fragment() {
         list.layoutManager = LinearLayoutManager(context)
         list.adapter = adapter
         fab.setOnClickListener {
-            navController.navigate(R.id.action_accountFragment_to_addAccountFragment)
+            navController.navigate(R.id.action_accountFragment_to_addEditAccountFragment)
         }
+    }
+
+    override fun onEditRequested(accountId: Int) {
+        val action = AccountFragmentDirections.actionAccountFragmentToAddEditAccountFragment(accountId)
+        navController.navigate(action)
     }
 
     companion object {

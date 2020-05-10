@@ -10,19 +10,25 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.navArgs
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.AccountEntity
 import com.mancode.financetracker.ui.hideKeyboard
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor.defaultCurrency
-import com.mancode.financetracker.viewmodel.AccountViewModel
+import com.mancode.financetracker.viewmodel.AddEditAccountViewModel
 import kotlinx.android.synthetic.main.edit_account.*
 import kotlinx.android.synthetic.main.fragment_add_account.*
 import org.joda.money.CurrencyUnit
-import java.util.*
 
-class AddAccountFragment : Fragment() {
-    private val accountViewModel: AccountViewModel by viewModels()
+class AddEditAccountFragment : Fragment() {
+    private val args: AddEditAccountFragmentArgs by navArgs()
+    private val account: LiveData<AccountEntity> by lazy {
+        viewModel.getAccount(args.accountId)
+    }
+    private val viewModel: AddEditAccountViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -31,6 +37,26 @@ class AddAccountFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (args.accountId != 0) {
+            account.observe(viewLifecycleOwner, Observer {
+                accountName.setText(it.accountName)
+                dropdownCurrency.setText(it.currency)
+                currencyInputLayout.isEnabled = false
+                accountType.check(
+                        if (it.accountType == AccountEntity.TYPE_ASSETS)
+                            R.id.assets else
+                            R.id.liabilities)
+                for (i in 0 until accountType.childCount) {
+                    accountType.getChildAt(i).isEnabled = false
+                }
+                accountOpenDate.date = it.openDate
+                accountOpenDate.isEnabled = false
+                accountClosed.isChecked = it.closeDate != null
+                if (it.closeDate != null) accountCloseDate.date = it.closeDate
+            })
+        }
+
         accountName.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
@@ -79,18 +105,22 @@ class AddAccountFragment : Fragment() {
             AccountEntity.TYPE_ASSETS else
             AccountEntity.TYPE_LIABILITIES
         val openDate = accountOpenDate.date
-        val closeDate = accountCloseDate.date
+        val closeDate = if (accountClosed.isChecked) accountCloseDate.date else null
         val currency = dropdownCurrency.text.toString()
         if (name.isNotEmpty()) {
             val account = AccountEntity(
-                    0,  // not set
+                    args.accountId,
                     name,
                     type,
                     currency,
                     openDate,
                     closeDate
             )
-            accountViewModel.insert(account)
+            if (args.accountId == 0) {
+                viewModel.insert(account)
+            } else {
+                viewModel.update(account)
+            }
             dismiss()
         } else {
             accountNameInputLayout.error = getString(R.string.error_field_empty)
@@ -99,6 +129,6 @@ class AddAccountFragment : Fragment() {
 
     private fun dismiss() {
         this.hideKeyboard()
-        NavHostFragment.findNavController(this).navigate(R.id.action_addAccountFragment_to_accountFragment)
+        NavHostFragment.findNavController(this).navigate(R.id.action_addEditAccountFragment_to_accountFragment)
     }
 }
