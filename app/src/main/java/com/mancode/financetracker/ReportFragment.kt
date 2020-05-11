@@ -9,10 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.NavHostFragment
 import co.csadev.kellocharts.gesture.ContainerScrollType
 import co.csadev.kellocharts.model.*
 import com.mancode.financetracker.database.entity.NetValue
 import com.mancode.financetracker.database.entity.TransactionEntity
+import com.mancode.financetracker.ui.hideKeyboard
 import com.mancode.financetracker.ui.setFormattedMoney
 import com.mancode.financetracker.viewmodel.ReportViewModel
 import com.mancode.financetracker.viewmodel.ReportViewModel.Companion.MONTH_NEXT
@@ -34,6 +36,9 @@ class ReportFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        toolbar.setNavigationOnClickListener { dismiss() }
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24dp)
+
         netValueChart.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL)
         netValueChart.isZoomEnabled = false
 
@@ -164,5 +169,10 @@ class ReportFragment : Fragment() {
                 .coerceIn(mv.left, mv.right - 0.1f) // end of range needs to be open for scroll to work
         val y = (mv.top + mv.bottom) / 2
         netValueChart.moveToWithAnimation(x, y)
+    }
+
+    private fun dismiss() {
+        this.hideKeyboard()
+        NavHostFragment.findNavController(this).navigateUp()
     }
 }
