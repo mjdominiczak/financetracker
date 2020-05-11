@@ -36,9 +36,6 @@
             android:defaultValue="@null"
             app:argType="org.threeten.bp.LocalDate"
             app:nullable="true" />
-        <action
-            android:id="@+id/action_addBalanceFragment_to_balanceFragment"
-            app:popUpTo="@id/balanceFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -60,9 +57,6 @@
         android:name="com.mancode.financetracker.ui.accounts.AddEditAccountFragment"
         android:label="fragment_add_account"
         tools:layout="@layout/fragment_add_account">
-        <action
-            android:id="@+id/action_addEditAccountFragment_to_accountFragment"
-            app:popUpTo="@id/accountFragment" />
         <argument
             android:name="accountId"
             android:defaultValue="0"

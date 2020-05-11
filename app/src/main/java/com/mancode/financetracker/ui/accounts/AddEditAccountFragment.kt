@@ -129,6 +129,6 @@ class AddEditAccountFragment : Fragment() {
 
     private fun dismiss() {
         this.hideKeyboard()
-        NavHostFragment.findNavController(this).navigate(R.id.action_addEditAccountFragment_to_accountFragment)
+        NavHostFragment.findNavController(this).navigateUp()
     }
 }

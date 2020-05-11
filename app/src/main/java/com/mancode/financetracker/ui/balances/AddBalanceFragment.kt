@@ -113,6 +113,6 @@ class AddBalanceFragment() : Fragment() {
 
     private fun dismiss() {
         hideKeyboard()
-        navController.navigate(R.id.action_addBalanceFragment_to_balanceFragment)
+        navController.navigateUp()
     }
 }
