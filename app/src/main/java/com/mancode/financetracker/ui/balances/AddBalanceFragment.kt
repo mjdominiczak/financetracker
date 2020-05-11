@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -18,7 +18,6 @@ import com.mancode.financetracker.database.entity.BalanceEntity
 import com.mancode.financetracker.database.pojos.BalanceExtended
 import com.mancode.financetracker.ui.BalanceInputView
 import com.mancode.financetracker.ui.hideKeyboard
-import com.mancode.financetracker.utils.InjectorUtils
 import com.mancode.financetracker.viewmodel.AddBalancesViewModel
 import com.mancode.financetracker.workers.UpdateStateWorker
 import kotlinx.android.synthetic.main.fragment_add_balance.*
@@ -34,11 +33,7 @@ class AddBalanceFragment() : Fragment() {
     private val args: AddBalanceFragmentArgs by navArgs()
     val date: LocalDate by lazy { args.balanceDate ?: LocalDate.now() }
 
-    private val viewModel by lazy {
-        ViewModelProviders.of(this,
-                InjectorUtils.provideAddBalancesViewModelFactory(requireContext(), date))
-                .get(AddBalancesViewModel::class.java)
-    }
+    private val viewModel: AddBalancesViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? =
@@ -89,7 +84,7 @@ class AddBalanceFragment() : Fragment() {
                     Toast.makeText(activity, "No accounts selected!", Toast.LENGTH_SHORT).show()
                 } else {
                     val request = OneTimeWorkRequest.Builder(UpdateStateWorker::class.java).build()
-                    WorkManager.getInstance().enqueue(request)
+                    WorkManager.getInstance(context!!).enqueue(request)
                     dismiss()
                 }
             }
