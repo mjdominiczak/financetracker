@@ -27,14 +27,6 @@
             app:destination="@id/addBalanceFragment" />
     </fragment>
     <fragment
-        android:id="@+id/transactionFragment"
-        android:name="com.mancode.financetracker.ui.transactions.TransactionFragment"
-        android:label="@string/transactions">
-        <action
-            android:id="@+id/action_transactionFragment_to_addEditTransactionFragment"
-            app:destination="@id/addEditTransactionFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/addBalanceFragment"
         android:name="com.mancode.financetracker.ui.balances.AddBalanceFragment"
         android:label="@string/title_add_balance"
@@ -47,19 +39,6 @@
         <action
             android:id="@+id/action_addBalanceFragment_to_balanceFragment"
             app:popUpTo="@id/balanceFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/addEditTransactionFragment"
-        android:name="com.mancode.financetracker.ui.transactions.AddEditTransactionFragment"
-        android:label="fragment_add_transaction"
-        tools:layout="@layout/fragment_add_transaction">
-        <action
-            android:id="@+id/action_addEditTransactionFragment_to_transactionFragment"
-            app:popUpTo="@id/transactionFragment" />
-        <argument
-            android:name="transactionId"
-            android:defaultValue="0"
-            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -89,4 +68,29 @@
             android:defaultValue="0"
             app:argType="integer" />
     </fragment>
+    <navigation
+        android:id="@+id/transactionsGraph"
+        app:startDestination="@id/transactionFragment">
+        <fragment
+            android:id="@+id/addEditTransactionFragment"
+            android:name="com.mancode.financetracker.ui.transactions.AddEditTransactionFragment"
+            android:label="fragment_add_transaction"
+            tools:layout="@layout/fragment_add_transaction">
+            <action
+                android:id="@+id/action_addEditTransactionFragment_to_transactionFragment"
+                app:popUpTo="@id/transactionFragment" />
+            <argument
+                android:name="transactionId"
+                android:defaultValue="0"
+                app:argType="integer" />
+        </fragment>
+        <fragment
+            android:id="@+id/transactionFragment"
+            android:name="com.mancode.financetracker.ui.transactions.TransactionFragment"
+            android:label="@string/transactions">
+            <action
+                android:id="@+id/action_transactionFragment_to_addEditTransactionFragment"
+                app:destination="@id/addEditTransactionFragment" />
+        </fragment>
+    </navigation>
 </navigation>

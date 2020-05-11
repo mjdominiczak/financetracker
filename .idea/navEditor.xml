@@ -13,8 +13,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="33" />
-                            <option name="y" value="707" />
+                            <option name="x" value="28" />
+                            <option name="y" value="-62" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -39,8 +39,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="333" />
-                            <option name="y" value="-15" />
+                            <option name="x" value="327" />
+                            <option name="y" value="289" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -60,8 +60,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="334" />
-                            <option name="y" value="707" />
+                            <option name="x" value="329" />
+                            <option name="y" value="-62" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -76,34 +76,13 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="addEditTransactionFragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="335" />
-                            <option name="y" value="343" />
-                          </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_addEditTransactionFragment_to_transactionFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
                   <entry key="balanceFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="31" />
-                            <option name="y" value="-15" />
+                            <option name="x" value="22" />
+                            <option name="y" value="289" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -163,20 +142,57 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="transactionFragment">
+                  <entry key="transactionsGraph">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="33" />
-                            <option name="y" value="342" />
+                            <option name="x" value="22" />
+                            <option name="y" value="662" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_transactionFragment_to_addEditTransactionFragment">
+                            <entry key="addEditTransactionFragment">
                               <value>
-                                <LayoutPositions />
+                                <LayoutPositions>
+                                  <option name="myPosition">
+                                    <Point>
+                                      <option name="x" value="256" />
+                                      <option name="y" value="12" />
+                                    </Point>
+                                  </option>
+                                  <option name="myPositions">
+                                    <map>
+                                      <entry key="action_addEditTransactionFragment_to_transactionFragment">
+                                        <value>
+                                          <LayoutPositions />
+                                        </value>
+                                      </entry>
+                                    </map>
+                                  </option>
+                                </LayoutPositions>
+                              </value>
+                            </entry>
+                            <entry key="transactionFragment">
+                              <value>
+                                <LayoutPositions>
+                                  <option name="myPosition">
+                                    <Point>
+                                      <option name="x" value="12" />
+                                      <option name="y" value="12" />
+                                    </Point>
+                                  </option>
+                                  <option name="myPositions">
+                                    <map>
+                                      <entry key="action_transactionFragment_to_addEditTransactionFragment">
+                                        <value>
+                                          <LayoutPositions />
+                                        </value>
+                                      </entry>
+                                    </map>
+                                  </option>
+                                </LayoutPositions>
                               </value>
                             </entry>
                           </map>
