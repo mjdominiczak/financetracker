@@ -19,41 +19,40 @@
             app:title="@string/reports" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ImageButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnPrev"
-        style="?android:attr/imageButtonStyle"
+        style="@style/Widget.App.Button.IconOnly"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_alignParentStart="true"
         android:layout_marginStart="16dp"
         android:contentDescription="@string/previous_report"
-        android:src="@drawable/ic_arrow_back_24dp"
+        app:icon="@drawable/ic_arrow_back_24dp"
         app:layout_constraintBottom_toBottomOf="@+id/btnRange"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnRange" />
 
     <Button
         android:id="@+id/btnRange"
-        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
         android:textAlignment="center"
         app:layout_constraintEnd_toStartOf="@+id/btnNext"
         app:layout_constraintStart_toEndOf="@+id/btnPrev"
         app:layout_constraintTop_toBottomOf="@id/appbarlayout"
         tools:text="1.05.2018 - 31.05.2018" />
 
-    <ImageButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnNext"
-        style="?android:attr/imageButtonStyle"
+        style="@style/Widget.App.Button.IconOnly"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_alignParentEnd="true"
         android:layout_marginEnd="16dp"
         android:contentDescription="@string/next_report"
-        android:minWidth="48dp"
-        android:src="@drawable/ic_arrow_forward_24dp"
+        app:icon="@drawable/ic_arrow_forward_24dp"
         app:layout_constraintBottom_toBottomOf="@+id/btnPrev"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnPrev" />

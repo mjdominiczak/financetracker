@@ -28,4 +28,10 @@
         <item name="android:layout">@layout/fragment_settings</item>
     </style>
 
+    <style name="Widget.App.Button.IconOnly" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="iconPadding">0dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="android:minWidth">0dp</item>
+    </style>
+
 </resources>
