@@ -18,6 +18,7 @@ import com.mancode.financetracker.database.entity.BalanceEntity
 import com.mancode.financetracker.database.pojos.BalanceExtended
 import com.mancode.financetracker.ui.BalanceInputView
 import com.mancode.financetracker.ui.hideKeyboard
+import com.mancode.financetracker.utils.InjectorUtils
 import com.mancode.financetracker.viewmodel.AddBalancesViewModel
 import com.mancode.financetracker.workers.UpdateStateWorker
 import kotlinx.android.synthetic.main.fragment_add_balance.*
@@ -33,7 +34,9 @@ class AddBalanceFragment() : Fragment() {
     private val args: AddBalanceFragmentArgs by navArgs()
     val date: LocalDate by lazy { args.balanceDate ?: LocalDate.now() }
 
-    private val viewModel: AddBalancesViewModel by viewModels()
+    private val viewModel: AddBalancesViewModel by viewModels {
+        InjectorUtils.provideAddBalancesViewModelFactory(requireContext(), date)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? =
