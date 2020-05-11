@@ -12,7 +12,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.mancode.financetracker.R
-import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 import com.mancode.financetracker.viewmodel.DashboardViewModel
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 
@@ -40,19 +39,18 @@ class DashboardFragment : Fragment(), View.OnClickListener, Toolbar.OnMenuItemCl
                 actualNetValue.setFormattedMoney(it)
             }
         })
-        netValueChart.setOnClickListener(this)
+        reportMonthlyButton.setOnClickListener(this)
         actualNetValue.setOnClickListener(this)
         dashboardToolbar.setOnMenuItemClickListener(this)
         assets_accounts.text = getAccountsString(0)
         liabilities_accounts.text = getAccountsString(0)
     }
 
-    private fun getAccountsString(quantity: Int) =
-            resources.getQuantityString(R.plurals.accounts_number_par, quantity, quantity)
+    private fun getAccountsString(quantity: Int) = resources.getQuantityString(R.plurals.accounts_number_par, quantity, quantity)
 
     override fun onClick(v: View?) {
         when (v!!.id) {
-            R.id.netValueChart -> navController.navigate(R.id.action_dashboardFragment_to_reportFragment)
+            R.id.reportMonthlyButton -> navController.navigate(R.id.action_dashboardFragment_to_reportFragment)
         }
     }
 

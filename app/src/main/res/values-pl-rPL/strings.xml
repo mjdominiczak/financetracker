@@ -20,6 +20,7 @@
     <string name="balances">Bilanse</string>
     <string name="transactions">Transakcje</string>
     <string name="reports">Raporty</string>
+    <string name="report_monthly">Raport miesięczny</string>
     <string name="dashboard">Tablica</string>
     <string name="hint_account_name">Nazwa konta</string>
     <string name="hint_account_type">Typ konta</string>
