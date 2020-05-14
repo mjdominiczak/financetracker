@@ -21,10 +21,14 @@
             app:title="@string/title_add_transaction" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include
-        layout="@layout/edit_transaction"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/appbarlayout" />
+        android:layout_below="@id/appbarlayout">
 
+        <include
+            layout="@layout/edit_transaction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </ScrollView>
 </RelativeLayout>
