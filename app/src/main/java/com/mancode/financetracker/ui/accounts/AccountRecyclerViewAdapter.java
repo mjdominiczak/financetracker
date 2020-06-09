@@ -99,6 +99,9 @@ public class AccountRecyclerViewAdapter
             } else {
                 mBalanceView.setText("n/a"); //TODO refactor - different info
             }
+            if (account.accountCloseDate != null) {
+                cardView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorInactive));
+            }
         }
     }
 

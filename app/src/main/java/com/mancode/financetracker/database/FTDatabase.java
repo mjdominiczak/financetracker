@@ -43,7 +43,7 @@ import com.mancode.financetracker.workers.UpdateStateWorker;
         version = FTDatabase.DATABASE_VERSION)
 public abstract class FTDatabase extends RoomDatabase {
 
-    public static final int DATABASE_VERSION = 4;
+    public static final int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "database.db";
     private static FTDatabase sInstance;
 
@@ -164,6 +164,31 @@ public abstract class FTDatabase extends RoomDatabase {
         }
     };
 
+    /**
+     * Migration from version 4 to version 5:
+     * - AccountExtended view modified
+     */
+    private static Migration MIGRATION_4_5 = new Migration(4, 5) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase db) {
+            db.beginTransaction();
+            try {
+                db.execSQL("PRAGMA foreign_keys=off;");
+                db.execSQL("DROP VIEW accounts_view;");
+                db.execSQL("CREATE VIEW `accounts_view` AS SELECT accounts._id, account_name, " +
+                        "account_type, account_currency, account_close_date, balance_check_date, " +
+                        "balance_value, " +
+                        "(SELECT balances._id FROM balances WHERE balance_account_id = accounts._id " +
+                        "ORDER BY date(balance_check_date) DESC LIMIT 1) AS balance_id " +
+                        "FROM accounts LEFT JOIN balances ON balance_id = balances._id");
+                db.execSQL("PRAGMA foreign_keys=on;");
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
+        }
+    };
+
     public static FTDatabase getInstance(final Context context) {
         if (sInstance == null) {
             synchronized (FTDatabase.class) {
@@ -180,6 +205,7 @@ public abstract class FTDatabase extends RoomDatabase {
                 .addMigrations(MIGRATION_1_2)
                 .addMigrations(MIGRATION_2_3)
                 .addMigrations(MIGRATION_3_4)
+                .addMigrations(MIGRATION_4_5)
                 .addCallback(new Callback() {
                     @Override
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {

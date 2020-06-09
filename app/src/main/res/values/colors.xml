@@ -19,4 +19,5 @@
 
     <color name="colorPositiveValue">#4caf50</color>
     <color name="colorNegativeValue">#d32f2f</color>
+    <color name="colorInactive">#C8C8C8</color>
 </resources>
