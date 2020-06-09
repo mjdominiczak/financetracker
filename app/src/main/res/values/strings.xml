@@ -62,6 +62,8 @@
     <string name="label_category">Category</string>
     <string name="label_date">Date</string>
     <string name="error_field_empty">Field cannot be empty</string>
+    <string name="error_account_not_open">Account has not been opened yet</string>
+    <string name="error_account_closed">Account has been closed</string>
     <string name="total_label">Total:</string>
     <string name="registered_outcome">Registered outcome</string>
     <string name="registered_income">Registered income</string>

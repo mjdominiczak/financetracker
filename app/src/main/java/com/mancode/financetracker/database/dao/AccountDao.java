@@ -30,6 +30,9 @@ public interface AccountDao {
     LiveData<List<AccountExtended>> getAllAccountsLive();
 
     @Query("SELECT * FROM accounts")
+    LiveData<List<AccountEntity>> getAll();
+
+    @Query("SELECT * FROM accounts")
     List<AccountEntity> getAllAccounts();
 
     @Query("SELECT _id, account_name FROM accounts")

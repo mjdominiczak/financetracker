@@ -1,5 +1,6 @@
 package com.mancode.financetracker.repository
 
+import android.os.AsyncTask
 import androidx.lifecycle.LiveData
 import com.mancode.financetracker.database.dao.TransactionDao
 import com.mancode.financetracker.database.entity.TransactionEntity
@@ -9,6 +10,24 @@ class TransactionsRepository private constructor(private val transactionDao: Tra
 
     fun getTransactionsForRange(from: LocalDate, to: LocalDate): LiveData<List<TransactionEntity>> =
             transactionDao.getTransactionsFromRange(from, to)
+
+    fun getTransaction(id: Int): LiveData<TransactionEntity> = transactionDao.getTransaction(id)
+
+    fun insertTransaction(transaction: TransactionEntity) {
+        AsyncTask.execute { transactionDao.insertTransaction(transaction) }
+    }
+
+    fun updateTransaction(transaction: TransactionEntity) {
+        AsyncTask.execute { transactionDao.updateTransaction(transaction) }
+    }
+
+    fun deleteTransaction(transaction: TransactionEntity) {
+        AsyncTask.execute { transactionDao.deleteTransaction(transaction) }
+    }
+
+    fun toggleBookmark(transaction: TransactionEntity) {
+        AsyncTask.execute { transactionDao.toggleFlag(transaction.id, TransactionEntity.BOOKMARKED) }
+    }
 
     companion object {
         @Volatile

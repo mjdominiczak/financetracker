@@ -13,6 +13,8 @@ class AccountsRepository private constructor(
         private val accountDao: AccountDao,
         private val currencyDao: CurrencyDao) {
 
+    val allAccounts: LiveData<List<AccountEntity>> = accountDao.all
+
     fun getAccountById(id: Int): LiveData<AccountEntity> = accountDao.getAccountById(id)
 
     fun getAccountsActiveOn(date: LocalDate): LiveData<List<AccountNameCurrency>> =

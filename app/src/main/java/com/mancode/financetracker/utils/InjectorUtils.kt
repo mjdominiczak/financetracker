@@ -2,10 +2,7 @@ package com.mancode.financetracker.utils
 
 import android.content.Context
 import com.mancode.financetracker.database.FTDatabase
-import com.mancode.financetracker.repository.AccountsRepository
-import com.mancode.financetracker.repository.BalancesRepository
-import com.mancode.financetracker.repository.NetValuesRepository
-import com.mancode.financetracker.repository.TransactionsRepository
+import com.mancode.financetracker.repository.*
 import com.mancode.financetracker.viewmodel.AddBalancesViewModelFactory
 import org.threeten.bp.LocalDate
 
@@ -27,6 +24,10 @@ object InjectorUtils {
 
     fun getTransactionsRepository(context: Context): TransactionsRepository {
         return TransactionsRepository.getInstance(FTDatabase.getInstance(context).transactionDao())
+    }
+
+    fun getCategoriesRepository(context: Context): CategoriesRepository {
+        return CategoriesRepository.getInstance(FTDatabase.getInstance(context).categoryDao())
     }
 
     fun provideAddBalancesViewModelFactory(

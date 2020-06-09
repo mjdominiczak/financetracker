@@ -21,6 +21,7 @@ public class SetDateView extends TextInputLayout {
     private boolean isShowingDialog = false;
     private LocalDate mDate;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
+    private OnDateSetListener listener = null;
 
     public SetDateView(Context context) {
         this(context, null);
@@ -30,7 +31,10 @@ public class SetDateView extends TextInputLayout {
         super(context, attrs, R.attr.setDateViewStyle);
         innerTextView = new AutoCompleteTextView(getContext(), null, R.attr.innerSetDateViewStyle);
         setDate(LocalDate.now());
-        mDateSetListener = (view, year, month, dayOfMonth) -> setDate(year, month + 1, dayOfMonth);
+        mDateSetListener = (view, year, month, dayOfMonth) -> {
+            setDate(year, month + 1, dayOfMonth);
+            if (listener != null) listener.onDateSet();
+        };
         innerTextView.setOnClickListener(v -> {
             if (isShowingDialog) return;
             DatePickerDialog dialog = new DatePickerDialog(
@@ -73,5 +77,13 @@ public class SetDateView extends TextInputLayout {
         } else {
             innerTextView.setText("");
         }
+    }
+
+    public void addDateSetListener(OnDateSetListener listener) {
+        this.listener = listener;
+    }
+
+    public interface OnDateSetListener {
+        void onDateSet();
     }
 }
