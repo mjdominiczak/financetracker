@@ -105,6 +105,9 @@ class TransactionRecyclerViewAdapter(
             bookmark.setOnClickListener {
                 modifyRequestListener?.onBookmarkToggleRequested(mTransaction!!.transaction) }
             bookmark.isChecked = (mTransaction!!.transaction.flags and TransactionEntity.BOOKMARKED) == 1
+            itemView.setOnClickListener {
+                modifyRequestListener?.onEditRequested(transaction.transaction)
+            }
         }
 
         private fun showTransactionPopup(view: View) {
@@ -113,10 +116,6 @@ class TransactionRecyclerViewAdapter(
             inflater.inflate(R.menu.transaction_actions, popup.menu)
             popup.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
-                    R.id.action_edit_transaction -> {
-                        modifyRequestListener?.onEditRequested(mTransaction!!.transaction)
-                        return@setOnMenuItemClickListener true
-                    }
                     R.id.action_delete_transaction -> {
                         modifyRequestListener?.onDeleteRequested(mTransaction!!.transaction)
                         return@setOnMenuItemClickListener true
