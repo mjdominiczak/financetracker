@@ -83,6 +83,8 @@
     <string name="question_transaction_reminder_decision">Czy chcesz ustawić codzienne przypomnienie o wprowadzeniu transakcji?</string>
     <string name="your_net_value">Twoja wartość netto</string>
     <string name="search">Wyszukaj</string>
+    <string name="undo">Cofnij</string>
+    <string name="snackbar_transaction_removed">Transakcja \"%1$s\" usunięta</string>
 
     <string-array name="transaction_filter_type">
         <item>Wszystkie</item>

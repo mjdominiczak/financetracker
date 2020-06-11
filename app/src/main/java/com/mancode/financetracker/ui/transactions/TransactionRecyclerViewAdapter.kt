@@ -5,11 +5,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.CheckBox
+import android.widget.Filter
+import android.widget.Filterable
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.converter.DateConverter
 import com.mancode.financetracker.database.entity.TransactionEntity
@@ -24,7 +28,7 @@ import java.util.*
 
 class TransactionRecyclerViewAdapter(
         private val context: Context,
-        private val modifyRequestListener: ModifyRequestListener?) :
+        val modifyRequestListener: ModifyRequestListener) :
         ListAdapter<TransactionFull, TransactionRecyclerViewAdapter.ViewHolder>(DiffCallback()), Filterable {
 
     private var allTransactions: List<TransactionFull>? = null
@@ -33,7 +37,7 @@ class TransactionRecyclerViewAdapter(
     val filterQuery = FilterQuery()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_transaction, parent, false)
+                .inflate(R.layout.transaction_wrapper, parent, false)
         return ViewHolder(view)
     }
 
@@ -84,12 +88,12 @@ class TransactionRecyclerViewAdapter(
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
+        val foregroundView: MaterialCardView = view.findViewById(R.id.transaction_card_foreground)
         private val tvDate: TextView = view.findViewById(R.id.transaction_date)
         private val tvValue: TextView = view.findViewById(R.id.transaction_value)
         private val tvDescription: TextView = view.findViewById(R.id.transaction_description)
-        private val menuButton: ImageButton = view.findViewById(R.id.transaction_menu_button)
         private val bookmark: CheckBox = view.findViewById(R.id.bookmarkButton)
-        private var mTransaction: TransactionFull? = null
+        var mTransaction: TransactionFull? = null
 
         fun init(transaction: TransactionFull) {
             mTransaction = transaction
@@ -101,29 +105,13 @@ class TransactionRecyclerViewAdapter(
                 ContextCompat.getColor(context, R.color.colorNegativeValue)
             tvValue.setTextColor(color)
             tvDescription.text = mTransaction!!.transaction.description
-            menuButton.setOnClickListener { this.showTransactionPopup(it) }
             bookmark.setOnClickListener {
-                modifyRequestListener?.onBookmarkToggleRequested(mTransaction!!.transaction) }
+                modifyRequestListener.onBookmarkToggleRequested(mTransaction!!.transaction)
+            }
             bookmark.isChecked = (mTransaction!!.transaction.flags and TransactionEntity.BOOKMARKED) == 1
-            itemView.setOnClickListener {
-                modifyRequestListener?.onEditRequested(transaction.transaction)
+            foregroundView.setOnClickListener {
+                modifyRequestListener.onEditRequested(transaction.transaction)
             }
-        }
-
-        private fun showTransactionPopup(view: View) {
-            val popup = PopupMenu(view.context, view)
-            val inflater = popup.menuInflater
-            inflater.inflate(R.menu.transaction_actions, popup.menu)
-            popup.setOnMenuItemClickListener { item ->
-                when (item.itemId) {
-                    R.id.action_delete_transaction -> {
-                        modifyRequestListener?.onDeleteRequested(mTransaction!!.transaction)
-                        return@setOnMenuItemClickListener true
-                    }
-                }
-                false
-            }
-            popup.show()
         }
     }
 
@@ -154,7 +142,8 @@ class TransactionRecyclerViewAdapter(
 
     interface ModifyRequestListener {
         fun onEditRequested(transaction: TransactionEntity)
-        fun onDeleteRequested(transaction: TransactionEntity)
+        fun onDeleteRequested(transaction: TransactionEntity?)
+        fun onRestoreRequested(transaction: TransactionEntity?)
         fun onBookmarkToggleRequested(transaction: TransactionEntity)
     }
 

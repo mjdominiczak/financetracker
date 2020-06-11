@@ -13,11 +13,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.TransactionEntity
 import com.mancode.financetracker.ui.SetDateView
+import com.mancode.financetracker.ui.SwipeToDeleteCallback
 import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.CUSTOM
 import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.LAST_MONTH
 import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.LAST_WEEK
@@ -57,6 +60,8 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
                 Observer { transactions -> adapter.setTransactions(transactions) })
         transactions_list.layoutManager = LinearLayoutManager(context)
         transactions_list.adapter = adapter
+        ItemTouchHelper(SwipeToDeleteCallback(adapter))
+                .attachToRecyclerView(transactions_list)
         transactions_toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.app_bar_filter -> {
@@ -92,8 +97,17 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
         navController.navigate(action)
     }
 
-    override fun onDeleteRequested(transaction: TransactionEntity) {
+    override fun onDeleteRequested(transaction: TransactionEntity?) {
         viewModel.deleteTransaction(transaction)
+        val text: String = getString(R.string.snackbar_transaction_removed, transaction?.description)
+        Snackbar.make(view!!, text, Snackbar.LENGTH_LONG)
+                .setAction(getString(R.string.undo)) {
+                    onRestoreRequested(transaction)
+                }.show()
+    }
+
+    override fun onRestoreRequested(transaction: TransactionEntity?) {
+        viewModel.restoreTransaction(transaction)
     }
 
     override fun onBookmarkToggleRequested(transaction: TransactionEntity) {

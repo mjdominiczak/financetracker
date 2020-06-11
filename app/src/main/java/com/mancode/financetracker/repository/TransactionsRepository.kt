@@ -4,9 +4,12 @@ import android.os.AsyncTask
 import androidx.lifecycle.LiveData
 import com.mancode.financetracker.database.dao.TransactionDao
 import com.mancode.financetracker.database.entity.TransactionEntity
+import com.mancode.financetracker.database.pojos.TransactionFull
 import org.threeten.bp.LocalDate
 
 class TransactionsRepository private constructor(private val transactionDao: TransactionDao) {
+
+    val allTransactions: LiveData<List<TransactionFull>> by lazy { transactionDao.allTransactionsLive }
 
     fun getTransactionsForRange(from: LocalDate, to: LocalDate): LiveData<List<TransactionEntity>> =
             transactionDao.getTransactionsFromRange(from, to)
