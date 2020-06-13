@@ -27,7 +27,7 @@ import java.util.List;
 public interface AccountDao {
 
     @Query("SELECT * FROM accounts_view")
-    LiveData<List<AccountExtended>> getAllAccountsLive();
+    LiveData<List<AccountExtended>> getAllAccountsExt();
 
     @Query("SELECT * FROM accounts")
     LiveData<List<AccountEntity>> getAll();

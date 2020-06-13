@@ -1,14 +1,13 @@
 package com.mancode.financetracker.workers
 
-import android.app.Application
 import android.content.Context
 import android.util.Log
 import android.util.Xml
 import androidx.appcompat.app.AppCompatActivity
 import androidx.work.*
 import com.mancode.financetracker.database.entity.CurrencyEntity
-import com.mancode.financetracker.repository.DataRepository
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor
+import com.mancode.financetracker.utils.InjectorUtils
 import okhttp3.*
 import org.threeten.bp.LocalDate
 import org.xmlpull.v1.XmlPullParser
@@ -48,10 +47,10 @@ class FetchECBRatesWorker(context: Context, params: WorkerParameters)
                 if (response.isSuccessful) {
                     val responseStream = response.body?.charStream()
                     if (responseStream != null) {
-                        val repo = DataRepository.getInstance(applicationContext as Application)
+                        val repo = InjectorUtils.getCurrencyRepository(applicationContext)
                         val currencyList = ECBXmlParser().parse(responseStream)
                         currencyList.add(CurrencyEntity("EUR", 1.0, null))
-                        repo.insertCurrencies(currencyList)
+                        repo.insertAll(currencyList)
                         PreferenceAccessor.ratesFetchDate = LocalDate.now()
                     }
                 }

@@ -18,6 +18,10 @@ object InjectorUtils {
         return BalancesRepository.getInstance(db.netValueDao(), db.balanceDao())
     }
 
+    fun getCurrencyRepository(context: Context): CurrencyRepository {
+        return CurrencyRepository.getInstance(FTDatabase.getInstance(context).currencyDao())
+    }
+
     fun getNetValuesRepository(context: Context): NetValuesRepository {
         return NetValuesRepository.getInstance(FTDatabase.getInstance(context).netValueDao())
     }

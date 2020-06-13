@@ -7,6 +7,7 @@ import com.mancode.financetracker.database.dao.CurrencyDao
 import com.mancode.financetracker.database.entity.AccountEntity
 import com.mancode.financetracker.database.entity.CurrencyEntity
 import com.mancode.financetracker.database.pojos.AccountNameCurrency
+import com.mancode.financetracker.database.views.AccountExtended
 import org.threeten.bp.LocalDate
 
 class AccountsRepository private constructor(
@@ -14,6 +15,7 @@ class AccountsRepository private constructor(
         private val currencyDao: CurrencyDao) {
 
     val allAccounts: LiveData<List<AccountEntity>> = accountDao.all
+    val allAccountsExt: LiveData<List<AccountExtended>> = accountDao.allAccountsExt
 
     fun getAccountById(id: Int): LiveData<AccountEntity> = accountDao.getAccountById(id)
 
