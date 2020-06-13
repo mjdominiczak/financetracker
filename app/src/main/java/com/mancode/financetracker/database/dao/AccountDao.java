@@ -39,7 +39,8 @@ public interface AccountDao {
     LiveData<AccountEntity> getAccountById(int id);
 
     @Query("SELECT _id, account_name, account_currency FROM accounts " +
-            "WHERE account_open_date <= :date")
+            "WHERE account_open_date <= :date AND " +
+            "(account_close_date IS NULL OR account_close_date >= :date)")
     LiveData<List<AccountNameCurrency>> getAccountsActiveOn(LocalDate date);
 
     @Query("SELECT COUNT(*) FROM accounts WHERE account_type = :type")
