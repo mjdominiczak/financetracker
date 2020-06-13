@@ -87,6 +87,8 @@
     <string name="search">Search</string>
     <string name="undo">Undo</string>
     <string name="snackbar_transaction_removed">Transaction \"%1$s\" removed</string>
+    <string name="remove_account">Remove account</string>
+    <string name="warning_account_used">Account is used after selected date</string>
 
     <!--NON TRANSLATABLE KEYS-->
     <string name="transaction_reminder_enabled" translatable="false">transaction_reminder_enabled</string>

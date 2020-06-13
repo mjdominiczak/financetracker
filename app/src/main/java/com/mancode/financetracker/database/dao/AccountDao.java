@@ -2,6 +2,7 @@ package com.mancode.financetracker.database.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -10,10 +11,10 @@ import androidx.room.Update;
 
 import com.mancode.financetracker.database.converter.DateConverter;
 import com.mancode.financetracker.database.entity.AccountEntity;
-import com.mancode.financetracker.database.pojos.AccountMini;
 import com.mancode.financetracker.database.pojos.AccountNameCurrency;
 import com.mancode.financetracker.database.views.AccountExtended;
 
+import org.jetbrains.annotations.NotNull;
 import org.threeten.bp.LocalDate;
 
 import java.util.List;
@@ -46,11 +47,22 @@ public interface AccountDao {
     @Query("SELECT COUNT(*) FROM accounts WHERE account_type = :type")
     LiveData<Integer> getActiveAccountsOfType(int type);
 
+    @Query("SELECT transaction_date FROM transactions WHERE transaction_account = :accountId " +
+            "ORDER BY transaction_date DESC LIMIT 1")
+    LocalDate getLastTransactionDate(int accountId);
+
+    @Query("SELECT balance_check_date FROM balances WHERE balance_account_id = :accountId " +
+            "ORDER BY balance_check_date DESC LIMIT 1")
+    LocalDate getLastBalanceDate(int accountId);
+
     @Insert
     void insertAccount(AccountEntity account);
 
     @Update
     void update(AccountEntity account);
+
+    @Delete
+    void remove(@NotNull AccountEntity account);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<AccountEntity> accountList);

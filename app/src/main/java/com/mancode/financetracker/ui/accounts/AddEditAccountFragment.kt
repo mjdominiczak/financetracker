@@ -8,20 +8,25 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.CheckBox
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.button.MaterialButton
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.AccountEntity
+import com.mancode.financetracker.ui.SetDateView
 import com.mancode.financetracker.ui.hideKeyboard
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor.defaultCurrency
 import com.mancode.financetracker.viewmodel.AddEditAccountViewModel
 import kotlinx.android.synthetic.main.edit_account.*
 import kotlinx.android.synthetic.main.fragment_add_account.*
 import org.joda.money.CurrencyUnit
+import org.threeten.bp.LocalDate
 
 class AddEditAccountFragment : Fragment() {
     private val args: AddEditAccountFragmentArgs by navArgs()
@@ -29,10 +34,22 @@ class AddEditAccountFragment : Fragment() {
         viewModel.getAccount(args.accountId)
     }
     private val viewModel: AddEditAccountViewModel by viewModels()
+    private val lastUsageDate: LiveData<LocalDate?> by lazy { viewModel.getLastUsageDate(args.accountId) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_add_account, container, false)
+        val view = inflater.inflate(R.layout.fragment_add_account, container, false)
+        if (args.accountId != 0) {
+            lastUsageDate.observe(viewLifecycleOwner, Observer {
+                if (it == null) {
+                    view.findViewById<MaterialButton>(R.id.removeAccount).visibility = View.VISIBLE
+                } else {
+                    view.findViewById<CheckBox>(R.id.accountClosed).visibility = View.VISIBLE
+                    view.findViewById<SetDateView>(R.id.accountCloseDate).visibility = View.VISIBLE
+                }
+            })
+        }
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -88,6 +105,17 @@ class AddEditAccountFragment : Fragment() {
         }
         accountClosed.setOnClickListener { accountCloseDate.isEnabled = accountClosed.isChecked }
         accountCloseDate.isEnabled = false
+        accountCloseDate.addDateSetListener {
+            if (accountCloseDate.date.isBefore(lastUsageDate.value)) {
+                accountCloseDate.date = lastUsageDate.value
+                Toast.makeText(context, getString(R.string.warning_account_used), Toast.LENGTH_SHORT)
+                        .show()
+            }
+        }
+        removeAccount.setOnClickListener {
+            viewModel.remove(account.value!!)
+            dismiss()
+        }
         toolbar.setOnMenuItemClickListener { item: MenuItem ->
             if (item.itemId == R.id.action_menu_save) {
                 validateAndSave()

@@ -2,6 +2,7 @@ package com.mancode.financetracker.repository
 
 import android.os.AsyncTask
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.mancode.financetracker.database.dao.AccountDao
 import com.mancode.financetracker.database.dao.CurrencyDao
 import com.mancode.financetracker.database.entity.AccountEntity
@@ -22,10 +23,10 @@ class AccountsRepository private constructor(
     fun getAccountsActiveOn(date: LocalDate): LiveData<List<AccountNameCurrency>> =
             accountDao.getAccountsActiveOn(date)
 
-    fun getAssetsAccountsCount() : LiveData<Int> =
+    fun getAssetsAccountsCount(): LiveData<Int> =
             accountDao.getActiveAccountsOfType(AccountEntity.TYPE_ASSETS)
 
-    fun getLiabilitiesAccountsCount() : LiveData<Int> =
+    fun getLiabilitiesAccountsCount(): LiveData<Int> =
             accountDao.getActiveAccountsOfType(AccountEntity.TYPE_LIABILITIES)
 
     fun insert(account: AccountEntity) {
@@ -43,6 +44,27 @@ class AccountsRepository private constructor(
         AsyncTask.execute {
             accountDao.update(account)
         }
+    }
+
+    fun remove(account: AccountEntity) {
+        AsyncTask.execute {
+            accountDao.remove(account)
+        }
+    }
+
+    fun getLastUsageDate(accountId: Int): LiveData<LocalDate?> {
+        val retVal = MutableLiveData<LocalDate?>()
+        AsyncTask.execute {
+            val dateTransaction = accountDao.getLastTransactionDate(accountId)
+            val dateBalance = accountDao.getLastBalanceDate(accountId)
+            retVal.postValue(when {
+                dateTransaction == null -> dateBalance
+                dateBalance == null -> dateTransaction
+                dateTransaction.isAfter(dateBalance) -> dateTransaction
+                else -> dateBalance
+            })
+        }
+        return retVal
     }
 
     companion object {
