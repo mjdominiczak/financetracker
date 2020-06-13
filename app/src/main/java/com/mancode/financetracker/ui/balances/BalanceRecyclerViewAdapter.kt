@@ -32,7 +32,7 @@ class BalanceRecyclerViewAdapter(private val modifyRequestListener: ModifyReques
         viewHolder.bindTo(getItem(position))
     }
 
-    class DiffCallback: DiffUtil.ItemCallback<NetValue>() {
+    class DiffCallback : DiffUtil.ItemCallback<NetValue>() {
         override fun areItemsTheSame(oldItem: NetValue, newItem: NetValue): Boolean =
                 oldItem.date.isEqual(newItem.date)
 
@@ -44,7 +44,7 @@ class BalanceRecyclerViewAdapter(private val modifyRequestListener: ModifyReques
             LayoutContainer {
 
         init {
-            containerView.setOnClickListener { modifyRequestListener.onEditRequested(balanceDate)}
+            containerView.setOnClickListener { modifyRequestListener.onEditRequested(balanceDate) }
         }
 
         private lateinit var balanceDate: LocalDate
