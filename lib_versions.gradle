@@ -36,7 +36,7 @@ kotlin.stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 kotlin.gradleplugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
 ext.libs = [:]
-ext.libs.androidgradleplugin = "com.android.tools.build:gradle:3.6.3"
+ext.libs.androidgradleplugin = "com.android.tools.build:gradle:4.0.0"
 ext.libs.androidx = androidx
 ext.libs.google = google
 ext.libs.kotlin = kotlin
