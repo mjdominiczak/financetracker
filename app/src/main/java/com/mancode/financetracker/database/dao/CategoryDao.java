@@ -18,10 +18,10 @@ import java.util.List;
 public interface CategoryDao {
 
     @Query("SELECT * FROM categories")
-    LiveData<List<CategoryEntity>> getAllCategoriesLive();
+    LiveData<List<CategoryEntity>> getAllCategories();
 
     @Query("SELECT * FROM categories")
-    List<CategoryEntity> getAllCategories();
+    List<CategoryEntity> getAllCategoriesSimple();
 
     @Insert
     void insertCategory(CategoryEntity category);

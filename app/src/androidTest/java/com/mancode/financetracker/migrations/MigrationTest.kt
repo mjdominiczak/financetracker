@@ -37,7 +37,7 @@ class MigrationTest {
         migrationTestHelper.runMigrationsAndValidate(TEST_DB_NAME, 4, true,
                 FTDatabase.MIGRATION_3_4)
 
-        val transaction = getMigratedDB().transactionDao().allTransactions[0]
+        val transaction = getMigratedDB().transactionDao().allTransactionsSimple[0]
 
         assertEquals(transaction.id, TRANSACTION.id)
         assertEquals(transaction.date, TRANSACTION.date)

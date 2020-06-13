@@ -32,10 +32,10 @@ public interface TransactionDao {
             "FROM transactions LEFT JOIN accounts ON transaction_account = accounts._id " +
             "LEFT JOIN categories ON transaction_category = categories._id " +
             "ORDER BY date(transaction_date) DESC, transactions._id DESC")
-    LiveData<List<TransactionFull>> getAllTransactionsLive();
+    LiveData<List<TransactionFull>> getAllTransactions();
 
     @Query("SELECT * FROM transactions")
-    List<TransactionEntity> getAllTransactions();
+    List<TransactionEntity> getAllTransactionsSimple();
 
     @Query("SELECT transactions._id, transaction_date, transaction_type, transaction_description, " +
             "transaction_value, transaction_flags, transaction_account, transaction_category," +

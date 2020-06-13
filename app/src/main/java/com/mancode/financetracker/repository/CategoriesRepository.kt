@@ -6,7 +6,7 @@ import com.mancode.financetracker.database.entity.CategoryEntity
 
 class CategoriesRepository private constructor(categoryDao: CategoryDao) {
 
-    val allCategories: LiveData<List<CategoryEntity>> = categoryDao.allCategoriesLive
+    val allCategories: LiveData<List<CategoryEntity>> = categoryDao.allCategories
 
     companion object {
         @Volatile

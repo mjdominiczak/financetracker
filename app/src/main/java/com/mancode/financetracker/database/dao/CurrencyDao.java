@@ -17,7 +17,7 @@ import java.util.List;
 public interface CurrencyDao {
 
     @Query("SELECT * FROM currencies")
-    List<CurrencyEntity> getAllCurrencies();
+    List<CurrencyEntity> getAllCurrenciesSimple();
 
     @Query("SELECT currency_exchange_rate FROM currencies WHERE currency_symbol=:symbol")
     double getExchangeRateForCurrency(String symbol);

@@ -26,10 +26,7 @@ import java.util.List;
 public interface BalanceDao {
 
     @Query("SELECT * FROM balances")
-    LiveData<List<BalanceEntity>> getAllBalancesLive();
-
-    @Query("SELECT * FROM balances")
-    List<BalanceEntity> getAllBalances();
+    List<BalanceEntity> getAllBalancesSimple();
 
     @Query("SELECT balances._id, balance_check_date, balance_value, balance_account_id, " +
             "account_name, account_type, account_currency " +

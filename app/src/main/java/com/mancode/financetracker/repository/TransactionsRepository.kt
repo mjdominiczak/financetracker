@@ -9,7 +9,7 @@ import org.threeten.bp.LocalDate
 
 class TransactionsRepository private constructor(private val transactionDao: TransactionDao) {
 
-    val allTransactions: LiveData<List<TransactionFull>> by lazy { transactionDao.allTransactionsLive }
+    val allTransactions: LiveData<List<TransactionFull>> by lazy { transactionDao.allTransactions }
 
     fun getTransactionsForRange(from: LocalDate, to: LocalDate): LiveData<List<TransactionEntity>> =
             transactionDao.getTransactionsFromRange(from, to)

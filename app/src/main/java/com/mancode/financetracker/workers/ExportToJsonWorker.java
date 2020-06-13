@@ -41,11 +41,11 @@ public class ExportToJsonWorker extends Worker {
         FTDatabase database = FTDatabase.getInstance(getApplicationContext());
         DatabaseObject databaseObject = new DatabaseObject(
                 FTDatabase.DATABASE_VERSION,
-                database.currencyDao().getAllCurrencies(),
-                database.categoryDao().getAllCategories(),
-                database.accountDao().getAllAccounts(),
-                database.balanceDao().getAllBalances(),
-                database.transactionDao().getAllTransactions()
+                database.currencyDao().getAllCurrenciesSimple(),
+                database.categoryDao().getAllCategoriesSimple(),
+                database.accountDao().getAllAccountsSimple(),
+                database.balanceDao().getAllBalancesSimple(),
+                database.transactionDao().getAllTransactionsSimple()
         );
 
         String json = gson.toJson(databaseObject);
