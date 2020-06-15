@@ -1,18 +1,10 @@
 package com.mancode.financetracker.ui.transactions
 
-import com.mancode.financetracker.database.converter.DateConverter.toDate
-import com.mancode.financetracker.database.converter.DateConverter.toString
 import com.mancode.financetracker.database.pojos.TransactionFull
 import org.threeten.bp.LocalDate
 import java.util.Locale.ROOT
 
 class FilterQuery {
-    init {
-        updateQuery()
-    }
-
-    // query might be removed
-    var query: String = ""
     var description: String = ""
         private set(value) {
             field = value.trim().replace(SEPARATOR, "")
@@ -28,6 +20,14 @@ class FilterQuery {
     var bookmarked: Boolean = false
         private set
 
+    fun isEmpty(): Boolean =
+            description.isEmpty()
+                    && type == TYPE_ALL
+                    && fromDate == null
+                    && toDate == null
+                    && timespan == UNCONSTRAINED
+                    && !bookmarked
+
     fun update(
             description: String? = null,
             type: Int? = null,
@@ -40,9 +40,14 @@ class FilterQuery {
         if (type != null) this.type = type
         if (from != null) this.fromDate = from
         if (to != null) this.toDate = to
-        if (timespan != null) this.timespan = timespan
+        if (timespan != null) {
+            this.timespan = timespan
+            if (timespan == UNCONSTRAINED) {
+                this.fromDate = null
+                this.toDate = null
+            }
+        }
         if (bookmark != null) this.bookmarked = bookmark
-        updateQuery()
     }
 
     fun resetExceptDescription() {
@@ -51,30 +56,6 @@ class FilterQuery {
                 timespan = UNCONSTRAINED,
                 bookmark = false
         )
-    }
-
-    private fun updateQuery() {
-        query = description +
-                SEPARATOR +
-                type +
-                SEPARATOR +
-                toString(fromDate) +
-                SEPARATOR +
-                toString(toDate) +
-                SEPARATOR +
-                timespan +
-                SEPARATOR +
-                bookmarked
-    }
-
-    private fun updateFields() {
-        val tokens = query.split(SEPARATOR)
-        description = tokens[0]
-        type = if (tokens[1].isNotEmpty()) tokens[1].toInt() else TYPE_ALL
-        fromDate = toDate(tokens[2])
-        toDate = toDate(tokens[3])
-        timespan = if (tokens[4].isNotEmpty()) tokens[4].toInt() else UNCONSTRAINED
-        bookmarked = tokens[5].isNotEmpty() && tokens[5].toBoolean()
     }
 
     fun isMatch(transaction: TransactionFull): Boolean {

@@ -117,9 +117,8 @@ class TransactionRecyclerViewAdapter(
 
     private inner class TransactionFilter : Filter() {
         override fun performFiltering(charSequence: CharSequence): FilterResults {
-            val query = filterQuery.query
             val filterResults = FilterResults()
-            if (query.isEmpty()) {
+            if (filterQuery.isEmpty()) {
                 filterResults.values = allTransactions
             } else {
                 val filteredList: MutableList<TransactionFull> = ArrayList()
