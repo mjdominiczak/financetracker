@@ -135,7 +135,7 @@ class TransactionRecyclerViewAdapter(
 
         @Suppress("UNCHECKED_CAST")
         override fun publishResults(charSequence: CharSequence, filterResults: FilterResults) {
-            filteredTransactions = filterResults.values as ArrayList<TransactionFull>
+            filteredTransactions = filterResults.values as ArrayList<TransactionFull>   // TODO crash here
             submitList(filteredTransactions)
         }
     }
