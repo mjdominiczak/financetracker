@@ -31,11 +31,11 @@ class AddEditTransactionViewModel(application: Application) : AndroidViewModel(a
 
     fun getAccountsOnDate(date: LocalDate): List<AccountEntity> =
             accounts.filter {
-                it.openDate.isBefore(date) && (it.closeDate == null || it.closeDate!!.isAfter(date))
+                !it.openDate.isAfter(date) && (it.closeDate == null || it.closeDate!!.isAfter(date))
             }
 
-    fun isAccountOpenBefore(date: LocalDate): Boolean =
-            account != null && account!!.openDate.isBefore(date)
+    fun isAccountOpenOn(date: LocalDate): Boolean =
+            account != null && !account!!.openDate.isAfter(date)
 
     fun isAccountClosedBefore(date: LocalDate): Boolean =
             account != null && (account!!.closeDate != null && account!!.closeDate!!.isBefore(date))

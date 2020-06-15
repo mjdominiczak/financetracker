@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -196,7 +195,7 @@ class AddEditTransactionFragment : Fragment() {
         with(accountDropdown) {
             setAdapter(obtainAccountAdapter())
             if (viewModel.account != null) {
-                accountInputLayout.error = if (!viewModel.isAccountOpenBefore(transactionDate.date)) {
+                accountInputLayout.error = if (!viewModel.isAccountOpenOn(transactionDate.date)) {
                     getString(R.string.error_account_not_open)
                 } else if (viewModel.isAccountClosedBefore(transactionDate.date)) {
                     getString(R.string.error_account_closed)
