@@ -23,6 +23,9 @@ public interface CategoryDao {
     @Query("SELECT * FROM categories")
     List<CategoryEntity> getAllCategoriesSimple();
 
+    @Query("SELECT * FROM categories WHERE category_type = :type")
+    LiveData<List<CategoryEntity>> getCategoriesOfType(int type);
+
     @Insert
     void insertCategory(CategoryEntity category);
 

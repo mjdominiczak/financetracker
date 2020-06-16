@@ -65,6 +65,7 @@ dependencies {
     implementation libs.androidx.lifecycle
     implementation libs.androidx.preference
     implementation libs.androidx.work
+    implementation libs.androidx.viewpager2
     implementation libs.androidx.navigationfragment
     implementation libs.androidx.navigationUI
     implementation libs.google.material
