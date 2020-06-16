@@ -46,6 +46,7 @@ version.properties
 .idea/caches
 .idea/codeStyles
 .idea/libraries
+.idea/shelf
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/datasources.xml
