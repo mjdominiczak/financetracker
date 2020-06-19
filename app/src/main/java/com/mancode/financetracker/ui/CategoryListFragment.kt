@@ -13,14 +13,14 @@ import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.TransactionEntity
 import com.mancode.financetracker.viewmodel.CategoryViewModel
 
-class CategoryListFragment : Fragment() {
+class CategoryListFragment : Fragment(), CategoryListAdapter.OnCategoryAddedListener {
 
     private val categoryType: Int by lazy {
         arguments!!.getInt(ARG_CATEGORY_TYPE)
     }
 
     private val viewModel: CategoryViewModel by viewModels()
-    private val adapter by lazy { CategoryListAdapter() }
+    private val adapter by lazy { CategoryListAdapter(this) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -40,6 +40,10 @@ class CategoryListFragment : Fragment() {
         listToObserve.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
         })
+    }
+
+    override fun onCategoryAdded(name: String) {
+        viewModel.insertCategory(name, categoryType)
     }
 
     companion object {

@@ -87,6 +87,7 @@
     <string name="snackbar_transaction_removed">Transakcja \"%1$s\" usunięta</string>
     <string name="remove_account">Usuń konto</string>
     <string name="warning_account_used">Konto jest używane po wskazanej dacie</string>
+    <string name="new_category">+ Nowa kategoria</string>
 
     <string-array name="transaction_filter_type">
         <item>Wszystkie</item>
