@@ -12,10 +12,10 @@
     <string name="title_transaction_filter">Filter transactions</string>
 
     <string name="neutral_filter">Reset</string>
-    <string name="negative_filter">Cancel</string>
     <string name="positive_filter">Apply</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="cancel">Cancel</string>
 
     <string name="accounts">Accounts</string>
     <string name="balances">Balances</string>

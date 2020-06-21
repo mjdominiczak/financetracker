@@ -11,7 +11,7 @@
     <string name="title_add_transaction">Dodaj transakcję</string>
     <string name="title_transaction_filter">Filtruj transakcje</string>
     <string name="neutral_filter">Przywróć</string>
-    <string name="negative_filter">Anuluj</string>
+    <string name="cancel">Anuluj</string>
     <string name="positive_filter">Zastosuj</string>
     <string name="yes">Tak</string>
     <string name="no">Nie</string>

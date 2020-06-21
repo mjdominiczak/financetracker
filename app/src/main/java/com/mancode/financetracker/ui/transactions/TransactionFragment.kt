@@ -163,7 +163,7 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
             builder.setTitle(R.string.title_transaction_filter)
                     .setView(dialogView)
                     .setNeutralButton(R.string.neutral_filter) { _, _ -> adapter.resetFilter() }
-                    .setNegativeButton(R.string.negative_filter) { _, _ -> }
+                    .setNegativeButton(R.string.cancel) { _, _ -> }
                     .setPositiveButton(R.string.positive_filter) { _, _ ->
                         adapter.updateFilterQuery(
                                 positionToType(typeAdapter.getPosition(dropdownTransactionType.text.toString())),
