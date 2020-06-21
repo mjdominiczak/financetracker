@@ -28,6 +28,7 @@
     </style>
 
     <style name="AlertDialog" parent="@style/ThemeOverlay.MaterialComponents.Dialog">
+        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
         <item name="dropdownInputStyle">@style/DropdownInputStyleOutlined</item>
         <item name="setDateViewStyle">@style/SetDateViewOutlined</item>
         <item name="innerSetDateViewStyle">@style/InnerSetDateViewOutlined</item>

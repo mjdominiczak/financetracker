@@ -9,11 +9,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.CategoryEntity
 
-class CategoryListAdapter(private val listener: OnCategoryAddedListener) :
+class CategoryListAdapter(private val listener: ModifyRequestListener) :
         ListAdapter<CategoryEntity, RecyclerView.ViewHolder>(DiffCallback()) {
 
     override fun getItemViewType(position: Int): Int {
@@ -33,9 +35,22 @@ class CategoryListAdapter(private val listener: OnCategoryAddedListener) :
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder.itemViewType == 0) {
-            val item: CategoryEntity? = currentList[position]
-            (holder as ViewHolder).categoryName.text = item?.category ?: "Brak"
+        if (holder is ViewHolder) {
+            val item: CategoryEntity = currentList[position]
+            holder.categoryName.text = item.category
+            holder.itemView.setOnClickListener {
+                val layout = LayoutInflater.from(it.context)
+                        .inflate(R.layout.dialog_category_edit, null)
+                val name = layout.findViewById<TextInputEditText>(R.id.categoryName)
+                name.setText(item.category)
+                MaterialAlertDialogBuilder(it.context)
+                        .setView(layout)
+                        .setNegativeButton(R.string.cancel) { _, _ -> }
+                        .setPositiveButton(R.string.toolbar_action_save) { _, _ ->
+                            listener.onCategoryUpdated(
+                                    CategoryEntity(item.id, name.text.toString(), item.categoryType))
+                        }.show()
+            }
         }
     }
 
@@ -81,7 +96,8 @@ class CategoryListAdapter(private val listener: OnCategoryAddedListener) :
         }
     }
 
-    interface OnCategoryAddedListener {
+    interface ModifyRequestListener {
         fun onCategoryAdded(name: String)
+        fun onCategoryUpdated(categoryEntity: CategoryEntity)
     }
 }

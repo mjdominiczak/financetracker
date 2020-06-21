@@ -20,6 +20,12 @@ class CategoriesRepository private constructor(private val categoryDao: Category
         }
     }
 
+    fun updateCategory(categoryEntity: CategoryEntity) {
+        AsyncTask.execute {
+            categoryDao.updateCategory(categoryEntity)
+        }
+    }
+
     companion object {
         @Volatile
         private var instance: CategoriesRepository? = null

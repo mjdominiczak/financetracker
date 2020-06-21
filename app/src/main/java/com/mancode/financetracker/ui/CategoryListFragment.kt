@@ -10,10 +10,11 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mancode.financetracker.R
+import com.mancode.financetracker.database.entity.CategoryEntity
 import com.mancode.financetracker.database.entity.TransactionEntity
 import com.mancode.financetracker.viewmodel.CategoryViewModel
 
-class CategoryListFragment : Fragment(), CategoryListAdapter.OnCategoryAddedListener {
+class CategoryListFragment : Fragment(), CategoryListAdapter.ModifyRequestListener {
 
     private val categoryType: Int by lazy {
         arguments!!.getInt(ARG_CATEGORY_TYPE)
@@ -44,6 +45,10 @@ class CategoryListFragment : Fragment(), CategoryListAdapter.OnCategoryAddedList
 
     override fun onCategoryAdded(name: String) {
         viewModel.insertCategory(name, categoryType)
+    }
+
+    override fun onCategoryUpdated(categoryEntity: CategoryEntity) {
+        viewModel.updateCategory(categoryEntity)
     }
 
     companion object {

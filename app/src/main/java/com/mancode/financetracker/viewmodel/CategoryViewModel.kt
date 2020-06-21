@@ -17,4 +17,8 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
                 CategoryEntity(0, name, categoryType)
         )
     }
+
+    fun updateCategory(categoryEntity: CategoryEntity) {
+        repository.updateCategory(categoryEntity)
+    }
 }
