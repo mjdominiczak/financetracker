@@ -1,4 +1,4 @@
-package com.mancode.financetracker.ui
+package com.mancode.financetracker.ui.categories
 
 import android.os.Bundle
 import android.view.LayoutInflater
