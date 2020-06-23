@@ -9,6 +9,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.CategoryEntity
 import com.mancode.financetracker.database.entity.TransactionEntity
@@ -47,8 +49,17 @@ class CategoryListFragment : Fragment(), CategoryListAdapter.ModifyRequestListen
         viewModel.insertCategory(name, categoryType)
     }
 
-    override fun onCategoryUpdated(categoryEntity: CategoryEntity) {
-        viewModel.updateCategory(categoryEntity)
+    override fun onCategoryModified(categoryEntity: CategoryEntity) {
+        val layout = layoutInflater.inflate(R.layout.dialog_category_edit, null)
+        val name = layout.findViewById<TextInputEditText>(R.id.categoryName)
+        name.setText(categoryEntity.category)
+        MaterialAlertDialogBuilder(context)
+                .setView(layout)
+                .setNegativeButton(R.string.cancel) { _, _ -> }
+                .setPositiveButton(R.string.toolbar_action_save) { _, _ ->
+                    viewModel.updateCategory(CategoryEntity(categoryEntity.id, name.text.toString(),
+                            categoryEntity.categoryType))
+                }.show()
     }
 
     companion object {

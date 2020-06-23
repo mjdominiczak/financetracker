@@ -9,9 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.CategoryEntity
 
@@ -39,17 +37,7 @@ class CategoryListAdapter(private val listener: ModifyRequestListener) :
             val item: CategoryEntity = currentList[position]
             holder.categoryName.text = item.category
             holder.itemView.setOnClickListener {
-                val layout = LayoutInflater.from(it.context)
-                        .inflate(R.layout.dialog_category_edit, null)
-                val name = layout.findViewById<TextInputEditText>(R.id.categoryName)
-                name.setText(item.category)
-                MaterialAlertDialogBuilder(it.context)
-                        .setView(layout)
-                        .setNegativeButton(R.string.cancel) { _, _ -> }
-                        .setPositiveButton(R.string.toolbar_action_save) { _, _ ->
-                            listener.onCategoryUpdated(
-                                    CategoryEntity(item.id, name.text.toString(), item.categoryType))
-                        }.show()
+                listener.onCategoryModified(item)
             }
         }
     }
@@ -98,6 +86,6 @@ class CategoryListAdapter(private val listener: ModifyRequestListener) :
 
     interface ModifyRequestListener {
         fun onCategoryAdded(name: String)
-        fun onCategoryUpdated(categoryEntity: CategoryEntity)
+        fun onCategoryModified(categoryEntity: CategoryEntity)
     }
 }
