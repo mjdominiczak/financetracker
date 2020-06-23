@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -50,16 +51,28 @@ class CategoryListFragment : Fragment(), CategoryListAdapter.ModifyRequestListen
     }
 
     override fun onCategoryModified(categoryEntity: CategoryEntity) {
-        val layout = layoutInflater.inflate(R.layout.dialog_category_edit, null)
-        val name = layout.findViewById<TextInputEditText>(R.id.categoryName)
-        name.setText(categoryEntity.category)
-        MaterialAlertDialogBuilder(context)
-                .setView(layout)
-                .setNegativeButton(R.string.cancel) { _, _ -> }
-                .setPositiveButton(R.string.toolbar_action_save) { _, _ ->
-                    viewModel.updateCategory(CategoryEntity(categoryEntity.id, name.text.toString(),
-                            categoryEntity.categoryType))
-                }.show()
+        viewModel.getCategoryDependencyCount(categoryEntity.id).observe(viewLifecycleOwner, Observer {
+            val layout = layoutInflater.inflate(R.layout.dialog_category_edit, null)
+            val name = layout.findViewById<TextInputEditText>(R.id.categoryName)
+            name.setText(categoryEntity.category)
+            val count = layout.findViewById<TextView>(R.id.dependencyCount)
+            count.text = getString(R.string.connected_transactions_count, it)
+            val neutralButtonText = if (it == 0)
+                R.string.action_delete else
+                R.string.hide
+            val neutralButtonAction = {
+                if (it == 0) viewModel.deleteCategory(categoryEntity)
+                else viewModel.toggleHidden(categoryEntity.id)
+            }
+            MaterialAlertDialogBuilder(context)
+                    .setView(layout)
+                    .setNeutralButton(neutralButtonText) { _, _ -> neutralButtonAction() }
+                    .setNegativeButton(R.string.cancel) { _, _ -> }
+                    .setPositiveButton(R.string.toolbar_action_save) { _, _ ->
+                        viewModel.updateCategory(CategoryEntity(categoryEntity.id, name.text.toString(),
+                                categoryEntity.categoryType))
+                    }.show()
+        })
     }
 
     companion object {

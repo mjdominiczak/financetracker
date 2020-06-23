@@ -21,4 +21,14 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
     fun updateCategory(categoryEntity: CategoryEntity) {
         repository.updateCategory(categoryEntity)
     }
+
+    fun deleteCategory(categoryEntity: CategoryEntity) {
+        repository.deleteCategory(categoryEntity)
+    }
+
+    fun toggleHidden(categoryId: Int) {
+        repository.toggleHidden(categoryId)
+    }
+
+    fun getCategoryDependencyCount(id: Int): LiveData<Int> = repository.getDependencyCount(id)
 }

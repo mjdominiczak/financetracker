@@ -2,6 +2,7 @@ package com.mancode.financetracker.database.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -27,6 +28,9 @@ public interface CategoryDao {
     @Query("SELECT * FROM categories WHERE category_type = :type")
     LiveData<List<CategoryEntity>> getCategoriesOfType(int type);
 
+    @Query("SELECT COUNT(*) FROM transactions WHERE transaction_category = :id")
+    LiveData<Integer> getDependencyCount(int id);
+
     @Insert
     void insertCategory(CategoryEntity category);
 
@@ -35,4 +39,11 @@ public interface CategoryDao {
 
     @Update
     void updateCategory(CategoryEntity category);
+
+    @Delete
+    void deleteCategory(CategoryEntity categoryEntity);
+
+//    TODO
+//    @Query("")
+//    void hideCategory();
 }

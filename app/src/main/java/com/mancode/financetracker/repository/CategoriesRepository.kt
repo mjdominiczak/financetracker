@@ -26,6 +26,20 @@ class CategoriesRepository private constructor(private val categoryDao: Category
         }
     }
 
+    fun deleteCategory(categoryEntity: CategoryEntity) {
+        AsyncTask.execute {
+            categoryDao.deleteCategory(categoryEntity)
+        }
+    }
+
+    fun toggleHidden(categoryId: Int) {
+        AsyncTask.execute {
+            TODO()
+        }
+    }
+
+    fun getDependencyCount(id: Int) : LiveData<Int> = categoryDao.getDependencyCount(id)
+
     companion object {
         @Volatile
         private var instance: CategoriesRepository? = null
