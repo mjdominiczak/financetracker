@@ -1,5 +1,6 @@
 package com.mancode.financetracker.ui.categories
 
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,9 +36,14 @@ class CategoryListAdapter(private val listener: ModifyRequestListener) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ViewHolder) {
             val item: CategoryEntity = currentList[position]
-            holder.categoryName.text = item.category
-            holder.itemView.setOnClickListener {
-                listener.onCategoryModified(item)
+            with(holder) {
+                categoryName.text = item.category
+                categoryName.paintFlags =
+                        if (item.hidden) categoryName.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                        else categoryName.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                itemView.setOnClickListener {
+                    listener.onCategoryModified(item)
+                }
             }
         }
     }
@@ -52,7 +58,9 @@ class CategoryListAdapter(private val listener: ModifyRequestListener) :
         override fun areContentsTheSame(oldItem: CategoryEntity, newItem: CategoryEntity): Boolean {
             return areItemsTheSame(oldItem, newItem) &&
                     oldItem.categoryType == newItem.categoryType &&
-                    oldItem.category == newItem.category
+                    oldItem.category == newItem.category &&
+                    oldItem.hidden == newItem.hidden &&
+                    oldItem.position == newItem.position
         }
     }
 

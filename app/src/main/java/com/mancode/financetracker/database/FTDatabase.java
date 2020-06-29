@@ -43,7 +43,7 @@ import com.mancode.financetracker.workers.UpdateStateWorker;
         version = FTDatabase.DATABASE_VERSION)
 public abstract class FTDatabase extends RoomDatabase {
 
-    public static final int DATABASE_VERSION = 5;
+    public static final int DATABASE_VERSION = 6;
     private static final String DATABASE_NAME = "database.db";
     private static FTDatabase sInstance;
 
@@ -189,6 +189,26 @@ public abstract class FTDatabase extends RoomDatabase {
         }
     };
 
+    /**
+     * Migration from version 5 to version 6:
+     * - added columns hidden and position in categories table
+     */
+    private static Migration MIGRATION_5_6 = new Migration(5, 6) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase db) {
+            db.beginTransaction();
+            try {
+                db.execSQL("PRAGMA foreign_keys=off;");
+                db.execSQL("ALTER TABLE categories ADD COLUMN hidden INTEGER NOT NULL DEFAULT 0");
+                db.execSQL("ALTER TABLE categories ADD COLUMN position INTEGER");
+                db.execSQL("PRAGMA foreign_keys=on;");
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
+        }
+    };
+
     public static FTDatabase getInstance(final Context context) {
         if (sInstance == null) {
             synchronized (FTDatabase.class) {
@@ -206,6 +226,7 @@ public abstract class FTDatabase extends RoomDatabase {
                 .addMigrations(MIGRATION_2_3)
                 .addMigrations(MIGRATION_3_4)
                 .addMigrations(MIGRATION_4_5)
+                .addMigrations(MIGRATION_5_6)
                 .addCallback(new Callback() {
                     @Override
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {

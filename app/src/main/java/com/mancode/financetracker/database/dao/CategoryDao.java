@@ -43,7 +43,8 @@ public interface CategoryDao {
     @Delete
     void deleteCategory(CategoryEntity categoryEntity);
 
-//    TODO
-//    @Query("")
-//    void hideCategory();
+    @Query("UPDATE categories " +
+            "SET hidden = ~(hidden & 1) & (hidden | 1) " +
+            "WHERE _id = :id")
+    void toggleHidden(int id);
 }

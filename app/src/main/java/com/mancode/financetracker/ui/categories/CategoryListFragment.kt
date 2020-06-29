@@ -57,9 +57,11 @@ class CategoryListFragment : Fragment(), CategoryListAdapter.ModifyRequestListen
             name.setText(categoryEntity.category)
             val count = layout.findViewById<TextView>(R.id.dependencyCount)
             count.text = getString(R.string.connected_transactions_count, it)
-            val neutralButtonText = if (it == 0)
-                R.string.action_delete else
-                R.string.hide
+            val neutralButtonText = when {
+                it == 0 -> R.string.action_delete
+                categoryEntity.hidden -> R.string.unhide
+                else -> R.string.hide
+            }
             val neutralButtonAction = {
                 if (it == 0) viewModel.deleteCategory(categoryEntity)
                 else viewModel.toggleHidden(categoryEntity.id)
@@ -70,7 +72,7 @@ class CategoryListFragment : Fragment(), CategoryListAdapter.ModifyRequestListen
                     .setNegativeButton(R.string.cancel) { _, _ -> }
                     .setPositiveButton(R.string.toolbar_action_save) { _, _ ->
                         viewModel.updateCategory(CategoryEntity(categoryEntity.id, name.text.toString(),
-                                categoryEntity.categoryType))
+                                categoryEntity.categoryType, categoryEntity.hidden, categoryEntity.position))
                     }.show()
         })
     }

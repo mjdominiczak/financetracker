@@ -91,6 +91,7 @@
     <string name="warning_account_used">Account is used after selected date</string>
     <string name="new_category">+ New category</string>
     <string name="hide">Hide</string>
+    <string name="unhide">Unhide</string>
     <string name="connected_transactions_count">%1$d transactions connected</string>
 
     <!--NON TRANSLATABLE KEYS-->

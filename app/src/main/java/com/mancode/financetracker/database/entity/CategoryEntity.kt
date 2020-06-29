@@ -16,7 +16,10 @@ data class CategoryEntity(
         @ColumnInfo(name = "category")
         var category: String,
         @ColumnInfo(name = "category_type")
-        var categoryType: Int) {
+        var categoryType: Int,
+        @ColumnInfo(defaultValue = "0")
+        var hidden: Boolean,
+        var position: Int?) {
 
     override fun toString(): String {
         return category

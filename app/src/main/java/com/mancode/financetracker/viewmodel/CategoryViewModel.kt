@@ -14,7 +14,7 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
 
     fun insertCategory(name: String, categoryType: Int) {
         repository.insertCategory(
-                CategoryEntity(0, name, categoryType)
+                CategoryEntity(0, name, categoryType, false, null)
         )
     }
 

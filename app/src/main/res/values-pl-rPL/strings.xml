@@ -89,6 +89,7 @@
     <string name="warning_account_used">Konto jest używane po wskazanej dacie</string>
     <string name="new_category">+ Nowa kategoria</string>
     <string name="hide">Ukryj</string>
+    <string name="unhide">Odkryj</string>
     <string name="connected_transactions_count">%1$d połączonych transakcji</string>
 
     <string-array name="transaction_filter_type">

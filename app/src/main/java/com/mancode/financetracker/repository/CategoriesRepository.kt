@@ -34,7 +34,7 @@ class CategoriesRepository private constructor(private val categoryDao: Category
 
     fun toggleHidden(categoryId: Int) {
         AsyncTask.execute {
-            TODO()
+            categoryDao.toggleHidden(categoryId)
         }
     }
 
