@@ -51,8 +51,10 @@ class AddEditTransactionViewModel(application: Application) : AndroidViewModel(a
     }
 
     fun splitCategories() {
-        incomeCategories.addAll(allCategories.filter { it.categoryType == TransactionEntity.TYPE_INCOME })
-        outcomeCategories.addAll(allCategories.filter { it.categoryType == TransactionEntity.TYPE_OUTCOME })
+        incomeCategories.addAll(allCategories.filter {
+            it.categoryType == TransactionEntity.TYPE_INCOME && !it.hidden })
+        outcomeCategories.addAll(allCategories.filter {
+            it.categoryType == TransactionEntity.TYPE_OUTCOME && !it.hidden })
     }
 
     fun getAccountName(): String? =
