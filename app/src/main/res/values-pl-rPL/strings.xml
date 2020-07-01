@@ -80,6 +80,7 @@
     <string name="pref_transaction_reminder_time">Ustaw czas</string>
     <string name="pref_transaction_reminder_weekdays">Wybierz dni tygodnia</string>
     <string name="pref_default_currency">Waluta domyślna</string>
+    <string name="pref_categories">Kategorie transakcji</string>
     <string name="question_transaction_reminder_decision">Czy chcesz ustawić codzienne przypomnienie o wprowadzeniu transakcji?</string>
     <string name="your_net_value">Twoja wartość netto</string>
     <string name="search">Wyszukaj</string>

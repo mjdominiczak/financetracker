@@ -40,7 +40,11 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.mancode.financetracker.SettingsFragment"
-        android:label="@string/action_settings" />
+        android:label="@string/action_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_categoryFragment"
+            app:destination="@id/categoryFragment" />
+    </fragment>
     <action
         android:id="@+id/action_global_settingsFragment"
         app:destination="@id/settingsFragment" />
@@ -62,6 +66,11 @@
             android:defaultValue="0"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.mancode.financetracker.ui.categories.CategoryFragment"
+        android:label="@string/categories"
+        tools:layout="@layout/fragment_category" />
     <navigation
         android:id="@+id/transactionsGraph"
         app:startDestination="@id/transactionFragment">

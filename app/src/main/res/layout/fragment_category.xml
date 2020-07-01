@@ -6,15 +6,27 @@
     android:orientation="vertical"
     tools:context=".ui.categories.CategoryFragment">
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayoutCategories"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/categoriesToolbar"
+            style="@style/Widget.MaterialComponents.Toolbar.Surface"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayoutCategories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/pagerCategories"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
 </LinearLayout>

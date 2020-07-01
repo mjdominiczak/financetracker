@@ -41,6 +41,10 @@
         <ListPreference
             android:key="@string/default_currency"
             android:title="@string/pref_default_currency" />
+
+        <Preference
+            android:key="key_categories"
+            android:title="@string/pref_categories"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:layout="@layout/preference_category_no_label">

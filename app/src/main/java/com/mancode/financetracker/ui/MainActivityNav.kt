@@ -40,6 +40,7 @@ class MainActivityNav : AppCompatActivity() {
                 R.id.addEditAccountFragment -> hideBottomNav()
                 R.id.addBalanceFragment -> hideBottomNav()
                 R.id.addEditTransactionFragment -> hideBottomNav()
+                R.id.categoryFragment -> hideBottomNav()
                 else -> showBottomNav()
             }
         }

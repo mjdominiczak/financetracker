@@ -5,6 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mancode.financetracker.R
@@ -27,6 +30,10 @@ class CategoryFragment : Fragment() {
                 else -> throw IllegalStateException("Wrong number of tabs")
             }
         }.attach()
+
+        val navController = findNavController()
+        val appBarConfig = AppBarConfiguration(navController.graph)
+        categoriesToolbar.setupWithNavController(navController, appBarConfig)
     }
 
     class CategoryPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {

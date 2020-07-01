@@ -63,6 +63,11 @@ class SettingsFragment : PreferenceFragmentCompat(),
             value = PreferenceAccessor.defaultCurrency
             summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
         }
+        val categoriesPref = findPreference<Preference>("key_categories")
+        categoriesPref?.setOnPreferenceClickListener {
+            findNavController().navigate(R.id.action_settingsFragment_to_categoryFragment)
+            true
+        }
 
         val exportPref = findPreference<Preference>("key_export")
         exportPref?.setOnPreferenceClickListener {
