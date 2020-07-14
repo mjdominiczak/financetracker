@@ -22,85 +22,85 @@
       "category": "Jedzenie",
       "categoryType": -1,
       "id": 1,
-      "hidden": 0
+      "hidden": false
     },
     {
       "category": "Dom",
       "categoryType": -1,
       "id": 2,
-      "hidden": 0
+      "hidden": false
     },
     {
       "category": "Transport",
       "categoryType": -1,
       "id": 3,
-      "hidden": 0
+      "hidden": false
     },
     {
       "category": "Telekomunikacja",
       "categoryType": -1,
       "id": 4,
-      "hidden": 0
+      "hidden": false
     },
     {
       "category": "Opieka zdrowotna",
       "categoryType": -1,
       "id": 5,
-      "hidden": 0
+      "hidden": false
     },
     {
       "category": "Ubranie",
       "categoryType": -1,
       "id": 6,
-      "hidden": 0
+      "hidden": false
     },
     {
       "category": "Higiena",
       "categoryType": -1,
       "id": 7,
-      "hidden": 0
+      "hidden": false
     },
     {
       "category": "Dzieci",
       "categoryType": -1,
       "id": 8,
-      "hidden": 0
+      "hidden": false
     },
     {
       "category": "Rozrywka",
       "categoryType": -1,
       "id": 9,
-      "hidden": 0
+      "hidden": false
     },
     {
       "category": "Inne wydatki",
       "categoryType": -1,
       "id": 10,
-      "hidden": 0
+      "hidden": false
     },
     {
       "category": "Pensja",
       "categoryType": 1,
       "id": 11,
-      "hidden": 0
+      "hidden": false
     },
     {
       "category": "Odsetki",
       "categoryType": 1,
       "id": 12,
-      "hidden": 0
+      "hidden": false
     },
     {
       "category": "Prezenty",
       "categoryType": 1,
       "id": 13,
-      "hidden": 0
+      "hidden": false
     },
     {
       "category": "Inne przychody",
       "categoryType": 1,
       "id": 14,
-      "hidden": 0
+      "hidden": false
     }
   ],
   "currencies": [
