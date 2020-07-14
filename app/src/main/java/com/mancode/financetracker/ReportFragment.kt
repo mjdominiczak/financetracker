@@ -77,7 +77,7 @@ class ReportFragment : Fragment() {
                 .toMutableList()
         val data = netValueChart.lineChartData
         data.axisXBottom = getAxisXFormatted(axisXValues)
-        val color = ContextCompat.getColor(context!!, R.color.colorSecondaryVariant)
+        val color = ContextCompat.getColor(requireContext(), R.color.colorSecondaryVariant)
         data.lines[0] = Line(newValues, color = color, isCubic = true, hasLabels = false,
                 hasLabelsOnlyForSelected = true, isFilled = true, pointRadius = 2)
         netValueChart.maximumViewport = Viewport(

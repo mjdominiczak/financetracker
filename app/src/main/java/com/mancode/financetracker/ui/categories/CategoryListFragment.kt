@@ -20,7 +20,7 @@ import com.mancode.financetracker.viewmodel.CategoryViewModel
 class CategoryListFragment : Fragment(), CategoryListAdapter.ModifyRequestListener {
 
     private val categoryType: Int by lazy {
-        arguments!!.getInt(ARG_CATEGORY_TYPE)
+        requireArguments().getInt(ARG_CATEGORY_TYPE)
     }
 
     private val viewModel: CategoryViewModel by viewModels()
@@ -66,7 +66,7 @@ class CategoryListFragment : Fragment(), CategoryListAdapter.ModifyRequestListen
                 if (it == 0) viewModel.deleteCategory(categoryEntity)
                 else viewModel.toggleHidden(categoryEntity.id)
             }
-            MaterialAlertDialogBuilder(context)
+            MaterialAlertDialogBuilder(requireContext())
                     .setView(layout)
                     .setNeutralButton(neutralButtonText) { _, _ -> neutralButtonAction() }
                     .setNegativeButton(R.string.cancel) { _, _ -> }
