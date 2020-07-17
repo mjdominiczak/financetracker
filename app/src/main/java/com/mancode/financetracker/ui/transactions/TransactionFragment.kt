@@ -45,7 +45,7 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
     private lateinit var navController: NavController
 
     private val adapter: TransactionRecyclerViewAdapter by lazy {
-        TransactionRecyclerViewAdapter(context!!, this)
+        TransactionRecyclerViewAdapter(requireContext(), this)
     }
     private val viewModel: TransactionViewModel by viewModels()
 
@@ -57,7 +57,16 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         navController = findNavController()
         viewModel.allTransactions.observe(viewLifecycleOwner,
-                Observer { transactions -> adapter.setTransactions(transactions) })
+                Observer { transactions ->
+                    adapter.setTransactions(transactions)
+                    if (transactions.isNotEmpty()) {
+                        transactions_list.visibility = View.VISIBLE
+                        emptyListInfo.visibility = View.GONE
+                    } else {
+                        transactions_list.visibility = View.GONE
+                        emptyListInfo.visibility = View.VISIBLE
+                    }
+                })
         transactions_list.layoutManager = LinearLayoutManager(context)
         transactions_list.adapter = adapter
         ItemTouchHelper(SwipeToDeleteCallback(adapter))
@@ -100,7 +109,7 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
     override fun onDeleteRequested(transaction: TransactionEntity?) {
         viewModel.deleteTransaction(transaction)
         val text: String = getString(R.string.snackbar_transaction_removed, transaction?.description)
-        Snackbar.make(view!!, text, Snackbar.LENGTH_LONG)
+        Snackbar.make(requireView(), text, Snackbar.LENGTH_LONG)
                 .setAction(getString(R.string.undo)) {
                     onRestoreRequested(transaction)
                 }.show()

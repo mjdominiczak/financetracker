@@ -92,6 +92,7 @@
     <string name="hide">Ukryj</string>
     <string name="unhide">Odkryj</string>
     <string name="connected_transactions_count">%1$d połączonych transakcji</string>
+    <string name="info_no_transactions">Nie dodałeś jeszcze żadnej transakcji!</string>
 
     <string-array name="transaction_filter_type">
         <item>Wszystkie</item>

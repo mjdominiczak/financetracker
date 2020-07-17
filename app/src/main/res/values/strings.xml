@@ -94,6 +94,7 @@
     <string name="hide">Hide</string>
     <string name="unhide">Unhide</string>
     <string name="connected_transactions_count">%1$d transactions connected</string>
+    <string name="info_no_transactions">You have not entered any transactions yet!</string>
 
     <!--NON TRANSLATABLE KEYS-->
     <string name="transaction_reminder_enabled" translatable="false">transaction_reminder_enabled</string>
