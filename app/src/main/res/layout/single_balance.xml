@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="8dp"
+    android:paddingVertical="4dp">
 
     <CheckBox
         android:id="@+id/checkBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:checked="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,15 +26,42 @@
         app:layout_constraintStart_toEndOf="@+id/checkBox"
         tools:text="Gotówka" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/deleteBalance"
+        style="@style/Widget.App.Button.IconOnly"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:visibility="gone"
+        app:icon="@drawable/ic_delete_black_24dp"
+        app:iconTint="@color/colorInactive"
+        app:layout_constraintBottom_toBottomOf="@+id/currency"
+        app:layout_constraintEnd_toStartOf="@+id/currency"
+        app:layout_constraintTop_toTopOf="@+id/currency" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/undeleteBalance"
+        style="@style/Widget.App.Button.IconOnly"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:visibility="gone"
+        app:icon="@drawable/ic_close_white_24dp"
+        app:iconTint="@color/colorInactive"
+        app:layout_constraintBottom_toBottomOf="@+id/currency"
+        app:layout_constraintEnd_toStartOf="@+id/currency"
+        app:layout_constraintTop_toTopOf="@+id/currency" />
+
     <EditText
         android:id="@+id/balanceValue"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="0.00"
         android:inputType="numberDecimal"
         android:selectAllOnFocus="true"
         android:singleLine="true"
         app:layout_constraintBaseline_toBaselineOf="@+id/accountName"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline3" />
 
     <androidx.constraintlayout.widget.Guideline

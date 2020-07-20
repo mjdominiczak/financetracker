@@ -27,7 +27,7 @@ import org.threeten.bp.LocalDate
 private val ViewGroup.views: List<View>
     get() = (0 until childCount).map { getChildAt(it) }
 
-class AddBalanceFragment() : Fragment() {
+class AddBalanceFragment : Fragment() {
 
     lateinit var navController: NavController
 
@@ -87,7 +87,7 @@ class AddBalanceFragment() : Fragment() {
                     Toast.makeText(activity, "No accounts selected!", Toast.LENGTH_SHORT).show()
                 } else {
                     val request = OneTimeWorkRequest.Builder(UpdateStateWorker::class.java).build()
-                    WorkManager.getInstance(context!!).enqueue(request)
+                    WorkManager.getInstance(requireContext()).enqueue(request)
                     dismiss()
                 }
             }
@@ -110,7 +110,7 @@ class AddBalanceFragment() : Fragment() {
             }
         }
         if (balanceFound) {
-            balanceView.setActive(false)
+            balanceView.setExisting()
         }
     }
 
