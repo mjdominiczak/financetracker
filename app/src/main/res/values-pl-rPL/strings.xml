@@ -94,6 +94,8 @@
     <string name="unhide">Odkryj</string>
     <string name="connected_transactions_count">%1$d połączonych transakcji</string>
     <string name="info_no_transactions">Nie dodałeś jeszcze żadnej transakcji!</string>
+    <string name="select_all">Wybierz wszystko</string>
+    <string name="balance_date">Data bilansu</string>
 
     <string-array name="transaction_filter_type">
         <item>Wszystkie</item>

@@ -51,9 +51,15 @@ class BalanceInputView : ConstraintLayout {
 
     fun isActive() = checkBox.isChecked
 
+    fun setActive(active: Boolean) {
+        if (checkBox.isEnabled) {
+            checkBox.isChecked = active
+            balanceValue.isEnabled = active
+        }
+    }
+
     fun setExisting() {
-        checkBox.isChecked = false
-        balanceValue.isEnabled = false
+        setActive(false)
         setBackgroundColor(ContextCompat.getColor(context, R.color.colorPositiveBackground))
         deleteBalance.visibility = View.VISIBLE
     }

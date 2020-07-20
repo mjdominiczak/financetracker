@@ -32,10 +32,8 @@ class AddBalanceFragment : Fragment() {
     lateinit var navController: NavController
 
     private val args: AddBalanceFragmentArgs by navArgs()
-    val date: LocalDate by lazy { args.balanceDate ?: LocalDate.now() }
-
     private val viewModel: AddBalancesViewModel by viewModels {
-        InjectorUtils.provideAddBalancesViewModelFactory(requireContext(), date)
+        InjectorUtils.provideAddBalancesViewModelFactory(requireContext(), args.balanceDate ?: LocalDate.now())
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -62,6 +60,15 @@ class AddBalanceFragment : Fragment() {
                 }
             }
         })
+
+        selectAll.setOnCheckedChangeListener { _, isChecked ->
+            for (balanceView in container.views) {
+                (balanceView as BalanceInputView).setActive(isChecked)
+            }
+        }
+        if (args.balanceDate == null) selectAll.isChecked = true
+        balanceDate.date = viewModel.date
+        balanceDate.isEnabled = false
 
         toolbar.setOnMenuItemClickListener { item ->
             if (item.itemId == R.id.action_menu_save) {
