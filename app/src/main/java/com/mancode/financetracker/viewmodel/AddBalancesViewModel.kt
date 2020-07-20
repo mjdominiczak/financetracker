@@ -26,4 +26,7 @@ class AddBalancesViewModel(
         }
     }
 
+    fun removeBalance(balance: BalanceEntity) {
+        balancesRepository.removeBalance(balance)
+    }
 }

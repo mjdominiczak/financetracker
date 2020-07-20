@@ -23,8 +23,4 @@ class BalanceViewModel(application: Application) : AndroidViewModel(application)
     fun insert(balance: BalanceEntity) {
         balancesRepository.insertBalance(balance)
     }
-
-    fun removeLastBalance() {
-        balancesRepository.removeLastBalance()
-    }
 }

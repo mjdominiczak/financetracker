@@ -25,8 +25,8 @@ class BalancesRepository private constructor(
         AsyncTask.execute { balanceDao.updateBalance(balance) }
     }
 
-    fun removeLastBalance() {
-        AsyncTask.execute { balanceDao.removeLast() }
+    fun removeBalance(balance: BalanceEntity) {
+        AsyncTask.execute { balanceDao.removeBalance(balance) }
     }
 
     companion object {

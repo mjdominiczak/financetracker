@@ -64,6 +64,7 @@
     <string name="error_field_empty">Pole nie może być puste</string>
     <string name="error_account_not_open">Konto nie jest otwarte</string>
     <string name="error_account_closed">Konto zostało zamknięte</string>
+    <string name="error_no_accounts_selected">Nie wybrałeś żadnego konta!</string>
     <string name="total_label">Suma:</string>
     <string name="previous_report">Poprzedni raport</string>
     <string name="next_report">Następny raport</string>

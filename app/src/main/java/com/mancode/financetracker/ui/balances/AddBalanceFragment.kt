@@ -69,10 +69,10 @@ class AddBalanceFragment : Fragment() {
                 var noneActive = true
                 for (balanceView in container.views) {
                     val balanceInputView = balanceView as BalanceInputView
-                    if (!balanceInputView.isActive()) continue
-
+                    if (!balanceInputView.isActive() && !balanceInputView.deleted) {
+                        continue
+                    }
                     noneActive = false
-
                     val balance = BalanceEntity(
                             balanceInputView.balanceId ?: 0,
                             viewModel.date,
@@ -80,11 +80,16 @@ class AddBalanceFragment : Fragment() {
                             balanceInputView.getValue(),
                             true
                     )
-                    viewModel.addEditBalance(balance)
+                    if (balanceInputView.deleted) {
+                        viewModel.removeBalance(balance)
+                        continue
+                    } else {
+                        viewModel.addEditBalance(balance)
+                    }
                 }
 
                 if (container.childCount == 0 || noneActive) {
-                    Toast.makeText(activity, "No accounts selected!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, getString(R.string.error_no_accounts_selected), Toast.LENGTH_SHORT).show()
                 } else {
                     val request = OneTimeWorkRequest.Builder(UpdateStateWorker::class.java).build()
                     WorkManager.getInstance(requireContext()).enqueue(request)
