@@ -79,9 +79,6 @@
             android:name="com.mancode.financetracker.ui.transactions.AddEditTransactionFragment"
             android:label="fragment_add_transaction"
             tools:layout="@layout/fragment_add_transaction">
-            <action
-                android:id="@+id/action_addEditTransactionFragment_to_transactionFragment"
-                app:popUpTo="@id/transactionFragment" />
             <argument
                 android:name="transactionId"
                 android:defaultValue="0"

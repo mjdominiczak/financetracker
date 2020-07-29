@@ -254,6 +254,6 @@ class AddEditTransactionFragment : Fragment() {
 
     private fun dismiss() {
         hideKeyboard()
-        navController.navigate(R.id.action_addEditTransactionFragment_to_transactionFragment)
+        navController.navigateUp()
     }
 }
