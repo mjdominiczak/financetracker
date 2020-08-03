@@ -75,10 +75,13 @@ class AddEditTransactionFragment : Fragment() {
                 if (viewModel.categoriesLiveData.value != null) {
                     updateCategoryAdapter(false)
                 }
+                radioGroupType.setOnCheckedChangeListener { _, _ -> updateCategoryAdapter() }
             })
         }
 
-        radioGroupType.setOnCheckedChangeListener { _, _ -> updateCategoryAdapter() }
+        if (args.transactionId == 0) {
+            radioGroupType.setOnCheckedChangeListener { _, _ -> updateCategoryAdapter() }
+        }
         transactionDate.addDateSetListener { updateAccountAdapter(false) }
         descriptionField.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
