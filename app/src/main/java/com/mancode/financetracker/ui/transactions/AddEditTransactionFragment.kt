@@ -227,8 +227,7 @@ class AddEditTransactionFragment : Fragment() {
 
     private fun obtainAccountAdapter(): ArrayAdapter<AccountEntity> {
         return ArrayAdapter(
-                context
-                        ?: throw IllegalStateException("Context null when trying to obtain adapter"),
+                requireContext(),
                 R.layout.dropdown_menu_popup_item,
                 viewModel.getAccountsOnDate(transactionDate.date)
         )
@@ -236,8 +235,7 @@ class AddEditTransactionFragment : Fragment() {
 
     private fun obtainIncomeAdapter(): ArrayAdapter<CategoryEntity> {
         return ArrayAdapter(
-                context
-                        ?: throw IllegalStateException("Context null when trying to obtain adapter"),
+                requireContext(),
                 R.layout.dropdown_menu_popup_item,
                 viewModel.incomeCategories
         )
@@ -245,8 +243,7 @@ class AddEditTransactionFragment : Fragment() {
 
     private fun obtainOutcomeAdapter(): ArrayAdapter<CategoryEntity> {
         return ArrayAdapter(
-                context
-                        ?: throw IllegalStateException("Context null when trying to obtain adapter"),
+                requireContext(),
                 R.layout.dropdown_menu_popup_item,
                 viewModel.outcomeCategories
         )
