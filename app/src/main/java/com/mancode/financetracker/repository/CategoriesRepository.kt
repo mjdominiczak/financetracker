@@ -20,6 +20,12 @@ class CategoriesRepository private constructor(private val categoryDao: Category
         }
     }
 
+    fun insertAll(categories: List<CategoryEntity>) {
+        AsyncTask.execute {
+            categoryDao.insertAll(categories)
+        }
+    }
+
     fun updateCategory(categoryEntity: CategoryEntity) {
         AsyncTask.execute {
             categoryDao.updateCategory(categoryEntity)

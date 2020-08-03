@@ -11,6 +11,7 @@ import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.mancode.financetracker.R
 import com.mancode.financetracker.notifications.resetRemindersAndShowDecisionDialog
+import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 import com.mancode.financetracker.utils.PERMISSION_REQUEST_READ_EXTERNAL_STORAGE
 import com.mancode.financetracker.utils.PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE
 import com.mancode.financetracker.utils.exportJson
@@ -25,7 +26,9 @@ class MainActivityNav : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        resetRemindersAndShowDecisionDialog()
+        if (!PreferenceAccessor.firstRun) {
+            resetRemindersAndShowDecisionDialog()
+        }
         fetchExchangeRates()
 
         setContentView(R.layout.activity_main_nav)
@@ -35,6 +38,7 @@ class MainActivityNav : AppCompatActivity() {
         navController = host.navController
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
+                R.id.firstRunFragment -> hideBottomNav()
                 R.id.settingsFragment -> hideBottomNav()
                 R.id.reportFragment -> hideBottomNav()
                 R.id.addEditAccountFragment -> hideBottomNav()

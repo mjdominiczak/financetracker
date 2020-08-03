@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.mancode.financetracker.R
+import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 import com.mancode.financetracker.viewmodel.DashboardViewModel
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 
@@ -22,12 +23,13 @@ class DashboardFragment : Fragment(), View.OnClickListener, Toolbar.OnMenuItemCl
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        navController = findNavController()
+        if (PreferenceAccessor.firstRun) navController.navigate(R.id.firstRunFragment)
         return inflater.inflate(R.layout.fragment_dashboard, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navController = findNavController()
         viewModel.assetsAccountsNumber.observe(viewLifecycleOwner, Observer {
             assets_accounts.text = getAccountsString(it)
         })

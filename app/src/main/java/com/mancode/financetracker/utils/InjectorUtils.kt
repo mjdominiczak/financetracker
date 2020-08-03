@@ -13,7 +13,7 @@ object InjectorUtils {
         return AccountsRepository.getInstance(db.accountDao(), db.currencyDao())
     }
 
-    private fun getBalancesRepository(context: Context): BalancesRepository {
+    fun getBalancesRepository(context: Context): BalancesRepository {
         val db = FTDatabase.getInstance(context)
         return BalancesRepository.getInstance(db.netValueDao(), db.balanceDao())
     }

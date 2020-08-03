@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Finance Tracker</string>
+    <string name="app_logo">App logo</string>
+    <string name="welcome_to_ft">Welcome to Finance Tracker!</string>
     <string name="action_settings">Settings</string>
     <string name="action_clearDB">Clear database</string>
     <string name="action_exportData">Export DB to file</string>
@@ -30,7 +32,7 @@
     <string name="hint_account_close_date">Account close date</string>
     <string name="hint_balance_value">Balance value</string>
     <string name="currency">Currency</string>
-    <string name="toolbar_action_save">Save</string>
+    <string name="save">Save</string>
     <string name="hint_transaction_date">Transaction date</string>
     <string name="hint_transaction_description">Description</string>
     <string name="hint_transaction_value">Value</string>
@@ -65,6 +67,7 @@
     <string name="error_account_not_open">Account has not been opened yet</string>
     <string name="error_account_closed">Account has been closed</string>
     <string name="error_no_accounts_selected">No accounts selected!</string>
+    <string name="error_not_a_number">This must be a number</string>
     <string name="total_label">Total:</string>
     <string name="registered_outcome">Registered outcome</string>
     <string name="registered_income">Registered income</string>
@@ -98,6 +101,32 @@
     <string name="info_no_transactions">You have not entered any transactions yet!</string>
     <string name="select_all">Select all</string>
     <string name="balance_date">Balance date</string>
+    <string name="opening_balance">Opening balance</string>
+
+    <!--OUTCOME CATEGORIES INITIAL-->
+    <string name="category_name_food">Food</string>
+    <string name="category_name_housing">Housing</string>
+    <string name="category_name_transportation">Transportation</string>
+    <string name="category_name_telecommunication">Telecommunication</string>
+    <string name="category_name_healthcare">Healthcare</string>
+    <string name="category_name_clothes">Clothes</string>
+    <string name="category_name_cosmetics">Cosmetics</string>
+    <string name="category_name_education">Education</string>
+    <string name="category_name_entertainment">Entertainment</string>
+    <string name="category_name_miscellaneous">Miscellaneous</string>
+
+    <!--INCOME CATEGORIES INITIAL-->
+    <string name="category_name_salary">Salary</string>
+    <string name="category_name_interest">Interest</string>
+    <string name="category_name_other">Other income</string>
+
+    <!--ACCOUNTS INITIAL-->
+    <string name="account_name_cash">Cash</string>
+
+    <!--LONG TEXTS-->
+    <string name="description_and_opening_balance">You just made a step towards better controlling your funds, congratulations!\n
+\nIn the app you can track state of your finances and control income and expenses. Reports will help you gain insight into your financial condition.\n
+\nIn the beginning enter opening balance for your main account (i.e. cash amount or bank account balance). You can add other accounts at any moment.</string>
 
     <!--NON TRANSLATABLE KEYS-->
     <string name="transaction_reminder_enabled" translatable="false">transaction_reminder_enabled</string>

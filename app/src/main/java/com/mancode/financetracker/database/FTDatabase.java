@@ -26,7 +26,6 @@ import com.mancode.financetracker.database.entity.CurrencyEntity;
 import com.mancode.financetracker.database.entity.NetValue;
 import com.mancode.financetracker.database.entity.TransactionEntity;
 import com.mancode.financetracker.database.views.AccountExtended;
-import com.mancode.financetracker.workers.PrepopulateDatabaseWorker;
 import com.mancode.financetracker.workers.UpdateStateWorker;
 
 /**
@@ -229,20 +228,11 @@ public abstract class FTDatabase extends RoomDatabase {
                 .addMigrations(MIGRATION_5_6)
                 .addCallback(new Callback() {
                     @Override
-                    public void onCreate(@NonNull SupportSQLiteDatabase db) {
-                        super.onCreate(db);
-                        OneTimeWorkRequest request =
-                                new OneTimeWorkRequest.Builder(PrepopulateDatabaseWorker.class).build();
-                        WorkManager.getInstance().enqueue(request);
-                    }
-                })
-                .addCallback(new Callback() {
-                    @Override
                     public void onOpen(@NonNull SupportSQLiteDatabase db) {
                         super.onOpen(db);
                         OneTimeWorkRequest request =
                                 new OneTimeWorkRequest.Builder(UpdateStateWorker.class).build();
-                        WorkManager.getInstance().enqueue(request);
+                        WorkManager.getInstance(applicationContext).enqueue(request);
                     }
                 })
                 .build();

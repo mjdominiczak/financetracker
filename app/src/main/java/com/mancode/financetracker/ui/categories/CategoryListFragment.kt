@@ -70,7 +70,7 @@ class CategoryListFragment : Fragment(), CategoryListAdapter.ModifyRequestListen
                     .setView(layout)
                     .setNeutralButton(neutralButtonText) { _, _ -> neutralButtonAction() }
                     .setNegativeButton(R.string.cancel) { _, _ -> }
-                    .setPositiveButton(R.string.toolbar_action_save) { _, _ ->
+                    .setPositiveButton(R.string.save) { _, _ ->
                         viewModel.updateCategory(CategoryEntity(categoryEntity.id, name.text.toString(),
                                 categoryEntity.categoryType, categoryEntity.hidden, categoryEntity.position))
                     }.show()

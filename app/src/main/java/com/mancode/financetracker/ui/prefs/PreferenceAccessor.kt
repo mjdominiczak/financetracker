@@ -29,6 +29,10 @@ object PreferenceAccessor {
                 CurrencyUnit.of(Locale.getDefault()).code)!!
         set(value) = preferences.edit { it.putString("default_currency", value) }
 
+    var firstRun: Boolean
+        get() = preferences.getBoolean("first_run", true)
+        set(value) = preferences.edit { it.putBoolean("first_run", value) }
+
     var ratesFetchDate: LocalDate?
         get() {
             val string = preferences.getString("rates_fetch_date", null)

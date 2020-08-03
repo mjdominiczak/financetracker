@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Finance Tracker</string>
+    <string name="app_logo">Logo aplikacji</string>
+    <string name="welcome_to_ft">Witaj w Finance Trackerze!</string>
     <string name="action_settings">Ustawienia</string>
     <string name="action_clearDB">Wyczyść bazę</string>
     <string name="action_exportData">Eksportuj dane do pliku</string>
@@ -28,7 +30,7 @@
     <string name="hint_account_close_date">Data zamknięcia konta</string>
     <string name="hint_balance_value">Wartość bilansu</string>
     <string name="currency">Waluta</string>
-    <string name="toolbar_action_save">Zapisz</string>
+    <string name="save">Zapisz</string>
     <string name="hint_transaction_date">Data transakcji</string>
     <string name="hint_transaction_description">Opis</string>
     <string name="hint_transaction_value">Wartość</string>
@@ -65,6 +67,7 @@
     <string name="error_account_not_open">Konto nie jest otwarte</string>
     <string name="error_account_closed">Konto zostało zamknięte</string>
     <string name="error_no_accounts_selected">Nie wybrałeś żadnego konta!</string>
+    <string name="error_not_a_number">Podaj wartość liczbową</string>
     <string name="total_label">Suma:</string>
     <string name="previous_report">Poprzedni raport</string>
     <string name="next_report">Następny raport</string>
@@ -96,6 +99,32 @@
     <string name="info_no_transactions">Nie dodałeś jeszcze żadnej transakcji!</string>
     <string name="select_all">Wybierz wszystko</string>
     <string name="balance_date">Data bilansu</string>
+    <string name="opening_balance">Bilans otwarcia</string>
+
+    <!--OUTCOME CATEGORIES INITIAL-->
+    <string name="category_name_food">Jedzenie</string>
+    <string name="category_name_housing">Dom</string>
+    <string name="category_name_transportation">Transport</string>
+    <string name="category_name_telecommunication">Telekomunikacja</string>
+    <string name="category_name_healthcare">Opieka zdrowotna</string>
+    <string name="category_name_clothes">Ubrania</string>
+    <string name="category_name_cosmetics">Kosmetyki</string>
+    <string name="category_name_education">Edukacja</string>
+    <string name="category_name_entertainment">Rozrywka</string>
+    <string name="category_name_miscellaneous">Różne</string>
+
+    <!--INCOME CATEGORIES INITIAL-->
+    <string name="category_name_salary">Pensja</string>
+    <string name="category_name_interest">Odsetki</string>
+    <string name="category_name_other">Inne przychody</string>
+
+    <!--ACCOUNTS INITIAL-->
+    <string name="account_name_cash">Gotówka</string>
+
+    <!--LONG TEXTS-->
+    <string name="description_and_opening_balance">Wykonałeś właśnie krok w kierunku lepszego panowania nad Twoimi finansami, gratulacje!\n
+\nW aplikacji możesz śledzić stan swoich środków oraz kontrolować przychody i wydatki. Raporty pomogą Ci uzyskać wgląd w Twoją kondycję finansową.\n
+\nNa początek wprowadź bilans otwarcia swojego głównego konta (np. stan portfela lub konta w określonym banku). Inne konta możesz dodać w dowolnej chwili.</string>
 
     <string-array name="transaction_filter_type">
         <item>Wszystkie</item>

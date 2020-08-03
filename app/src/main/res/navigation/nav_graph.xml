@@ -93,4 +93,14 @@
                 app:destination="@id/addEditTransactionFragment" />
         </fragment>
     </navigation>
+    <fragment
+        android:id="@+id/firstRunFragment"
+        android:name="com.mancode.financetracker.ui.FirstRunFragment"
+        android:label="FirstRunFragment" >
+        <action
+            android:id="@+id/action_firstRunFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment"
+            app:popUpTo="@id/dashboardFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>
