@@ -67,8 +67,9 @@ fun MainActivityNav.resetRemindersAndShowDecisionDialog() {
     val builder = MaterialAlertDialogBuilder(context)
     builder.setMessage(context.getString(R.string.question_transaction_reminder_decision))
             .setPositiveButton(context.getString(R.string.yes)) { _, _ ->
-                registerReminderWithProperty(context)
                 PreferenceAccessor.transactionReminderDecided = true
+                PreferenceAccessor.transactionReminderEnabled = true
+                registerReminderWithProperty(context)
                 navController.navigate(R.id.action_global_settingsFragment)
             }
             .setNegativeButton(context.getString(R.string.no)) { _, _ ->
