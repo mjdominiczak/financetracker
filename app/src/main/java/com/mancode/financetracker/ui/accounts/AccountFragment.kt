@@ -24,12 +24,6 @@ class AccountFragment : Fragment(), AccountRecyclerViewAdapter.ModifyRequestList
     private val adapter: AccountRecyclerViewAdapter by lazy { AccountRecyclerViewAdapter(this) }
     private val viewModel: AccountViewModel by viewModels()
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel.allAccounts.observe(viewLifecycleOwner,
-                Observer { accounts -> adapter.setAccounts(accounts) })
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_account_list, container, false)
@@ -37,9 +31,20 @@ class AccountFragment : Fragment(), AccountRecyclerViewAdapter.ModifyRequestList
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.allAccounts.observe(viewLifecycleOwner,
+                Observer { accounts ->
+                    adapter.setAccounts(accounts)
+                    if (accounts.isNotEmpty()) {
+                        accountsList.visibility = View.VISIBLE
+                        emptyListInfo.visibility = View.GONE
+                    } else {
+                        accountsList.visibility = View.GONE
+                        emptyListInfo.visibility = View.VISIBLE
+                    }
+                })
         navController = findNavController()
-        list.layoutManager = LinearLayoutManager(context)
-        list.adapter = adapter
+        accountsList.layoutManager = LinearLayoutManager(context)
+        accountsList.adapter = adapter
         fab.setOnClickListener {
             navController.navigate(R.id.action_accountFragment_to_addEditAccountFragment)
         }
