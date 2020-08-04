@@ -19,11 +19,11 @@ class ReportViewModel(application: Application) : AndroidViewModel(application) 
     val netValues: LiveData<List<NetValue>> = netValuesRepository.netValues
     val keyedNetValues: LiveData<List<NetValue>> = netValuesRepository.keyedNetValues
 
-    fun getNetValueBeforeFrom(): LiveData<NetValue> =
-            netValuesRepository.getNetValueBefore(report.from)
+    fun getNetValueClosestToFrom(): LiveData<NetValue> =
+            netValuesRepository.getNetValueClosestTo(report.from)
 
-    fun getNetValueBeforeTo(): LiveData<NetValue> =
-            netValuesRepository.getNetValueBefore(report.to)
+    fun getNetValueClosestToTo(): LiveData<NetValue> =
+            netValuesRepository.getNetValueClosestTo(report.to)
 
     fun initReport(whichMonth: Int) {
         report.init(getMonthStart(whichMonth), getMonthEnd(whichMonth))

@@ -99,6 +99,7 @@
     <string name="info_no_accounts">Nie dodałeś jeszcze żadnego konta!</string>
     <string name="info_no_balances">Nie dodałeś jeszcze żadnego bilansu!</string>
     <string name="info_no_transactions">Nie dodałeś jeszcze żadnej transakcji!</string>
+    <string name="info_not_enough_data">Za mało danych aby stworzyć wykres, wróć jutro!</string>
     <string name="select_all">Wybierz wszystko</string>
     <string name="balance_date">Data bilansu</string>
     <string name="opening_balance">Bilans otwarcia</string>

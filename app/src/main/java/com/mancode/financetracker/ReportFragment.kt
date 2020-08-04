@@ -22,6 +22,7 @@ import com.mancode.financetracker.viewmodel.ReportViewModel.Companion.MONTH_PREV
 import com.mancode.financetracker.viewmodel.ReportViewModel.Companion.MONTH_THIS
 import kotlinx.android.synthetic.main.fragment_report_monthly.*
 import org.threeten.bp.LocalDate
+import kotlin.math.max
 
 class ReportFragment : Fragment() {
 
@@ -29,7 +30,16 @@ class ReportFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        viewModel.netValues.observe(viewLifecycleOwner, Observer { updateChartData(it) })
+        viewModel.netValues.observe(viewLifecycleOwner, Observer { netValues ->
+            if (netValues.isEmpty() || netValues.size == 1) {
+                disableButtons()
+                emptyChartInfo.visibility = View.VISIBLE
+            } else {
+                enableButtons()
+                emptyChartInfo.visibility = View.GONE
+                updateChartData(netValues)
+            }
+        })
         resetObservers()
         return inflater.inflate(R.layout.fragment_report_monthly, container, false)
     }
@@ -83,8 +93,8 @@ class ReportFragment : Fragment() {
         netValueChart.maximumViewport = Viewport(
                 left = dateMin.toEpochDay().toFloat(),
                 right = dateMax.toEpochDay().toFloat(),
-                top = valueMax + 0.05f * deltaY,
-                bottom = valueMin - 0.05f * deltaY)
+                top = valueMax + max(0.05f * deltaY, 0.01f),
+                bottom = valueMin - max(0.05f * deltaY, 0.01f))
         val currentViewport = netValueChart.maximumViewport.copy().apply {
             left = right - 60f
         }
@@ -108,14 +118,14 @@ class ReportFragment : Fragment() {
             if (viewModel.report.dataPresent())
                 updateViews()
         })
-        val netValueBeforeFrom: LiveData<NetValue> = viewModel.getNetValueBeforeFrom()
+        val netValueBeforeFrom: LiveData<NetValue> = viewModel.getNetValueClosestToFrom()
         netValueBeforeFrom.removeObservers(this)
         netValueBeforeFrom.observe(viewLifecycleOwner, Observer {
             viewModel.report.netValue1 = it
             if (viewModel.report.dataPresent())
                 updateViews()
         })
-        val netValueBeforeTo: LiveData<NetValue> = viewModel.getNetValueBeforeTo() // TODO algorithm for choosing netvalues
+        val netValueBeforeTo: LiveData<NetValue> = viewModel.getNetValueClosestToTo() // TODO algorithm for choosing netvalues
         netValueBeforeTo.removeObservers(this)
         netValueBeforeTo.observe(viewLifecycleOwner, Observer {
             viewModel.report.netValue2 = it
@@ -137,16 +147,15 @@ class ReportFragment : Fragment() {
     }
 
     private fun updateNetValueViews() {
-        val value1Set = viewModel.report.netValue1 != null
+        val value1Set = viewModel.report.netValue1 != null // TODO always true because querying for closest netvalue?
         val value2Set = viewModel.report.netValue2 != null
         if (value1Set) {
             tvNetValueDate1.text = viewModel.report.netValue1.date.toString()
             tvNetValue1.setFormattedMoney(viewModel.report.netValue1.value)
-            btnPrev.isEnabled = true
+            btnPrev.isEnabled = viewModel.report.netValue1.date.isEqual(viewModel.report.from)
         } else {
             tvNetValueDate1.text = "n/a"
             tvNetValue1.text = "n/a"
-            btnPrev.isEnabled = false
         }
         if (value2Set) {
             tvNetValueDate2.text = viewModel.report.netValue2.date.toString()
@@ -169,6 +178,18 @@ class ReportFragment : Fragment() {
                 .coerceIn(mv.left, mv.right - 0.1f) // end of range needs to be open for scroll to work
         val y = (mv.top + mv.bottom) / 2
         netValueChart.moveToWithAnimation(x, y)
+    }
+
+    private fun enableButtons() {
+        btnNext.isEnabled = true
+        btnPrev.isEnabled = true
+        btnRange.isEnabled = true
+    }
+
+    private fun disableButtons() {
+        btnNext.isEnabled = false
+        btnPrev.isEnabled = false
+        btnRange.isEnabled = false
     }
 
     private fun dismiss() {

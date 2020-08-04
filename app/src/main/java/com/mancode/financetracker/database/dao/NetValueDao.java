@@ -27,8 +27,8 @@ public interface NetValueDao {
     @Query("SELECT * FROM net_values WHERE date <= :date ORDER BY date DESC LIMIT 1")
     LiveData<NetValue> getValueBefore(LocalDate date);
 
-    @Query("SELECT * FROM net_values WHERE date >= :date ORDER BY date ASC LIMIT 1")
-    LiveData<NetValue> getValueAfter(LocalDate date);
+    @Query("SELECT * FROM net_values ORDER BY abs(strftime('%s', date) - strftime('%s', :date)) ASC LIMIT 1")
+    LiveData<NetValue> getValueClosestTo(LocalDate date);
 
     @Query("SELECT value FROM net_values WHERE date = DATE('now', 'localtime') LIMIT 1")
     LiveData<Double> getActualNetValue();

@@ -11,7 +11,7 @@ class NetValuesRepository private constructor(private val netValueDao: NetValueD
     val netValues: LiveData<List<NetValue>> = netValueDao.values
     val keyedNetValues: LiveData<List<NetValue>> = netValueDao.keyedValues
 
-    fun getNetValueBefore(date: LocalDate): LiveData<NetValue> = netValueDao.getValueBefore(date)
+    fun getNetValueClosestTo(date: LocalDate): LiveData<NetValue> = netValueDao.getValueClosestTo(date)
 
     companion object {
         @Volatile

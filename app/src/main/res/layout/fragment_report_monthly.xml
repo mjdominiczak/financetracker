@@ -67,6 +67,17 @@
         app:layout_constraintTop_toBottomOf="@+id/btnRange" />
 
     <TextView
+        android:id="@+id/emptyChartInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/info_not_enough_data"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/netValueChart"
+        app:layout_constraintEnd_toEndOf="@+id/netValueChart"
+        app:layout_constraintStart_toStartOf="@+id/netValueChart"
+        app:layout_constraintTop_toTopOf="@+id/netValueChart" />
+
+    <TextView
         android:id="@+id/tvIncome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
