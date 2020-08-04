@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mancode.financetracker.R
 import com.mancode.financetracker.viewmodel.BalanceViewModel
-import kotlinx.android.synthetic.main.fragment_account_list.*
+import kotlinx.android.synthetic.main.fragment_balance_list.*
 import org.threeten.bp.LocalDate
 
 /**
@@ -26,21 +26,27 @@ class BalanceFragment : Fragment(), BalanceRecyclerViewAdapter.ModifyRequestList
     private val adapter: BalanceRecyclerViewAdapter by lazy { BalanceRecyclerViewAdapter(this) }
     private val viewModel: BalanceViewModel by viewModels()
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel.netValues.observe(viewLifecycleOwner, Observer { netValues -> adapter.submitList(netValues) })
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_account_list, container, false)
+        return inflater.inflate(R.layout.fragment_balance_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.netValues.observe(viewLifecycleOwner,
+                Observer { netValues ->
+                    adapter.submitList(netValues)
+                    if (netValues.isNotEmpty()) {
+                        balancesList.visibility = View.VISIBLE
+                        emptyListInfo.visibility = View.GONE
+                    } else {
+                        balancesList.visibility = View.GONE
+                        emptyListInfo.visibility = View.VISIBLE
+                    }
+                })
         navController = findNavController()
-        list.layoutManager = LinearLayoutManager(context)
-        list.adapter = adapter
+        balancesList.layoutManager = LinearLayoutManager(context)
+        balancesList.adapter = adapter
         fab.setOnClickListener {
             navController.navigate(R.id.action_balanceFragment_to_addBalanceFragment)
         }

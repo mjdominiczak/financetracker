@@ -96,6 +96,8 @@
     <string name="hide">Ukryj</string>
     <string name="unhide">Odkryj</string>
     <string name="connected_transactions_count">%1$d połączonych transakcji</string>
+    <string name="info_no_accounts">Nie dodałeś jeszcze żadnego konta!</string>
+    <string name="info_no_balances">Nie dodałeś jeszcze żadnego bilansu!</string>
     <string name="info_no_transactions">Nie dodałeś jeszcze żadnej transakcji!</string>
     <string name="select_all">Wybierz wszystko</string>
     <string name="balance_date">Data bilansu</string>

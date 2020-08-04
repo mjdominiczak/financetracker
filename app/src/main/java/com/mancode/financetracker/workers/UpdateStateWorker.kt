@@ -15,6 +15,7 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
         val start = System.currentTimeMillis()
 
         val db = FTDatabase.getInstance(applicationContext)
+        db.netValueDao().clear()
         val dateKeys: List<LocalDate> = db.balanceDao().dateKeys
         if (dateKeys.isEmpty()) return Result.failure()
 
@@ -47,7 +48,6 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
             netValues.add(NetValue(date, value, calculated))
         }
 
-        db.netValueDao().clear()
         db.netValueDao().insertAll(netValues)
 
         println("${(System.currentTimeMillis() - start) / 1000}s")
