@@ -224,6 +224,10 @@ class AddEditTransactionFragment : Fragment() {
             if (shouldResetSelection && !adapter.isEmpty) {
                 viewModel.category = adapter.getItem(0) as CategoryEntity
             }
+            if (adapter.isEmpty) {
+                viewModel.category = null
+                viewModel.transaction = null
+            }
             setText(viewModel.getCategoryName(), false)
         }
     }
