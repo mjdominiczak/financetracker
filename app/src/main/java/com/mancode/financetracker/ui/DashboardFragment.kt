@@ -39,6 +39,8 @@ class DashboardFragment : Fragment(), View.OnClickListener, Toolbar.OnMenuItemCl
         viewModel.actualNetValue.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 actualNetValue.setFormattedMoney(it)
+            } else {
+                actualNetValue.text = "---"
             }
         })
         reportMonthlyButton.setOnClickListener(this)

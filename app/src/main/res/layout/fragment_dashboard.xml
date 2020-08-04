@@ -48,6 +48,7 @@
         android:layout_height="wrap_content"
         android:text="TODO"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -89,6 +90,7 @@
         android:layout_height="wrap_content"
         android:text="TODO"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+        android:visibility="gone"
         app:layout_constraintBaseline_toBaselineOf="@+id/actualAssets"
         app:layout_constraintEnd_toEndOf="@+id/liabilities_accounts" />
 
