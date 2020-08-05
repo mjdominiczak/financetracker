@@ -103,6 +103,7 @@
     <string name="select_all">Wybierz wszystko</string>
     <string name="balance_date">Data bilansu</string>
     <string name="opening_balance">Bilans otwarcia</string>
+    <string name="skip">Pomiń</string>
 
     <!--OUTCOME CATEGORIES INITIAL-->
     <string name="category_name_food">Jedzenie</string>

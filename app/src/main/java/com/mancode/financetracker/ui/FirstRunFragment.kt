@@ -67,6 +67,11 @@ class FirstRunFragment : Fragment() {
             }
         })
 
+        skipButton.setOnClickListener {
+            viewModel.skip()
+            findNavController().navigate(R.id.action_firstRunFragment_to_dashboardFragment)
+        }
+
         saveButton.setOnClickListener {
             viewModel.storeInitialData()
             val request = OneTimeWorkRequest.Builder(UpdateStateWorker::class.java).build()

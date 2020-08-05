@@ -63,4 +63,8 @@ class FirstRunViewModel(application: Application) : AndroidViewModel(application
 
         PreferenceAccessor.firstRun = false
     }
+
+    fun skip() {
+        PreferenceAccessor.firstRun = false
+    }
 }

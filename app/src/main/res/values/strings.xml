@@ -105,6 +105,7 @@
     <string name="select_all">Select all</string>
     <string name="balance_date">Balance date</string>
     <string name="opening_balance">Opening balance</string>
+    <string name="skip">Skip</string>
 
     <!--OUTCOME CATEGORIES INITIAL-->
     <string name="category_name_food">Food</string>
