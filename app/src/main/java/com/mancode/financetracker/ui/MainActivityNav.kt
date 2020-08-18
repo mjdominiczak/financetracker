@@ -21,6 +21,7 @@ import com.mancode.financetracker.notifications.resetRemindersAndShowDecisionDia
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 import com.mancode.financetracker.workers.ExportToJsonWorker
 import com.mancode.financetracker.workers.ImportFromJsonWorker
+import com.mancode.financetracker.workers.UpdateStateWorker
 import com.mancode.financetracker.workers.fetchExchangeRates
 import kotlinx.android.synthetic.main.activity_main_nav.*
 
@@ -100,7 +101,11 @@ class MainActivityNav : AppCompatActivity() {
         }.build()
         val importRequest = OneTimeWorkRequest.Builder(ImportFromJsonWorker::class.java)
                 .setInputData(data).build()
-        WorkManager.getInstance(this).enqueue(importRequest)
+        val updateRequest = OneTimeWorkRequest.Builder(UpdateStateWorker::class.java).build()
+        WorkManager.getInstance(this)
+                .beginWith(importRequest)
+                .then(updateRequest)
+                .enqueue()
     }
 
     fun exportJson() {
