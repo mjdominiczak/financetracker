@@ -1,6 +1,7 @@
 package com.mancode.financetracker.workers;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -15,15 +16,13 @@ import com.mancode.financetracker.database.json.LocalDateGsonAdapter;
 
 import org.threeten.bp.LocalDate;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
-
-import static com.mancode.financetracker.database.DatabaseJson.JSON_FILE;
 
 public class ExportToJsonWorker extends Worker {
 
+    public static final String KEY_URI_ARG = "uri";
     private static final String TAG = ExportToJsonWorker.class.getName();
 
     public ExportToJsonWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
@@ -51,16 +50,16 @@ public class ExportToJsonWorker extends Worker {
         String json = gson.toJson(databaseObject);
 
         try {
-            if (JSON_FILE.exists() && JSON_FILE.delete()) {
-                Log.d(TAG, "File: " + JSON_FILE.getPath() + "already existed and has been successfully deleted.");
-            }
-            JSON_FILE.createNewFile();
-            PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(JSON_FILE)));
-            writer.write(json);
-            writer.close();
-            return Result.success();
-        } catch (IOException e) {
-            Log.e(TAG, "Creating new file during export failed!");
+            Uri u = Uri.parse(getInputData().getString(KEY_URI_ARG));
+            OutputStream outputStream = getApplicationContext().getContentResolver().openOutputStream(u);
+            if (outputStream != null) {
+                PrintWriter writer = new PrintWriter(outputStream);
+                writer.write(json);
+                writer.close();
+                return Result.success();
+            } else return Result.failure();
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "File not found!");
             e.printStackTrace();
             return Result.failure();
         }

@@ -1,27 +1,44 @@
 package com.mancode.financetracker.ui
 
-import android.content.pm.PackageManager
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
+import androidx.activity.result.contract.ActivityResultContracts.OpenDocument
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.mancode.financetracker.R
 import com.mancode.financetracker.notifications.resetRemindersAndShowDecisionDialog
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor
-import com.mancode.financetracker.utils.PERMISSION_REQUEST_READ_EXTERNAL_STORAGE
-import com.mancode.financetracker.utils.PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE
-import com.mancode.financetracker.utils.exportJson
-import com.mancode.financetracker.utils.importJson
+import com.mancode.financetracker.workers.ExportToJsonWorker
+import com.mancode.financetracker.workers.ImportFromJsonWorker
 import com.mancode.financetracker.workers.fetchExchangeRates
 import kotlinx.android.synthetic.main.activity_main_nav.*
 
 class MainActivityNav : AppCompatActivity() {
 
     internal lateinit var navController: NavController
+
+    /** Nullability checks necessary for app to not crash on going back from selection activity */
+    private val createDocument = registerForActivityResult(CreateJson()) { it: Uri? ->
+        if (it != null) {
+            createJsonAtUri(it)
+        }
+    }
+    private val importDocument = registerForActivityResult(OpenDocument()) { it: Uri? ->
+        if (it != null) {
+            importJsonFromUri(it)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,21 +77,6 @@ class MainActivityNav : AppCompatActivity() {
                 super.onOptionsItemSelected(item)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        when (requestCode) {
-            PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE -> if (grantResults.isNotEmpty()
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                exportJson()
-            }
-            PERMISSION_REQUEST_READ_EXTERNAL_STORAGE -> if (grantResults.isNotEmpty()
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                importJson()
-            }
-            else -> {
-            }
-        }
-    }
-
     private fun showBottomNav() {
         bottomNavigationView.visibility = View.VISIBLE
     }
@@ -82,4 +84,39 @@ class MainActivityNav : AppCompatActivity() {
     private fun hideBottomNav() {
         bottomNavigationView.visibility = View.GONE
     }
+
+    private fun createJsonAtUri(uri: Uri) {
+        val data = Data.Builder().apply {
+            putString(ExportToJsonWorker.KEY_URI_ARG, uri.toString())
+        }.build()
+        val exportRequest = OneTimeWorkRequest.Builder(ExportToJsonWorker::class.java)
+                .setInputData(data).build()
+        WorkManager.getInstance(this).enqueue(exportRequest)
+    }
+
+    private fun importJsonFromUri(uri: Uri) {
+        val data = Data.Builder().apply {
+            putString(ImportFromJsonWorker.KEY_URI_ARG, uri.toString())
+        }.build()
+        val importRequest = OneTimeWorkRequest.Builder(ImportFromJsonWorker::class.java)
+                .setInputData(data).build()
+        WorkManager.getInstance(this).enqueue(importRequest)
+    }
+
+    fun exportJson() {
+        createDocument.launch(JSON_FILENAME)
+    }
+
+    fun importJson() {
+        importDocument.launch(arrayOf("application/json"))
+    }
+
+    private class CreateJson : CreateDocument() {
+        override fun createIntent(context: Context, input: String): Intent {
+            return super.createIntent(context, input)
+                    .setType("application/json")
+        }
+    }
 }
+
+const val JSON_FILENAME = "ft_dump.json"

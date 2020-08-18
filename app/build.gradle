@@ -17,11 +17,11 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.mancode.financetracker"
         minSdkVersion 22
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode versioning.code()
         versionName versioning.name()
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -55,6 +55,8 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation libs.androidx.activity
+    implementation libs.androidx.fragment
     implementation libs.androidx.appcompat
     implementation libs.androidx.constraintlayout
     implementation libs.androidx.recyclerview

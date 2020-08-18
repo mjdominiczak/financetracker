@@ -1,6 +1,7 @@
 package com.mancode.financetracker.workers;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -16,12 +17,12 @@ import com.mancode.financetracker.database.json.LocalDateGsonAdapter;
 import org.threeten.bp.LocalDate;
 
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Scanner;
-
-import static com.mancode.financetracker.database.DatabaseJson.JSON_FILE;
 
 public class ImportFromJsonWorker extends Worker {
 
+    public static final String KEY_URI_ARG = "uri";
     private static final String TAG = ImportFromJsonWorker.class.getName();
 
     public ImportFromJsonWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
@@ -38,8 +39,10 @@ public class ImportFromJsonWorker extends Worker {
         StringBuilder json = new StringBuilder();
 
         try {
-            if (JSON_FILE.exists()) {
-                Scanner scanner = new Scanner(JSON_FILE).useDelimiter("\\z");
+            Uri u = Uri.parse(getInputData().getString(KEY_URI_ARG));
+            InputStream inputStream = getApplicationContext().getContentResolver().openInputStream(u);
+            if (inputStream != null) {
+                Scanner scanner = new Scanner(inputStream).useDelimiter("\\z");
                 while (scanner.hasNext()) {
                     json.append(scanner.next());
                 }
