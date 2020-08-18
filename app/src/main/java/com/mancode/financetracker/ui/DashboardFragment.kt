@@ -28,8 +28,8 @@ class DashboardFragment : Fragment(), View.OnClickListener, Toolbar.OnMenuItemCl
         return inflater.inflate(R.layout.fragment_dashboard, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         viewModel.assetsAccountsNumber.observe(viewLifecycleOwner, Observer {
             assets_accounts.text = getAccountsString(it)
         })
@@ -43,6 +43,10 @@ class DashboardFragment : Fragment(), View.OnClickListener, Toolbar.OnMenuItemCl
                 actualNetValue.text = "---"
             }
         })
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         reportMonthlyButton.setOnClickListener(this)
         actualNetValue.setOnClickListener(this)
         dashboardToolbar.setOnMenuItemClickListener(this)
