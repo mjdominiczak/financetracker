@@ -30,12 +30,12 @@ class MainActivityNav : AppCompatActivity() {
     internal lateinit var navController: NavController
 
     /** Nullability checks necessary for app to not crash on going back from selection activity */
-    private val createDocument = registerForActivityResult(CreateJson()) { it: Uri? ->
+    private val createDocument = registerForActivityResult(CreateJson()) {
         if (it != null) {
             createJsonAtUri(it)
         }
     }
-    private val importDocument = registerForActivityResult(OpenDocument()) { it: Uri? ->
+    private val importDocument = registerForActivityResult(OpenDocument()) {
         if (it != null) {
             importJsonFromUri(it)
         }

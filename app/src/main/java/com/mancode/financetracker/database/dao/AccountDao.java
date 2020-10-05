@@ -44,7 +44,9 @@ public interface AccountDao {
             "(account_close_date IS NULL OR account_close_date >= :date)")
     LiveData<List<AccountNameCurrency>> getAccountsActiveOn(LocalDate date);
 
-    @Query("SELECT COUNT(*) FROM accounts WHERE account_type = :type")
+    @Query("SELECT COUNT(*) FROM accounts WHERE account_type = :type AND " +
+            "account_open_date <= DATE('now', 'localtime') AND " +
+            "(account_close_date IS NULL OR account_close_date >= DATE('now', 'localtime'))")
     LiveData<Integer> getActiveAccountsOfType(int type);
 
     @Query("SELECT transaction_date FROM transactions WHERE transaction_account = :accountId " +
