@@ -84,8 +84,7 @@ public class AccountRecyclerViewAdapter
         }
 
         void init(AccountExtended account) {
-            cardView.setOnClickListener(v ->
-                    listener.onEditRequested(account.id));
+            cardView.setOnClickListener(v -> listener.onEditRequested(account.id));
             mIdView.setText(String.valueOf(account.id));
             mContentView.setText(account.accountName);
             if (account.balanceCheckDate != null) {
@@ -101,6 +100,8 @@ public class AccountRecyclerViewAdapter
             }
             if (account.accountCloseDate != null) {
                 cardView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorInactive));
+            } else {
+                cardView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorSurface));
             }
         }
     }
