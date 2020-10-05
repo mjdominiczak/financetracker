@@ -10,7 +10,6 @@ import android.widget.CheckBox
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -56,17 +55,16 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         navController = findNavController()
-        viewModel.allTransactions.observe(viewLifecycleOwner,
-                Observer { transactions ->
-                    adapter.setTransactions(transactions)
-                    if (transactions.isNotEmpty()) {
-                        transactions_list.visibility = View.VISIBLE
-                        emptyListInfo.visibility = View.GONE
-                    } else {
-                        transactions_list.visibility = View.GONE
-                        emptyListInfo.visibility = View.VISIBLE
-                    }
-                })
+        viewModel.allTransactions.observe(viewLifecycleOwner, { transactions ->
+            adapter.setTransactions(transactions)
+            if (transactions.isNotEmpty()) {
+                transactions_list.visibility = View.VISIBLE
+                emptyListInfo.visibility = View.GONE
+            } else {
+                transactions_list.visibility = View.GONE
+                emptyListInfo.visibility = View.VISIBLE
+            }
+        })
         transactions_list.layoutManager = LinearLayoutManager(context)
         transactions_list.adapter = adapter
         ItemTouchHelper(SwipeToDeleteCallback(adapter))
@@ -161,13 +159,15 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
                 setOnItemClickListener { _, _, position, _ -> handleTimespan(position) }
             }
             fromDateView = dialogView.findViewById(R.id.sd_transaction_filter_from)
+            if (query.fromDate != null) fromDateView.date = query.fromDate
             toDateView = dialogView.findViewById(R.id.sd_transaction_filter_to)
+            if (query.toDate != null) toDateView.date = query.toDate
             bookmarkFilter = dialogView.findViewById(R.id.bookmarkFilter)
             bookmarkFilter.isChecked = query.bookmarked
             handleTimespan(query.timespan)
         }
 
-        internal fun show() {
+        fun show() {
             val builder = MaterialAlertDialogBuilder(context!!)
             builder.setTitle(R.string.title_transaction_filter)
                     .setView(dialogView)
@@ -238,12 +238,6 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
             }
             toDateView.isEnabled = false
             fromDateView.isEnabled = false
-        }
-    }
-
-    companion object {
-        fun newInstance(): TransactionFragment {
-            return TransactionFragment()
         }
     }
 }
