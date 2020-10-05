@@ -10,10 +10,11 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.AccountEntity
 import com.mancode.financetracker.database.entity.CategoryEntity
@@ -22,6 +23,7 @@ import com.mancode.financetracker.database.entity.TransactionEntity.Companion.TY
 import com.mancode.financetracker.database.entity.TransactionEntity.Companion.TYPE_OUTCOME
 import com.mancode.financetracker.ui.hideKeyboard
 import com.mancode.financetracker.viewmodel.AddEditTransactionViewModel
+import com.mancode.financetracker.workers.UpdateStateWorker
 import kotlinx.android.synthetic.main.edit_transaction.*
 
 class AddEditTransactionFragment : Fragment() {
@@ -40,7 +42,7 @@ class AddEditTransactionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = findNavController()
 
-        viewModel.categoriesLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.categoriesLiveData.observe(viewLifecycleOwner, {
             viewModel.splitCategories()
             if (args.transactionId == 0) {
                 updateCategoryAdapter()
@@ -48,7 +50,7 @@ class AddEditTransactionFragment : Fragment() {
                 updateCategoryAdapter(false)
             }
         })
-        viewModel.accountsLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.accountsLiveData.observe(viewLifecycleOwner, {
             if (args.transactionId == 0) {
                 updateAccountAdapter()
             } else if (viewModel.transaction != null) {
@@ -57,7 +59,7 @@ class AddEditTransactionFragment : Fragment() {
         })
 
         if (args.transactionId != 0) {
-            viewModel.getTransaction(args.transactionId).observe(viewLifecycleOwner, Observer {
+            viewModel.getTransaction(args.transactionId).observe(viewLifecycleOwner, {
                 viewModel.transaction = it
                 transactionDate.date = it.date
                 if (it.type == TYPE_INCOME) {
@@ -155,7 +157,8 @@ class AddEditTransactionFragment : Fragment() {
                     val account = viewModel.getAccountIdByName(accountString)
                     val category = viewModel.category?.id ?: viewModel.transaction!!.categoryId
                     val value = valueString.toDouble()
-                    val flags = if (args.transactionId == 0) 0 else viewModel.transaction?.flags ?: 0
+                    val flags = if (args.transactionId == 0) 0 else
+                        viewModel.transaction?.flags ?: 0
                     val transaction = TransactionEntity(
                             args.transactionId,
                             date,
@@ -171,6 +174,8 @@ class AddEditTransactionFragment : Fragment() {
                     } else {
                         viewModel.updateTransaction(transaction)
                     }
+                    val request = OneTimeWorkRequest.Builder(UpdateStateWorker::class.java).build()
+                    WorkManager.getInstance(requireContext()).enqueue(request)
                     dismiss()
                 } else {
                     if (description.isEmpty()) {
