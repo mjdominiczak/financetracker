@@ -46,5 +46,6 @@ ext.libs.kotlin = kotlin
 ext.libs.junit = "junit:junit:4.13"
 ext.libs.jodamoney = "org.joda:joda-money:1.0.1"
 ext.libs.threetenabp = "com.jakewharton.threetenabp:threetenabp:1.2.4"
+ext.libs.threetenbp = "org.threeten:threetenbp:1.5.0"
 ext.libs.okhttp = "com.squareup.okhttp3:okhttp:4.9.0"
 ext.libs.kellocharts = "co.csadev:kellocharts:2.0.0"
