@@ -2,7 +2,6 @@ package com.mancode.financetracker.ui
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -13,16 +12,12 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
-import androidx.work.Data
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
 import com.mancode.financetracker.R
 import com.mancode.financetracker.notifications.resetRemindersAndShowDecisionDialog
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor
-import com.mancode.financetracker.workers.ExportToJsonWorker
-import com.mancode.financetracker.workers.ImportFromJsonWorker
-import com.mancode.financetracker.workers.UpdateStateWorker
 import com.mancode.financetracker.workers.fetchExchangeRates
+import com.mancode.financetracker.workers.runExportToUri
+import com.mancode.financetracker.workers.runImportFromUri
 import kotlinx.android.synthetic.main.activity_main_nav.*
 
 class MainActivityNav : AppCompatActivity() {
@@ -32,12 +27,12 @@ class MainActivityNav : AppCompatActivity() {
     /** Nullability checks necessary for app to not crash on going back from selection activity */
     private val createDocument = registerForActivityResult(CreateJson()) {
         if (it != null) {
-            createJsonAtUri(it)
+            applicationContext.runExportToUri(it)
         }
     }
     private val importDocument = registerForActivityResult(OpenDocument()) {
         if (it != null) {
-            importJsonFromUri(it)
+            applicationContext.runImportFromUri(it)
         }
     }
 
@@ -84,28 +79,6 @@ class MainActivityNav : AppCompatActivity() {
 
     private fun hideBottomNav() {
         bottomNavigationView.visibility = View.GONE
-    }
-
-    private fun createJsonAtUri(uri: Uri) {
-        val data = Data.Builder().apply {
-            putString(ExportToJsonWorker.KEY_URI_ARG, uri.toString())
-        }.build()
-        val exportRequest = OneTimeWorkRequest.Builder(ExportToJsonWorker::class.java)
-                .setInputData(data).build()
-        WorkManager.getInstance(this).enqueue(exportRequest)
-    }
-
-    private fun importJsonFromUri(uri: Uri) {
-        val data = Data.Builder().apply {
-            putString(ImportFromJsonWorker.KEY_URI_ARG, uri.toString())
-        }.build()
-        val importRequest = OneTimeWorkRequest.Builder(ImportFromJsonWorker::class.java)
-                .setInputData(data).build()
-        val updateRequest = OneTimeWorkRequest.Builder(UpdateStateWorker::class.java).build()
-        WorkManager.getInstance(this)
-                .beginWith(importRequest)
-                .then(updateRequest)
-                .enqueue()
     }
 
     fun exportJson() {

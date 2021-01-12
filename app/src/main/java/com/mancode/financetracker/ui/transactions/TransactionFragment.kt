@@ -31,6 +31,7 @@ import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.TYPE_INC
 import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.TYPE_OUTCOME
 import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.UNCONSTRAINED
 import com.mancode.financetracker.viewmodel.TransactionViewModel
+import com.mancode.financetracker.workers.runUpdateWorker
 import kotlinx.android.synthetic.main.fragment_transaction_list.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.temporal.TemporalAdjusters
@@ -111,10 +112,12 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
                 .setAction(getString(R.string.undo)) {
                     onRestoreRequested(transaction)
                 }.show()
+        requireContext().runUpdateWorker(intArrayOf(transaction!!.id), transaction.date)
     }
 
     override fun onRestoreRequested(transaction: TransactionEntity?) {
         viewModel.restoreTransaction(transaction)
+        requireContext().runUpdateWorker(intArrayOf(transaction!!.id), transaction.date)
     }
 
     override fun onBookmarkToggleRequested(transaction: TransactionEntity) {

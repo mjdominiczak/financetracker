@@ -35,15 +35,7 @@ public interface BalanceDao {
             "WHERE balance_check_date = :date ORDER BY balance_account_id ASC")
     LiveData<List<BalanceExtended>> getFullBalancesForDate(LocalDate date);
 
-    @Query("SELECT DISTINCT balance_check_date FROM balances ORDER BY balance_check_date ASC")
-    List<LocalDate> getDateKeys();
-
-    @Query("SELECT balance_check_date, balance_value, account_type, account_currency " +
-            "FROM balances INNER JOIN accounts ON balance_account_id = accounts._id " +
-            "WHERE balance_check_date = :date")
-    List<BalanceMini> getBalancesForDate(LocalDate date);
-
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertBalance(BalanceEntity balance);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

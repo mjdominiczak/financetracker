@@ -7,12 +7,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.BalanceEntity
 import com.mancode.financetracker.database.pojos.BalanceExtended
@@ -20,7 +17,7 @@ import com.mancode.financetracker.ui.BalanceInputView
 import com.mancode.financetracker.ui.hideKeyboard
 import com.mancode.financetracker.utils.InjectorUtils
 import com.mancode.financetracker.viewmodel.AddBalancesViewModel
-import com.mancode.financetracker.workers.UpdateStateWorker
+import com.mancode.financetracker.workers.runUpdateWorker
 import kotlinx.android.synthetic.main.fragment_add_balance.*
 import org.threeten.bp.LocalDate
 
@@ -33,7 +30,8 @@ class AddBalanceFragment : Fragment() {
 
     private val args: AddBalanceFragmentArgs by navArgs()
     private val viewModel: AddBalancesViewModel by viewModels {
-        InjectorUtils.provideAddBalancesViewModelFactory(requireContext(), args.balanceDate ?: LocalDate.now())
+        InjectorUtils.provideAddBalancesViewModelFactory(requireContext(), args.balanceDate
+                ?: LocalDate.now())
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +42,7 @@ class AddBalanceFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = findNavController()
 
-        viewModel.accounts.observe(viewLifecycleOwner, Observer { accounts ->
+        viewModel.accounts.observe(viewLifecycleOwner, { accounts ->
             for (account in accounts) {
                 val balanceView = BalanceInputView(requireContext())
                 balanceView.setAccount(account)
@@ -53,7 +51,7 @@ class AddBalanceFragment : Fragment() {
             }
         })
 
-        viewModel.balances.observe(viewLifecycleOwner, Observer { balances ->
+        viewModel.balances.observe(viewLifecycleOwner, { balances ->
             if (container.childCount > 0) {
                 for (balanceView in container.views) {
                     updateBalanceWidget(balanceView as BalanceInputView, balances)
@@ -74,6 +72,7 @@ class AddBalanceFragment : Fragment() {
             if (item.itemId == R.id.action_menu_save) {
 
                 var noneActive = true
+                val accountIds = mutableListOf<Int>()
                 for (balanceView in container.views) {
                     val balanceInputView = balanceView as BalanceInputView
                     if (!balanceInputView.isActive() && !balanceInputView.deleted) {
@@ -93,13 +92,13 @@ class AddBalanceFragment : Fragment() {
                     } else {
                         viewModel.addEditBalance(balance)
                     }
+                    accountIds.add(balance.accountId)
                 }
 
                 if (container.childCount == 0 || noneActive) {
                     Toast.makeText(activity, getString(R.string.error_no_accounts_selected), Toast.LENGTH_SHORT).show()
                 } else {
-                    val request = OneTimeWorkRequest.Builder(UpdateStateWorker::class.java).build()
-                    WorkManager.getInstance(requireContext()).enqueue(request)
+                    requireContext().runUpdateWorker(accountIds.toIntArray(), viewModel.date)
                     dismiss()
                 }
             }

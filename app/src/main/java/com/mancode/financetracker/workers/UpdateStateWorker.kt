@@ -1,60 +1,163 @@
 package com.mancode.financetracker.workers
 
 import android.content.Context
+import android.util.Log
+import androidx.annotation.VisibleForTesting
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.mancode.financetracker.database.FTDatabase
-import com.mancode.financetracker.database.entity.NetValue
+import com.mancode.financetracker.database.converter.DateConverter
+import com.mancode.financetracker.database.entity.*
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 import org.threeten.bp.LocalDate
 
 class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
 
+    private val defaultCurrency: String = PreferenceAccessor.defaultCurrency
+    private val db: FTDatabase by lazy { FTDatabase.getInstance(applicationContext) }
+    private val allCurrencies by lazy { db.currencyDao().allCurrenciesSimple }
+    private val allAccounts by lazy { db.accountDao().allAccountsSimple }
+
     override fun doWork(): Result {
 
         val start = System.currentTimeMillis()
 
-        val db = FTDatabase.getInstance(applicationContext)
-        db.netValueDao().clear()
-        val dateKeys: List<LocalDate> = db.balanceDao().dateKeys
-        if (dateKeys.isEmpty()) return Result.failure()
+        val inputAccountIds = inputData.getIntArray(KEY_ACCOUNT_IDS)
+        val inputDate = DateConverter.toDate(inputData.getString(KEY_DATE))
+        val isPartial = inputDate != null
 
-        val datesDaily: ArrayList<LocalDate> =
-                generateDatesDaily(dateKeys[0], LocalDate.now())
-        val currency = PreferenceAccessor.defaultCurrency
-        val rateEuroToDefault = db.currencyDao().getExchangeRateForCurrency(currency)
+        var minDate: LocalDate? = null
+        var maxDate: LocalDate? = null
 
-        val netValues = ArrayList<NetValue>()
-        for (date in datesDaily) {
-            var value = 0.0
-            val calculated: Boolean
-            if (date in dateKeys) {
-                val balances = db.balanceDao().getBalancesForDate(date)
-                for (balance in balances) {
-                    val conversionRate = if (balance.accountCurrency == currency) 1.0 else {
-                        rateEuroToDefault / db.currencyDao().getExchangeRateForCurrency(balance.accountCurrency)
-                    }
-                    value += balance.accountType.toDouble() * balance.value * conversionRate
-                }
-                calculated = false
-            } else {
-                value = netValues[netValues.size - 1].value
-                val transactions = db.transactionDao().getTransactionsForDate(date)
-                for (transaction in transactions) {
-                    value += transaction.value * transaction.type.toDouble()
-                }
-                calculated = true
-            }
-            netValues.add(NetValue(date, value, calculated))
+        val accounts = if (inputAccountIds != null)
+            allAccounts.filter { inputAccountIds.contains(it.id) } else
+            allAccounts
+
+        if (accounts.isEmpty()) return Result.failure()
+
+        val allBalances = db.balanceDao().allBalancesSimple
+        val allTransactions = db.transactionDao().allTransactionsSimple
+
+        for (account in accounts) {
+            val balancesToInsert: List<BalanceEntity> =
+                    calculateBalancesForAccount(account, allBalances, allTransactions, inputDate)
+            val startDate = balancesToInsert.first().checkDate
+            val endDate = balancesToInsert.last().checkDate
+            if (minDate == null || startDate.isBefore(minDate)) minDate = startDate
+            if (maxDate == null || endDate.isAfter(maxDate)) maxDate = endDate
+
+            db.balanceDao().insertAll(balancesToInsert)
+        }
+        Log.i("UpdateStateWorker [id=${id}]", "Accounts update: ${(System.currentTimeMillis() - start)}ms")
+
+        if (!isPartial) {
+            db.netValueDao().clear()
         }
 
+        val netValues = mutableListOf<NetValue>()
+        val datesDaily = generateDatesDaily(minDate ?: LocalDate.now(), maxDate ?: LocalDate.now())
+        for (date in datesDaily) {
+            val balances = allBalances.filter { it.checkDate.isEqual(date) }
+            val value = sumBalances(balances, allAccounts, allCurrencies, defaultCurrency)
+            val calculated = !allBalances.filter { it.fixed }.any { it.checkDate.isEqual(date) }
+            netValues.add(NetValue(date, value, calculated))
+        }
         db.netValueDao().insertAll(netValues)
 
-        println("${(System.currentTimeMillis() - start) / 1000}s")
+        Log.i("UpdateStateWorker [id=${id}]", "Update state end: ${(System.currentTimeMillis() - start)}ms")
 
         return Result.success()
     }
 
+    companion object {
+        const val KEY_DATE = "date"
+        const val KEY_ACCOUNT_IDS = "accountIds"
+
+        private fun sumTransactions(transactions: List<TransactionEntity>): Double {
+            var sum = 0.0
+            if (transactions.isEmpty()) return sum
+            for (t in transactions) {
+                sum += t.type * t.value
+            }
+            return sum
+        }
+
+        @VisibleForTesting
+        fun calculateBalancesForAccount(
+                account: AccountEntity,
+                allBalances: MutableList<BalanceEntity>,
+                allTransactions: List<TransactionEntity>,
+                inputDate: LocalDate? = null
+        ): List<BalanceEntity> {
+            val openDate = account.openDate
+            val closeDate = account.closeDate ?: LocalDate.now()
+            val isPartial = inputDate != null
+            if (isPartial && (inputDate!!.isBefore(openDate) || inputDate.isAfter(closeDate)))
+                return emptyList()
+
+            val balancesToInsert = mutableListOf<BalanceEntity>()
+            val fixedKeys = allBalances.filter { it.accountId == account.id && it.fixed }.map { it.checkDate }
+            val startDate = inputDate ?: openDate
+            val endDate = if (!isPartial) closeDate else
+                fixedKeys.find { !it.isBefore(inputDate) } ?: closeDate
+
+            val datesList = generateDatesDaily(startDate, endDate)
+            var prevBalance = 0.0
+            for (date in datesList) {
+                if (!fixedKeys.contains(date)) {
+                    /** no fixed balance */
+                    if (inputDate != null && date.isEqual(datesList[0])) {
+                        /** if input date provided, on first date load previous day balance */
+                        try {
+                            prevBalance = allBalances.first { it.accountId == account.id && it.checkDate.isEqual(date.minusDays(1)) }.value
+                        } catch (e: NoSuchElementException) {
+                        }
+                    }
+                    val balanceId = try {
+                        allBalances.first { it.accountId == account.id && it.checkDate.isEqual(date) }.id
+                    } catch (e: NoSuchElementException) {
+                        0
+                    }
+                    val transactions = allTransactions.filter { it.accountId == account.id && it.date.isEqual(date) }
+                    prevBalance += sumTransactions(transactions)
+                    val balanceToAdd = BalanceEntity(balanceId, date, account.id, prevBalance, false)
+                    balancesToInsert.add(balanceToAdd)
+                    if (balanceId != 0) allBalances.removeAll { it.id == balanceId }
+                    allBalances.add(balanceToAdd)
+                } else {
+                    /** is fixed balance */
+                    balancesToInsert.add(allBalances.find {
+                        it.accountId == account.id && it.checkDate.isEqual(date)
+                    }!!)
+                    prevBalance = allBalances.first { it.accountId == account.id && it.checkDate.isEqual(date) }.value
+                }
+            }
+            return balancesToInsert
+        }
+
+        @VisibleForTesting
+        fun sumBalances(balances: List<BalanceEntity>,
+                        accounts: List<AccountEntity>,
+                        currencies: List<CurrencyEntity>,
+                        defaultCurrency: String): Double {
+            var value = 0.0
+            if (balances.isEmpty()) return value
+
+            val rateEuroToDefault = currencies.find { it.currencySymbol == defaultCurrency }!!.exchangeRate
+            for (balance in balances) {
+                val account = accounts.find { it.id == balance.accountId }
+                val currency = account!!.currency
+                val accountCurrencyRate = currencies
+                        .find { it.currencySymbol == currency }
+                        ?.exchangeRate ?: 1.0
+                val conversionRate = if (currency == defaultCurrency)
+                    1.0 else
+                    rateEuroToDefault / accountCurrencyRate
+                value += account.accountType.toDouble() * balance.value * conversionRate
+            }
+            return value
+        }
+    }
 }
 
 fun generateDatesDaily(fromInclusive: LocalDate, toInclusive: LocalDate): ArrayList<LocalDate> {

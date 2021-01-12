@@ -47,9 +47,6 @@ public interface TransactionDao {
             "AND date(transaction_date) <= date(:to)")
     LiveData<List<TransactionEntity>> getTransactionsFromRange(LocalDate from, LocalDate to);
 
-    @Query("SELECT * FROM transactions WHERE transaction_date = :date")
-    List<TransactionEntity> getTransactionsForDate(LocalDate date);
-
     @Query("SELECT * FROM transactions WHERE _id = :id")
     LiveData<TransactionEntity> getTransaction(int id);
 

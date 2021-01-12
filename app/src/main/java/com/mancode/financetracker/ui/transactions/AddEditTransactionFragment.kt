@@ -13,8 +13,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.AccountEntity
 import com.mancode.financetracker.database.entity.CategoryEntity
@@ -23,7 +21,7 @@ import com.mancode.financetracker.database.entity.TransactionEntity.Companion.TY
 import com.mancode.financetracker.database.entity.TransactionEntity.Companion.TYPE_OUTCOME
 import com.mancode.financetracker.ui.hideKeyboard
 import com.mancode.financetracker.viewmodel.AddEditTransactionViewModel
-import com.mancode.financetracker.workers.UpdateStateWorker
+import com.mancode.financetracker.workers.runUpdateWorker
 import kotlinx.android.synthetic.main.edit_transaction.*
 
 class AddEditTransactionFragment : Fragment() {
@@ -174,8 +172,7 @@ class AddEditTransactionFragment : Fragment() {
                     } else {
                         viewModel.updateTransaction(transaction)
                     }
-                    val request = OneTimeWorkRequest.Builder(UpdateStateWorker::class.java).build()
-                    WorkManager.getInstance(requireContext()).enqueue(request)
+                    requireContext().runUpdateWorker(intArrayOf(account), date)
                     dismiss()
                 } else {
                     if (description.isEmpty()) {

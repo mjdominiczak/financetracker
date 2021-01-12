@@ -10,11 +10,9 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
 import com.mancode.financetracker.R
 import com.mancode.financetracker.viewmodel.FirstRunViewModel
-import com.mancode.financetracker.workers.UpdateStateWorker
+import com.mancode.financetracker.workers.runUpdateWorker
 import kotlinx.android.synthetic.main.fragment_first_run.*
 
 class FirstRunFragment : Fragment() {
@@ -74,8 +72,7 @@ class FirstRunFragment : Fragment() {
 
         saveButton.setOnClickListener {
             viewModel.storeInitialData()
-            val request = OneTimeWorkRequest.Builder(UpdateStateWorker::class.java).build()
-            WorkManager.getInstance(requireContext()).enqueue(request)
+            requireContext().runUpdateWorker()
             findNavController().navigate(R.id.action_firstRunFragment_to_dashboardFragment)
         }
     }

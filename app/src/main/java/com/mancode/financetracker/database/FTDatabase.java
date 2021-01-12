@@ -4,14 +4,11 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import androidx.lifecycle.MutableLiveData;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
 
 import com.mancode.financetracker.database.dao.AccountDao;
 import com.mancode.financetracker.database.dao.BalanceDao;
@@ -26,7 +23,7 @@ import com.mancode.financetracker.database.entity.CurrencyEntity;
 import com.mancode.financetracker.database.entity.NetValue;
 import com.mancode.financetracker.database.entity.TransactionEntity;
 import com.mancode.financetracker.database.views.AccountExtended;
-import com.mancode.financetracker.workers.UpdateStateWorker;
+import com.mancode.financetracker.workers.WorkUtilsKt;
 
 /**
  * Created by Manveru on 31.01.2018.
@@ -46,13 +43,11 @@ public abstract class FTDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "database.db";
     private static FTDatabase sInstance;
 
-    private final MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
-
     /**
      * Migration from version 1 to version 2:
      * Introducing net_values table
      */
-    private static Migration MIGRATION_1_2 = new Migration(1, 2) {
+    private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("CREATE TABLE IF NOT EXISTS `net_values` " +
@@ -65,7 +60,7 @@ public abstract class FTDatabase extends RoomDatabase {
      * Migration from version 2 to version 3:
      * TODO
      */
-    private static Migration MIGRATION_2_3 = new Migration(2, 3) {
+    private static final Migration MIGRATION_2_3 = new Migration(2, 3) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase db) {
             db.beginTransaction();
@@ -167,7 +162,7 @@ public abstract class FTDatabase extends RoomDatabase {
      * Migration from version 4 to version 5:
      * - AccountExtended view modified
      */
-    private static Migration MIGRATION_4_5 = new Migration(4, 5) {
+    private static final Migration MIGRATION_4_5 = new Migration(4, 5) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase db) {
             db.beginTransaction();
@@ -192,7 +187,7 @@ public abstract class FTDatabase extends RoomDatabase {
      * Migration from version 5 to version 6:
      * - added columns hidden and position in categories table
      */
-    private static Migration MIGRATION_5_6 = new Migration(5, 6) {
+    private static final Migration MIGRATION_5_6 = new Migration(5, 6) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase db) {
             db.beginTransaction();
@@ -230,9 +225,7 @@ public abstract class FTDatabase extends RoomDatabase {
                     @Override
                     public void onOpen(@NonNull SupportSQLiteDatabase db) {
                         super.onOpen(db);
-                        OneTimeWorkRequest request =
-                                new OneTimeWorkRequest.Builder(UpdateStateWorker.class).build();
-                        WorkManager.getInstance(applicationContext).enqueue(request);
+                        WorkUtilsKt.runUpdateWorker(applicationContext, null, null);
                     }
                 })
                 .build();
