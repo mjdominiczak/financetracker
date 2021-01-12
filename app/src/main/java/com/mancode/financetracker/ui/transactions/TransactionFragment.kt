@@ -112,12 +112,12 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
                 .setAction(getString(R.string.undo)) {
                     onRestoreRequested(transaction)
                 }.show()
-        requireContext().runUpdateWorker(intArrayOf(transaction!!.id), transaction.date)
+        requireContext().runUpdateWorker(intArrayOf(transaction!!.accountId), transaction.date)
     }
 
     override fun onRestoreRequested(transaction: TransactionEntity?) {
         viewModel.restoreTransaction(transaction)
-        requireContext().runUpdateWorker(intArrayOf(transaction!!.id), transaction.date)
+        requireContext().runUpdateWorker(intArrayOf(transaction!!.accountId), transaction.date)
     }
 
     override fun onBookmarkToggleRequested(transaction: TransactionEntity) {
