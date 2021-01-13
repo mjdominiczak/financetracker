@@ -66,7 +66,10 @@ class AddBalanceFragment : Fragment() {
         }
         if (args.balanceDate == null) selectAll.isChecked = true
         balanceDate.date = viewModel.date
-        balanceDate.isEnabled = false
+        balanceDate.addDateSetListener {
+            val action = AddBalanceFragmentDirections.actionAddBalanceFragmentSelf(balanceDate.date)
+            findNavController().navigate(action)
+        }
 
         toolbar.setOnMenuItemClickListener { item ->
             if (item.itemId == R.id.action_menu_save) {
