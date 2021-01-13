@@ -56,7 +56,6 @@
         android:id="@+id/balanceValue"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="0.00"
         android:inputType="numberDecimal"
         android:selectAllOnFocus="true"
         android:singleLine="true"

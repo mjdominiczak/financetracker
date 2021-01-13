@@ -47,14 +47,14 @@ class AddBalanceFragment : Fragment() {
                 val balanceView = BalanceInputView(requireContext())
                 balanceView.setAccount(account)
                 container.addView(balanceView)
-                if (viewModel.balances.value != null) updateBalanceWidget(balanceView, viewModel.balances.value!!)
+                if (viewModel.balances.value != null) balanceView.updateWidget(viewModel.balances.value!!)
             }
         })
 
         viewModel.balances.observe(viewLifecycleOwner, { balances ->
             if (container.childCount > 0) {
                 for (balanceView in container.views) {
-                    updateBalanceWidget(balanceView as BalanceInputView, balances)
+                    (balanceView as BalanceInputView).updateWidget(balances)
                 }
             }
         })
@@ -109,24 +109,23 @@ class AddBalanceFragment : Fragment() {
         toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
     }
 
-    private fun updateBalanceWidget(balanceView: BalanceInputView, balances: List<BalanceExtended>) {
-        var balanceFound = false
-
-        for (balance in balances) {
-            if (balanceView.getAccountId() == balance.accountId) {
-                balanceView.setValue(balance.value) // TODO needs validation?
-                balanceView.balanceId = balance.id
-                balanceFound = true
-                break
-            }
-        }
-        if (balanceFound) {
-            balanceView.setExisting()
-        }
-    }
-
     private fun dismiss() {
         hideKeyboard()
         navController.navigateUp()
+    }
+}
+
+private fun BalanceInputView.updateWidget(balances: List<BalanceExtended>) {
+    for (balance in balances) {
+        if (getAccountId() == balance.accountId) {
+            if (balance.fixed) {
+                setValue(balance.value) // TODO needs validation?
+                setExisting()
+            } else {
+                setHint(balance.value)
+            }
+            balanceId = balance.id
+            break
+        }
     }
 }

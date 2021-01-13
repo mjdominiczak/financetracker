@@ -30,7 +30,7 @@ public interface BalanceDao {
     List<BalanceEntity> getAllBalancesSimple();
 
     @Query("SELECT balances._id, balance_check_date, balance_value, balance_account_id, " +
-            "account_name, account_type, account_currency " +
+            "balance_fixed, account_name, account_type, account_currency " +
             "FROM balances INNER JOIN accounts ON balance_account_id = accounts._id " +
             "WHERE balance_check_date = :date ORDER BY balance_account_id ASC")
     LiveData<List<BalanceExtended>> getFullBalancesForDate(LocalDate date);

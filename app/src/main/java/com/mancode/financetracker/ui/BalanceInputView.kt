@@ -34,6 +34,7 @@ class BalanceInputView : ConstraintLayout {
         this.account = account
         accountName.text = account.accountName
         currency.text = account.currency
+        setHint(0.0)
     }
 
     fun getAccountId(): Int = account.id
@@ -47,6 +48,10 @@ class BalanceInputView : ConstraintLayout {
 
     fun setValue(value: Double) {
         balanceValue.setText(value.toString())
+    }
+
+    fun setHint(value: Double) {
+        balanceValue.hint = value.toString()
     }
 
     fun isActive() = checkBox.isChecked
