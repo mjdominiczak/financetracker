@@ -73,15 +73,6 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
         const val KEY_DATE = "date"
         const val KEY_ACCOUNT_IDS = "accountIds"
 
-        private fun sumTransactions(transactions: List<TransactionEntity>): Double {
-            var sum = 0.0
-            if (transactions.isEmpty()) return sum
-            for (t in transactions) {
-                sum += t.type * t.value
-            }
-            return sum
-        }
-
         @VisibleForTesting
         fun calculateBalancesForAccount(
                 account: AccountEntity,
@@ -135,28 +126,6 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
             return balancesToInsert
         }
 
-        @VisibleForTesting
-        fun sumBalances(balances: List<BalanceEntity>,
-                        accounts: List<AccountEntity>,
-                        currencies: List<CurrencyEntity>,
-                        defaultCurrency: String): Double {
-            var value = 0.0
-            if (balances.isEmpty()) return value
-
-            val rateEuroToDefault = currencies.find { it.currencySymbol == defaultCurrency }!!.exchangeRate
-            for (balance in balances) {
-                val account = accounts.find { it.id == balance.accountId }
-                val currency = account!!.currency
-                val accountCurrencyRate = currencies
-                        .find { it.currencySymbol == currency }
-                        ?.exchangeRate ?: 1.0
-                val conversionRate = if (currency == defaultCurrency)
-                    1.0 else
-                    rateEuroToDefault / accountCurrencyRate
-                value += account.accountType.toDouble() * balance.value * conversionRate
-            }
-            return value
-        }
     }
 }
 
@@ -170,4 +139,35 @@ fun generateDatesDaily(fromInclusive: LocalDate, toInclusive: LocalDate): ArrayL
         d = d.plusDays(1)
     }
     return dates
+}
+
+fun sumTransactions(transactions: List<TransactionEntity>): Double {
+    var sum = 0.0
+    if (transactions.isEmpty()) return sum
+    for (t in transactions) {
+        sum += t.type * t.value
+    }
+    return sum
+}
+
+fun sumBalances(balances: List<BalanceEntity>,
+                accounts: List<AccountEntity>,
+                currencies: List<CurrencyEntity>,
+                defaultCurrency: String): Double {
+    var value = 0.0
+    if (balances.isEmpty()) return value
+
+    val rateEuroToDefault = currencies.find { it.currencySymbol == defaultCurrency }!!.exchangeRate
+    for (balance in balances) {
+        val account = accounts.find { it.id == balance.accountId }
+        val currency = account!!.currency
+        val accountCurrencyRate = currencies
+                .find { it.currencySymbol == currency }
+                ?.exchangeRate ?: 1.0
+        val conversionRate = if (currency == defaultCurrency)
+            1.0 else
+            rateEuroToDefault / accountCurrencyRate
+        value += account.accountType.toDouble() * balance.value * conversionRate
+    }
+    return value
 }

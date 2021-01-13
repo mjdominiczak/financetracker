@@ -4,7 +4,6 @@ import com.google.common.truth.Truth.assertThat
 import com.mancode.financetracker.database.entity.AccountEntity
 import com.mancode.financetracker.database.entity.BalanceEntity
 import com.mancode.financetracker.database.entity.CurrencyEntity
-import com.mancode.financetracker.workers.UpdateStateWorker.Companion.sumBalances
 import org.junit.Before
 import org.junit.Test
 import org.threeten.bp.LocalDate
