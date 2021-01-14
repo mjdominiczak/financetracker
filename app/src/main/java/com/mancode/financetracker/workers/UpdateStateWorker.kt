@@ -17,6 +17,8 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
     private val db: FTDatabase by lazy { FTDatabase.getInstance(applicationContext) }
     private val allCurrencies by lazy { db.currencyDao().allCurrenciesSimple }
     private val allAccounts by lazy { db.accountDao().allAccountsSimple }
+    private val allBalances by lazy { db.balanceDao().allBalancesSimple }
+    private val allTransactions by lazy { db.transactionDao().allTransactionsSimple }
 
     override fun doWork(): Result {
 
@@ -35,24 +37,21 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
 
         if (accounts.isEmpty()) return Result.failure()
 
-        val allBalances = db.balanceDao().allBalancesSimple
-        val allTransactions = db.transactionDao().allTransactionsSimple
-
+        val balancesToInsert = mutableListOf<BalanceEntity>()
         for (account in accounts) {
-            val balancesToInsert: List<BalanceEntity> =
-                    calculateBalancesForAccount(account, allBalances, allTransactions, inputDate)
+            balancesToInsert.addAll(calculateBalancesForAccount(account, allBalances, allTransactions, inputDate))
             val startDate = balancesToInsert.first().checkDate
             val endDate = balancesToInsert.last().checkDate
             if (minDate == null || startDate.isBefore(minDate)) minDate = startDate
             if (maxDate == null || endDate.isAfter(maxDate)) maxDate = endDate
 
-            db.balanceDao().insertAll(balancesToInsert)
         }
-        Log.i("UpdateStateWorker [id=${id}]", "Accounts update: ${(System.currentTimeMillis() - start)}ms")
-
-        if (!isPartial) {
-            db.netValueDao().clear()
+        if (balancesToInsert.isNotEmpty()) {
+            balancesToInsert.sortBy { it.checkDate }
+            minDate = balancesToInsert.first().checkDate
+            maxDate = balancesToInsert.last().checkDate
         }
+        Log.i("UpdateStateWorker [id=${id}]", "Balances update: ${(System.currentTimeMillis() - start)}ms")
 
         val netValues = mutableListOf<NetValue>()
         val datesDaily = generateDatesDaily(minDate ?: LocalDate.now(), maxDate ?: LocalDate.now())
@@ -62,6 +61,12 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
             val calculated = !allBalances.filter { it.fixed }.any { it.checkDate.isEqual(date) }
             netValues.add(NetValue(date, value, calculated))
         }
+        Log.i("UpdateStateWorker [id=${id}]", "NetValues update: ${(System.currentTimeMillis() - start)}ms")
+
+        if (!isPartial) {
+            db.netValueDao().clear()
+        }
+        db.balanceDao().insertAll(balancesToInsert)
         db.netValueDao().insertAll(netValues)
 
         Log.i("UpdateStateWorker [id=${id}]", "Update state end: ${(System.currentTimeMillis() - start)}ms")
