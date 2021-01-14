@@ -1,5 +1,6 @@
 package com.mancode.financetracker.database.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -19,8 +20,8 @@ public interface CurrencyDao {
     @Query("SELECT * FROM currencies")
     List<CurrencyEntity> getAllCurrenciesSimple();
 
-    @Query("SELECT currency_exchange_rate FROM currencies WHERE currency_symbol=:symbol")
-    double getExchangeRateForCurrency(String symbol);
+    @Query("SELECT * FROM currencies")
+    LiveData<List<CurrencyEntity>> getAllCurrenciesLive();
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertCurrency(CurrencyEntity currency);

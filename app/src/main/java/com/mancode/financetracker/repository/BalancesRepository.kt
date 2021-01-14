@@ -17,6 +17,9 @@ class BalancesRepository private constructor(
 
     fun getBalancesForDate(date: LocalDate): LiveData<List<BalanceExtended>> = balanceDao.getFullBalancesForDate(date)
 
+    fun getActualAssets(): LiveData<List<BalanceEntity>> = balanceDao.actualAssets
+    fun getActualLiabilities(): LiveData<List<BalanceEntity>> = balanceDao.actualLiabilities
+
     fun insertBalance(balance: BalanceEntity) {
         AsyncTask.execute { balanceDao.insertBalance(balance) }
     }

@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.mancode.financetracker.R
@@ -28,25 +27,35 @@ class DashboardFragment : Fragment(), View.OnClickListener, Toolbar.OnMenuItemCl
         return inflater.inflate(R.layout.fragment_dashboard, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel.assetsAccountsNumber.observe(viewLifecycleOwner, Observer {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.assetsAccountsNumber.observe(viewLifecycleOwner, {
             assets_accounts.text = getAccountsString(it)
         })
-        viewModel.liabilitiesAccountsNumber.observe(viewLifecycleOwner, Observer {
+        viewModel.liabilitiesAccountsNumber.observe(viewLifecycleOwner, {
             liabilities_accounts.text = getAccountsString(it)
         })
-        viewModel.actualNetValue.observe(viewLifecycleOwner, Observer {
+        viewModel.actualNetValue.observe(viewLifecycleOwner, {
             if (it != null) {
                 actualNetValue.setFormattedMoney(it)
             } else {
-                actualNetValue.text = "---"
+                actualNetValue.text = "?"
             }
         })
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        viewModel.getActualAssets().observe(viewLifecycleOwner, {
+            if (it != null) {
+                actualAssets.setFormattedMoney(it)
+            } else {
+                actualAssets.text = "?"
+            }
+        })
+        viewModel.getActualLiabilities().observe(viewLifecycleOwner, {
+            if (it != null) {
+                actualLiabilities.setFormattedMoney(it)
+            } else {
+                actualAssets.text = "?"
+            }
+        })
         reportMonthlyButton.setOnClickListener(this)
         actualNetValue.setOnClickListener(this)
         dashboardToolbar.setOnMenuItemClickListener(this)

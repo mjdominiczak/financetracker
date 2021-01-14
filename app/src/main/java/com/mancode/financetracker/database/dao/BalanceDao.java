@@ -12,7 +12,6 @@ import androidx.room.Update;
 import com.mancode.financetracker.database.converter.DateConverter;
 import com.mancode.financetracker.database.entity.BalanceEntity;
 import com.mancode.financetracker.database.pojos.BalanceExtended;
-import com.mancode.financetracker.database.pojos.BalanceMini;
 
 import org.threeten.bp.LocalDate;
 
@@ -28,6 +27,16 @@ public interface BalanceDao {
 
     @Query("SELECT * FROM balances")
     List<BalanceEntity> getAllBalancesSimple();
+
+    @Query("SELECT * FROM balances INNER JOIN accounts ON balance_account_id = accounts._id " +
+            "WHERE balance_check_date = DATE('now', 'localtime') AND account_type = 1 " +
+            "ORDER BY balance_account_id ASC")
+    LiveData<List<BalanceEntity>> getActualAssets();
+
+    @Query("SELECT * FROM balances INNER JOIN accounts ON balance_account_id = accounts._id " +
+            "WHERE balance_check_date = DATE('now', 'localtime') AND account_type = -1 " +
+            "ORDER BY balance_account_id ASC")
+    LiveData<List<BalanceEntity>> getActualLiabilities();
 
     @Query("SELECT balances._id, balance_check_date, balance_value, balance_account_id, " +
             "balance_fixed, account_name, account_type, account_currency " +
