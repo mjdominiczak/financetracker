@@ -28,6 +28,9 @@ public interface BalanceDao {
     @Query("SELECT * FROM balances")
     List<BalanceEntity> getAllBalancesSimple();
 
+    @Query("SELECT * FROM balances WHERE balance_fixed = 1")
+    List<BalanceEntity> getAllFixedBalancesSimple();
+
     @Query("SELECT * FROM balances INNER JOIN accounts ON balance_account_id = accounts._id " +
             "WHERE balance_check_date = DATE('now', 'localtime') AND account_type = 1 " +
             "ORDER BY balance_account_id ASC")

@@ -43,7 +43,7 @@ public class ExportToJsonWorker extends Worker {
                 database.currencyDao().getAllCurrenciesSimple(),
                 database.categoryDao().getAllCategoriesSimple(),
                 database.accountDao().getAllAccountsSimple(),
-                database.balanceDao().getAllBalancesSimple(),
+                database.balanceDao().getAllFixedBalancesSimple(),
                 database.transactionDao().getAllTransactionsSimple()
         );
 
