@@ -45,6 +45,7 @@ ext.libs.google = google
 ext.libs.kotlin = kotlin
 ext.libs.junit = "junit:junit:4.13.1"
 ext.libs.jodamoney = "org.joda:joda-money:1.0.1"
+ext.libs.timber = "com.jakewharton.timber:timber:4.7.1"
 ext.libs.threetenabp = "com.jakewharton.threetenabp:threetenabp:1.3.0"
 ext.libs.threetenbp = "org.threeten:threetenbp:1.5.0"
 ext.libs.okhttp = "com.squareup.okhttp3:okhttp:4.9.0"

@@ -64,7 +64,7 @@ public interface AccountDao {
     void update(AccountEntity account);
 
     @Delete
-    void remove(@NotNull AccountEntity account);
+    void remove(AccountEntity account);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<AccountEntity> accountList);
