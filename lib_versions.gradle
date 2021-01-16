@@ -38,11 +38,19 @@ def kotlin_version = '1.4.21'
 kotlin.stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 kotlin.gradleplugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
+def firebase = [:]
+firebase.googleservicesplugin = "com.google.gms:google-services:4.3.4"
+firebase.crashlyticsplugin = "com.google.firebase:firebase-crashlytics-gradle:2.4.1"
+firebase.bom = "com.google.firebase:firebase-bom:26.3.0"
+firebase.analytics = "com.google.firebase:firebase-analytics-ktx"
+firebase.crashlytics = "com.google.firebase:firebase-crashlytics-ktx"
+
 ext.libs = [:]
 ext.libs.androidgradleplugin = "com.android.tools.build:gradle:4.1.1"
 ext.libs.androidx = androidx
 ext.libs.google = google
 ext.libs.kotlin = kotlin
+ext.libs.firebase = firebase
 ext.libs.junit = "junit:junit:4.13.1"
 ext.libs.jodamoney = "org.joda:joda-money:1.0.1"
 ext.libs.timber = "com.jakewharton.timber:timber:4.7.1"
