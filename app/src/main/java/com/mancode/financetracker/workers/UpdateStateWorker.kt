@@ -1,7 +1,6 @@
 package com.mancode.financetracker.workers
 
 import android.content.Context
-import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.work.Worker
 import androidx.work.WorkerParameters
@@ -10,6 +9,7 @@ import com.mancode.financetracker.database.converter.DateConverter
 import com.mancode.financetracker.database.entity.*
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 import org.threeten.bp.LocalDate
+import timber.log.Timber
 
 class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
 
@@ -17,7 +17,7 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
     private val db: FTDatabase by lazy { FTDatabase.getInstance(applicationContext) }
     private val allCurrencies by lazy { db.currencyDao().allCurrenciesSimple }
     private val allAccounts by lazy { db.accountDao().allAccountsSimple }
-    private val allBalances by lazy { db.balanceDao().allBalancesSimple }
+    private var allBalances = db.balanceDao().allBalancesSimple
     private val allTransactions by lazy { db.transactionDao().allTransactionsSimple }
 
     override fun doWork(): Result {
@@ -51,8 +51,13 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
             minDate = balancesToInsert.first().checkDate
             maxDate = balancesToInsert.last().checkDate
         }
-        Log.i("UpdateStateWorker [id=${id}]", "Balances update: ${(System.currentTimeMillis() - start)}ms")
+        if (!isPartial) {
+            db.balanceDao().clearNotFixed()
+        }
+        db.balanceDao().insertAll(balancesToInsert)
+        Timber.i("[id=${id}] Balances update: ${(System.currentTimeMillis() - start)}ms")
 
+        allBalances = db.balanceDao().allBalancesSimple
         val netValues = mutableListOf<NetValue>()
         val datesDaily = generateDatesDaily(minDate ?: LocalDate.now(), maxDate ?: LocalDate.now())
         for (date in datesDaily) {
@@ -61,15 +66,14 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
             val calculated = !allBalances.filter { it.fixed }.any { it.checkDate.isEqual(date) }
             netValues.add(NetValue(date, value, calculated))
         }
-        Log.i("UpdateStateWorker [id=${id}]", "NetValues update: ${(System.currentTimeMillis() - start)}ms")
+        Timber.i("[id=${id}] NetValues update: ${(System.currentTimeMillis() - start)}ms")
 
         if (!isPartial) {
             db.netValueDao().clear()
         }
-        db.balanceDao().insertAll(balancesToInsert)
         db.netValueDao().insertAll(netValues)
 
-        Log.i("UpdateStateWorker [id=${id}]", "Update state end: ${(System.currentTimeMillis() - start)}ms")
+        Timber.i("[id=${id}] Update state end: ${(System.currentTimeMillis() - start)}ms")
 
         return Result.success()
     }
@@ -81,7 +85,7 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
         @VisibleForTesting
         fun calculateBalancesForAccount(
                 account: AccountEntity,
-                allBalances: MutableList<BalanceEntity>,
+                allBalances: List<BalanceEntity>,
                 allTransactions: List<TransactionEntity>,
                 inputDate: LocalDate? = null
         ): List<BalanceEntity> {
@@ -118,8 +122,6 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
                     prevBalance += sumTransactions(transactions)
                     val balanceToAdd = BalanceEntity(balanceId, date, account.id, prevBalance, false)
                     balancesToInsert.add(balanceToAdd)
-                    if (balanceId != 0) allBalances.removeAll { it.id == balanceId }
-                    allBalances.add(balanceToAdd)
                 } else {
                     /** is fixed balance */
                     balancesToInsert.add(allBalances.find {

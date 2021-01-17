@@ -58,4 +58,7 @@ public interface BalanceDao {
 
     @Delete
     void removeBalance(BalanceEntity balance);
+
+    @Query("DELETE FROM balances WHERE balance_fixed = 0")
+    void clearNotFixed();
 }

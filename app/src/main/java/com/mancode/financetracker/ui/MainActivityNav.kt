@@ -86,7 +86,7 @@ class MainActivityNav : AppCompatActivity() {
     }
 
     fun importJson() {
-        importDocument.launch(arrayOf("application/json"))
+        importDocument.launch(arrayOf("*/*", "application/json"))
     }
 
     private class CreateJson : CreateDocument() {
