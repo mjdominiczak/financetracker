@@ -12,9 +12,12 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.mancode.financetracker.R
 import com.mancode.financetracker.notifications.resetRemindersAndShowDecisionDialog
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor
+import com.mancode.financetracker.workers.TAG_UPDATE
 import com.mancode.financetracker.workers.fetchExchangeRates
 import com.mancode.financetracker.workers.runExportToUri
 import com.mancode.financetracker.workers.runImportFromUri
@@ -62,6 +65,15 @@ class MainActivityNav : AppCompatActivity() {
             }
         }
         bottomNavigationView.setupWithNavController(navController)
+        WorkManager.getInstance(applicationContext)
+                .getWorkInfosByTagLiveData(TAG_UPDATE)
+                .observe(this, { workinfos ->
+                    if (workinfos.any { it.state == WorkInfo.State.RUNNING }) {
+                        workerProgressIndicator.show()
+                    } else {
+                        workerProgressIndicator.hide()
+                    }
+                })
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -75,10 +87,24 @@ class MainActivityNav : AppCompatActivity() {
 
     private fun showBottomNav() {
         bottomNavigationView.visibility = View.VISIBLE
+//        bottomNavigationView.animate()
+//                .translationY(0f)
+//                .setListener(object : AnimatorListenerAdapter() {
+//                    override fun onAnimationEnd(animation: Animator?) {
+//                        bottomNavigationView.visibility = View.VISIBLE
+//                    }
+//                })
     }
 
     private fun hideBottomNav() {
         bottomNavigationView.visibility = View.GONE
+//        bottomNavigationView.animate()
+//                .translationY(bottomNavigationView.height.toFloat())
+//                .setListener(object : AnimatorListenerAdapter() {
+//                    override fun onAnimationEnd(animation: Animator?) {
+//                        bottomNavigationView.visibility = View.GONE
+//                    }
+//                })
     }
 
     fun exportJson() {

@@ -2,6 +2,7 @@ package com.mancode.financetracker.workers
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
+import androidx.work.Data
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.mancode.financetracker.database.FTDatabase
@@ -23,6 +24,7 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
     override fun doWork(): Result {
 
         val start = System.currentTimeMillis()
+        setProgressAsync(Data.Builder().putInt(PROGRESS, 0).build())
 
         val inputAccountIds = inputData.getIntArray(KEY_ACCOUNT_IDS)
         val inputDate = DateConverter.toDate(inputData.getString(KEY_DATE))
@@ -55,6 +57,7 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
             db.balanceDao().clearNotFixed()
         }
         db.balanceDao().insertAll(balancesToInsert)
+        setProgressAsync(Data.Builder().putInt(PROGRESS, 45).build())
         Timber.i("[id=${id}] Balances update: ${(System.currentTimeMillis() - start)}ms")
 
         allBalances = db.balanceDao().allBalancesSimple
@@ -66,6 +69,7 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
             val calculated = !allBalances.filter { it.fixed }.any { it.checkDate.isEqual(date) }
             netValues.add(NetValue(date, value, calculated))
         }
+        setProgressAsync(Data.Builder().putInt(PROGRESS, 90).build())
         Timber.i("[id=${id}] NetValues update: ${(System.currentTimeMillis() - start)}ms")
 
         if (!isPartial) {
@@ -73,6 +77,7 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
         }
         db.netValueDao().insertAll(netValues)
 
+        setProgressAsync(Data.Builder().putInt(PROGRESS, 100).build())
         Timber.i("[id=${id}] Update state end: ${(System.currentTimeMillis() - start)}ms")
 
         return Result.success()
@@ -81,6 +86,7 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
     companion object {
         const val KEY_DATE = "date"
         const val KEY_ACCOUNT_IDS = "accountIds"
+        const val PROGRESS = "Progress"
 
         @VisibleForTesting
         fun calculateBalancesForAccount(
