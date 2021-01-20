@@ -13,7 +13,7 @@ versioning {
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android-extensions' // TODO to be removed when migration to view binding completed
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
@@ -37,6 +37,9 @@ android {
     // used by Room, to test Migrations
     sourceSets {
         androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
+    }
+    buildFeatures {
+        viewBinding true
     }
     buildTypes {
         release {

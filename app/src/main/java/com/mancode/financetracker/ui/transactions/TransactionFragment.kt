@@ -14,10 +14,12 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.TransactionEntity
+import com.mancode.financetracker.databinding.FragmentTransactionListBinding
 import com.mancode.financetracker.ui.SetDateView
 import com.mancode.financetracker.ui.SwipeToDeleteCallback
 import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.CUSTOM
@@ -32,7 +34,6 @@ import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.TYPE_OUT
 import com.mancode.financetracker.ui.transactions.FilterQuery.Companion.UNCONSTRAINED
 import com.mancode.financetracker.viewmodel.TransactionViewModel
 import com.mancode.financetracker.workers.runUpdateWorker
-import kotlinx.android.synthetic.main.fragment_transaction_list.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.temporal.TemporalAdjusters
 
@@ -40,8 +41,10 @@ import org.threeten.bp.temporal.TemporalAdjusters
  * Created by Manveru on 23.11.2017.
  */
 
-class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyRequestListener {
+class TransactionFragment : Fragment(R.layout.fragment_transaction_list), TransactionRecyclerViewAdapter.ModifyRequestListener {
 
+    private var _binding: FragmentTransactionListBinding? = null
+    private val binding get() = _binding!!
     private lateinit var navController: NavController
 
     private val adapter: TransactionRecyclerViewAdapter by lazy {
@@ -50,8 +53,9 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
     private val viewModel: TransactionViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_transaction_list, container, false)
+                              savedInstanceState: Bundle?): View {
+        _binding = FragmentTransactionListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,18 +63,18 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
         viewModel.allTransactions.observe(viewLifecycleOwner, { transactions ->
             adapter.setTransactions(transactions)
             if (transactions.isNotEmpty()) {
-                transactions_list.visibility = View.VISIBLE
-                emptyListInfo.visibility = View.GONE
+                binding.transactionsList.visibility = View.VISIBLE
+                binding.emptyListInfo.visibility = View.GONE
             } else {
-                transactions_list.visibility = View.GONE
-                emptyListInfo.visibility = View.VISIBLE
+                binding.transactionsList.visibility = View.GONE
+                binding.emptyListInfo.visibility = View.VISIBLE
             }
         })
-        transactions_list.layoutManager = LinearLayoutManager(context)
-        transactions_list.adapter = adapter
+        binding.transactionsList.layoutManager = LinearLayoutManager(context)
+        binding.transactionsList.adapter = adapter
         ItemTouchHelper(SwipeToDeleteCallback(adapter))
-                .attachToRecyclerView(transactions_list)
-        transactions_toolbar.setOnMenuItemClickListener { menuItem ->
+                .attachToRecyclerView(binding.transactionsList)
+        binding.transactionsToolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.app_bar_filter -> {
                     FilterDialog().show()
@@ -80,10 +84,10 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
             }
 
         }
-        fab.setOnClickListener {
+        binding.fab.setOnClickListener {
             navController.navigate(R.id.action_transactionFragment_to_addEditTransactionFragment)
         }
-        val searchView = transactions_toolbar.menu.findItem(R.id.search_transactions).actionView as SearchView
+        val searchView = binding.transactionsToolbar.menu.findItem(R.id.search_transactions).actionView as SearchView
         searchView.setIconifiedByDefault(false)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -94,6 +98,12 @@ class TransactionFragment : Fragment(), TransactionRecyclerViewAdapter.ModifyReq
             override fun onQueryTextChange(newText: String?): Boolean {
                 adapter.updateFilterQueryDescription(newText)
                 return false
+            }
+        })
+        adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                (binding.transactionsList.layoutManager as LinearLayoutManager)
+                        .scrollToPositionWithOffset(positionStart, 8)
             }
         })
         super.onViewCreated(view, savedInstanceState)
