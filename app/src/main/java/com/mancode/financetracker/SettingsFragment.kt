@@ -16,6 +16,7 @@ import androidx.preference.ListPreference
 import androidx.preference.MultiSelectListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.google.android.material.appbar.MaterialToolbar
 import com.mancode.financetracker.notifications.CHANNEL_ID_REMINDER
 import com.mancode.financetracker.notifications.cancelTransactionReminder
 import com.mancode.financetracker.notifications.registerTransactionReminder
@@ -23,7 +24,6 @@ import com.mancode.financetracker.ui.MainActivityNav
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 import com.mancode.financetracker.ui.prefs.TimePreference
 import com.mancode.financetracker.ui.prefs.TimePreferenceDialogFragment
-import kotlinx.android.synthetic.main.fragment_settings.*
 import org.joda.money.CurrencyUnit
 import org.threeten.bp.LocalTime
 
@@ -83,7 +83,8 @@ class SettingsFragment : PreferenceFragmentCompat(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val navController = findNavController()
         val appBarConfig = AppBarConfiguration(navController.graph)
-        settingsToolbar.setupWithNavController(navController, appBarConfig)
+        view.findViewById<MaterialToolbar>(R.id.settingsToolbar)
+                .setupWithNavController(navController, appBarConfig)
         super.onViewCreated(view, savedInstanceState)
     }
 

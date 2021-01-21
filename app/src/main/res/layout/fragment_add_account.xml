@@ -22,6 +22,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <include
+        android:id="@+id/edit_account"
         layout="@layout/edit_account"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

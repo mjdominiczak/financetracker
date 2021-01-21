@@ -11,56 +11,67 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.mancode.financetracker.R
+import com.mancode.financetracker.databinding.FragmentDashboardBinding
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 import com.mancode.financetracker.viewmodel.DashboardViewModel
-import kotlinx.android.synthetic.main.fragment_dashboard.*
 
-class DashboardFragment : Fragment(), View.OnClickListener, Toolbar.OnMenuItemClickListener {
+class DashboardFragment : Fragment(R.layout.fragment_dashboard), View.OnClickListener, Toolbar.OnMenuItemClickListener {
+
+    private var _binding: FragmentDashboardBinding? = null
+    private val binding get() = _binding!!
 
     lateinit var navController: NavController
     private val viewModel: DashboardViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         navController = findNavController()
         if (PreferenceAccessor.firstRun) navController.navigate(R.id.firstRunFragment)
-        return inflater.inflate(R.layout.fragment_dashboard, container, false)
+        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.assetsAccountsNumber.observe(viewLifecycleOwner, {
-            assets_accounts.text = getAccountsString(it)
+            binding.assetsAccounts.text = getAccountsString(it)
         })
         viewModel.liabilitiesAccountsNumber.observe(viewLifecycleOwner, {
-            liabilities_accounts.text = getAccountsString(it)
+            binding.liabilitiesAccounts.text = getAccountsString(it)
         })
         viewModel.actualNetValue.observe(viewLifecycleOwner, {
             if (it != null) {
-                actualNetValue.setFormattedMoney(it)
+                binding.actualNetValue.setFormattedMoney(it)
             } else {
-                actualNetValue.text = "?"
+                binding.actualNetValue.text = "?"
             }
         })
         viewModel.getActualAssets().observe(viewLifecycleOwner, {
             if (it != null) {
-                actualAssets.setFormattedMoney(it)
+                binding.actualAssets.setFormattedMoney(it)
             } else {
-                actualAssets.text = "?"
+                binding.actualAssets.text = "?"
             }
         })
         viewModel.getActualLiabilities().observe(viewLifecycleOwner, {
             if (it != null) {
-                actualLiabilities.setFormattedMoney(it)
+                binding.actualLiabilities.setFormattedMoney(it)
             } else {
-                actualAssets.text = "?"
+                binding.actualAssets.text = "?"
             }
         })
-        reportMonthlyButton.setOnClickListener(this)
-        actualNetValue.setOnClickListener(this)
-        dashboardToolbar.setOnMenuItemClickListener(this)
-        assets_accounts.text = getAccountsString(0)
-        liabilities_accounts.text = getAccountsString(0)
+        with(binding) {
+            reportMonthlyButton.setOnClickListener(this@DashboardFragment)
+            actualNetValue.setOnClickListener(this@DashboardFragment)
+            dashboardToolbar.setOnMenuItemClickListener(this@DashboardFragment)
+            assetsAccounts.text = getAccountsString(0)
+            liabilitiesAccounts.text = getAccountsString(0)
+        }
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     private fun getAccountsString(quantity: Int) = resources.getQuantityString(R.plurals.accounts_number_par, quantity, quantity)

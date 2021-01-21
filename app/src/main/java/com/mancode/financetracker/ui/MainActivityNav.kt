@@ -15,17 +15,18 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.mancode.financetracker.R
+import com.mancode.financetracker.databinding.ActivityMainNavBinding
 import com.mancode.financetracker.notifications.resetRemindersAndShowDecisionDialog
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 import com.mancode.financetracker.workers.TAG_UPDATE
 import com.mancode.financetracker.workers.fetchExchangeRates
 import com.mancode.financetracker.workers.runExportToUri
 import com.mancode.financetracker.workers.runImportFromUri
-import kotlinx.android.synthetic.main.activity_main_nav.*
 
 class MainActivityNav : AppCompatActivity() {
 
     internal lateinit var navController: NavController
+    private lateinit var binding: ActivityMainNavBinding
 
     /** Nullability checks necessary for app to not crash on going back from selection activity */
     private val createDocument = registerForActivityResult(CreateJson()) {
@@ -41,16 +42,16 @@ class MainActivityNav : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMainNavBinding.inflate(layoutInflater)
 
         if (!PreferenceAccessor.firstRun) {
             resetRemindersAndShowDecisionDialog()
         }
         fetchExchangeRates()
 
-        setContentView(R.layout.activity_main_nav)
+        setContentView(binding.root)
 
-        val host: NavHostFragment = supportFragmentManager
-                .findFragmentById(R.id.nav_host_fragment) as NavHostFragment? ?: return
+        val host = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = host.navController
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
@@ -64,14 +65,14 @@ class MainActivityNav : AppCompatActivity() {
                 else -> showBottomNav()
             }
         }
-        bottomNavigationView.setupWithNavController(navController)
+        binding.bottomNavigationView.setupWithNavController(navController)
         WorkManager.getInstance(applicationContext)
                 .getWorkInfosByTagLiveData(TAG_UPDATE)
                 .observe(this, { workinfos ->
                     if (workinfos.any { it.state == WorkInfo.State.RUNNING }) {
-                        workerProgressIndicator.show()
+                        binding.workerProgressIndicator.show()
                     } else {
-                        workerProgressIndicator.hide()
+                        binding.workerProgressIndicator.hide()
                     }
                 })
     }
@@ -86,7 +87,7 @@ class MainActivityNav : AppCompatActivity() {
     }
 
     private fun showBottomNav() {
-        bottomNavigationView.visibility = View.VISIBLE
+        binding.bottomNavigationView.visibility = View.VISIBLE
 //        bottomNavigationView.animate()
 //                .translationY(0f)
 //                .setListener(object : AnimatorListenerAdapter() {
@@ -97,7 +98,7 @@ class MainActivityNav : AppCompatActivity() {
     }
 
     private fun hideBottomNav() {
-        bottomNavigationView.visibility = View.GONE
+        binding.bottomNavigationView.visibility = View.GONE
 //        bottomNavigationView.animate()
 //                .translationY(bottomNavigationView.height.toFloat())
 //                .setListener(object : AnimatorListenerAdapter() {

@@ -27,6 +27,7 @@
         android:layout_below="@id/appbarlayout">
 
         <include
+            android:id="@+id/edit_transaction_layout"
             layout="@layout/edit_transaction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

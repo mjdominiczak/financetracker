@@ -1,27 +1,30 @@
 package com.mancode.financetracker.ui
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.mancode.financetracker.R
+import com.mancode.financetracker.databinding.FragmentFirstRunBinding
 import com.mancode.financetracker.viewmodel.FirstRunViewModel
 import com.mancode.financetracker.workers.runUpdateWorker
-import kotlinx.android.synthetic.main.fragment_first_run.*
 
-class FirstRunFragment : Fragment() {
+class FirstRunFragment : Fragment(R.layout.fragment_first_run) {
+
+    private var _binding: FragmentFirstRunBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModel: FirstRunViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_first_run, container, false)
+                              savedInstanceState: Bundle?): View {
+        _binding = FragmentFirstRunBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -32,7 +35,7 @@ class FirstRunFragment : Fragment() {
                 R.layout.dropdown_menu_popup_item,
                 viewModel.currencyCodesList
         )
-        with (defaultCurrency) {
+        with(binding.defaultCurrency) {
             setAdapter(currencyAdapter)
             setText(viewModel.defaultCurrency, false)
             setOnClickListener {
@@ -43,37 +46,34 @@ class FirstRunFragment : Fragment() {
                 viewModel.defaultCurrency = currencyAdapter.getItem(position)!!
             }
         }
-        openingBalance.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                if (!s.isNullOrBlank()) {
-                    try {
-                        val double = s.toString().trim().toDouble()
-                        viewModel.openingBalance = double
-                        openingBalanceInputLayout.error = null
-                    } catch (e: NumberFormatException) {
-                        openingBalanceInputLayout.error = getString(R.string.error_not_a_number)
-                    }
-                } else {
-                    openingBalanceInputLayout.error = null
+        binding.openingBalance.doAfterTextChanged {
+            if (!it.isNullOrBlank()) {
+                try {
+                    val double = it.toString().trim().toDouble()
+                    viewModel.openingBalance = double
+                    binding.openingBalanceInputLayout.error = null
+                } catch (e: NumberFormatException) {
+                    binding.openingBalanceInputLayout.error = getString(R.string.error_not_a_number)
                 }
+            } else {
+                binding.openingBalanceInputLayout.error = null
             }
+        }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
-        })
-
-        skipButton.setOnClickListener {
+        binding.skipButton.setOnClickListener {
             viewModel.skip()
             findNavController().navigate(R.id.action_firstRunFragment_to_dashboardFragment)
         }
 
-        saveButton.setOnClickListener {
+        binding.saveButton.setOnClickListener {
             viewModel.storeInitialData()
             requireContext().runUpdateWorker()
             findNavController().navigate(R.id.action_firstRunFragment_to_dashboardFragment)
         }
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 }

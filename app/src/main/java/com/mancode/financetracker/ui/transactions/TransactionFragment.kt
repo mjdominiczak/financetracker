@@ -109,6 +109,11 @@ class TransactionFragment : Fragment(R.layout.fragment_transaction_list), Transa
         super.onViewCreated(view, savedInstanceState)
     }
 
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+    }
+
     override fun onEditRequested(transaction: TransactionEntity) {
         val action = TransactionFragmentDirections
                 .actionTransactionFragmentToAddEditTransactionFragment(transaction.id)

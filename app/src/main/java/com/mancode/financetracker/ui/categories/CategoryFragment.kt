@@ -12,18 +12,22 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.TransactionEntity
-import kotlinx.android.synthetic.main.fragment_category.*
+import com.mancode.financetracker.databinding.FragmentCategoryBinding
 
-class CategoryFragment : Fragment() {
+class CategoryFragment : Fragment(R.layout.fragment_category) {
+
+    private var _binding: FragmentCategoryBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_category, container, false)
+                              savedInstanceState: Bundle?): View {
+        _binding = FragmentCategoryBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        pagerCategories.adapter = CategoryPagerAdapter(this)
-        TabLayoutMediator(tabLayoutCategories, pagerCategories) { tab, position ->
+        binding.pagerCategories.adapter = CategoryPagerAdapter(this)
+        TabLayoutMediator(binding.tabLayoutCategories, binding.pagerCategories) { tab, position ->
             tab.text = when (position) {
                 0 -> getString(R.string.outcome)
                 1 -> getString(R.string.income)
@@ -33,7 +37,12 @@ class CategoryFragment : Fragment() {
 
         val navController = findNavController()
         val appBarConfig = AppBarConfiguration(navController.graph)
-        categoriesToolbar.setupWithNavController(navController, appBarConfig)
+        binding.categoriesToolbar.setupWithNavController(navController, appBarConfig)
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     class CategoryPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {

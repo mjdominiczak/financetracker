@@ -8,9 +8,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.entity.NetValue
+import com.mancode.financetracker.databinding.FragmentBalanceBinding
 import com.mancode.financetracker.ui.setFormattedMoney
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_balance.view.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.*
@@ -40,19 +39,18 @@ class BalanceRecyclerViewAdapter(private val modifyRequestListener: ModifyReques
                 oldItem.date.isEqual(newItem.date) && oldItem.value == newItem.value // TODO NetValue to Kotlin and implement "equals" (data class)
     }
 
-    inner class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
-            LayoutContainer {
-
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         init {
-            containerView.setOnClickListener { modifyRequestListener.onEditRequested(balanceDate) }
+            view.setOnClickListener { modifyRequestListener.onEditRequested(balanceDate) }
         }
 
+        private val binding = FragmentBalanceBinding.bind(view)
         private lateinit var balanceDate: LocalDate
 
         fun bindTo(netValue: NetValue) {
             balanceDate = netValue.date
-            containerView.balanceDate.text = balanceDate.format(DateTimeFormatter.ISO_LOCAL_DATE.withLocale(Locale.getDefault()))
-            containerView.balanceDaily.setFormattedMoney(netValue.value)
+            binding.balanceDate.text = balanceDate.format(DateTimeFormatter.ISO_LOCAL_DATE.withLocale(Locale.getDefault()))
+            binding.balanceDaily.setFormattedMoney(netValue.value)
         }
     }
 
