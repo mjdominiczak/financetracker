@@ -47,7 +47,7 @@ firebase.analytics = "com.google.firebase:firebase-analytics-ktx"
 firebase.crashlytics = "com.google.firebase:firebase-crashlytics-ktx"
 
 ext.libs = [:]
-ext.libs.androidgradleplugin = "com.android.tools.build:gradle:4.1.1"
+ext.libs.androidgradleplugin = "com.android.tools.build:gradle:4.1.2"
 ext.libs.androidx = androidx
 ext.libs.google = google
 ext.libs.kotlin = kotlin
