@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -20,6 +19,7 @@ import com.mancode.financetracker.database.entity.TransactionEntity.Companion.TY
 import com.mancode.financetracker.database.entity.TransactionEntity.Companion.TYPE_OUTCOME
 import com.mancode.financetracker.databinding.FragmentAddTransactionBinding
 import com.mancode.financetracker.ui.hideKeyboard
+import com.mancode.financetracker.ui.showKeyboard
 import com.mancode.financetracker.viewmodel.AddEditTransactionViewModel
 import com.mancode.financetracker.workers.runUpdateWorker
 
@@ -114,63 +114,70 @@ class AddEditTransactionFragment : Fragment(R.layout.fragment_add_transaction) {
             }
         }
 
-        val toolbar = view.findViewById<Toolbar>(R.id.add_transaction_toolbar)
-        toolbar.setOnMenuItemClickListener { item ->
-            if (item.itemId == R.id.action_menu_save) {
-                with(binding.editTransactionLayout) {
-                    val description = descriptionField.text.toString()
-                    val valueString = valueField.text.toString()
-                    val accountString = accountDropdown.text.toString()
-                    val categoryString = categoryDropdown.text.toString()
+        binding.addTransactionToolbar.apply {
+            setOnMenuItemClickListener { item ->
+                if (item.itemId == R.id.action_menu_save) {
+                    with(binding.editTransactionLayout) {
+                        val description = descriptionField.text.toString()
+                        val valueString = valueField.text.toString()
+                        val accountString = accountDropdown.text.toString()
+                        val categoryString = categoryDropdown.text.toString()
 
-                    if (description.isNotEmpty()
-                            && valueString.isNotEmpty()
-                            && accountString.isNotEmpty()
-                            && accountDropdown.error == null
-                            && categoryString.isNotEmpty()) {
-                        val date = transactionDate.date
-                        val type = if (radioGroupType.checkedRadioButtonId == R.id.rb_income)
-                            TYPE_INCOME else
-                            TYPE_OUTCOME
-                        val account = viewModel.getAccountIdByName(accountString)
-                        val category = viewModel.category?.id ?: viewModel.transaction!!.categoryId
-                        val value = valueString.toDouble()
-                        val flags = if (args.transactionId == 0) 0 else
-                            viewModel.transaction?.flags ?: 0
-                        val transaction = TransactionEntity(
-                                args.transactionId,
-                                date,
-                                type,
-                                description,
-                                value,
-                                flags,
-                                account,
-                                category
-                        )
-                        if (args.transactionId == 0) {
-                            viewModel.insertTransaction(transaction)
+                        if (description.isNotEmpty()
+                                && valueString.isNotEmpty()
+                                && accountString.isNotEmpty()
+                                && accountDropdown.error == null
+                                && categoryString.isNotEmpty()) {
+                            val date = transactionDate.date
+                            val type = if (radioGroupType.checkedRadioButtonId == R.id.rb_income)
+                                TYPE_INCOME else
+                                TYPE_OUTCOME
+                            val account = viewModel.getAccountIdByName(accountString)
+                            val category = viewModel.category?.id
+                                    ?: viewModel.transaction!!.categoryId
+                            val value = valueString.toDouble()
+                            val flags = if (args.transactionId == 0) 0 else
+                                viewModel.transaction?.flags ?: 0
+                            val transaction = TransactionEntity(
+                                    args.transactionId,
+                                    date,
+                                    type,
+                                    description,
+                                    value,
+                                    flags,
+                                    account,
+                                    category
+                            )
+                            if (args.transactionId == 0) {
+                                viewModel.insertTransaction(transaction)
+                            } else {
+                                viewModel.updateTransaction(transaction)
+                            }
+                            requireContext().runUpdateWorker(intArrayOf(account), date)
+                            dismiss()
                         } else {
-                            viewModel.updateTransaction(transaction)
+                            if (description.isEmpty())
+                                descriptionInputLayout.error = getString(R.string.error_field_empty)
+                            if (valueString.isEmpty())
+                                valueInputLayout.error = getString(R.string.error_field_empty)
+                            if (accountString.isEmpty())
+                                accountInputLayout.error = getString(R.string.error_field_empty)
+                            if (categoryString.isEmpty())
+                                categoryInputLayout.error = getString(R.string.error_field_empty)
                         }
-                        requireContext().runUpdateWorker(intArrayOf(account), date)
-                        dismiss()
-                    } else {
-                        if (description.isEmpty())
-                            descriptionInputLayout.error = getString(R.string.error_field_empty)
-                        if (valueString.isEmpty())
-                            valueInputLayout.error = getString(R.string.error_field_empty)
-                        if (accountString.isEmpty())
-                            accountInputLayout.error = getString(R.string.error_field_empty)
-                        if (categoryString.isEmpty())
-                            categoryInputLayout.error = getString(R.string.error_field_empty)
                     }
                 }
+                false
             }
-            false
+            inflateMenu(R.menu.menu_dialog)
+            setNavigationOnClickListener { dismiss() }
+            setNavigationIcon(R.drawable.ic_close_white_24dp)
         }
-        toolbar.inflateMenu(R.menu.menu_dialog)
-        toolbar.setNavigationOnClickListener { dismiss() }
-        toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
+
+        binding.editTransactionLayout.valueField.apply {
+            requestFocus()
+            if (args.transactionId == 0) showKeyboard()
+        }
     }
 
     override fun onDestroyView() {
