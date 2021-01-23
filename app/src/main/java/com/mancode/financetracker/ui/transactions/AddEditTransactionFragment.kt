@@ -172,6 +172,8 @@ class AddEditTransactionFragment : Fragment(R.layout.fragment_add_transaction) {
             inflateMenu(R.menu.menu_dialog)
             setNavigationOnClickListener { dismiss() }
             setNavigationIcon(R.drawable.ic_close_white_24dp)
+            title = if (args.transactionId != 0) getString(R.string.title_edit_transaction)
+            else getString(R.string.title_add_transaction)
         }
 
         binding.editTransactionLayout.valueField.apply {

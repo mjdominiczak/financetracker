@@ -112,10 +112,12 @@ class AddBalanceFragment : Fragment(R.layout.fragment_add_balance) {
             }
             false
         }
-        with(binding) {
-            toolbar.inflateMenu(R.menu.menu_dialog)
-            toolbar.setNavigationOnClickListener { dismiss() }
-            toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
+        binding.toolbar.apply {
+            inflateMenu(R.menu.menu_dialog)
+            setNavigationOnClickListener { dismiss() }
+            setNavigationIcon(R.drawable.ic_close_white_24dp)
+            title = if (args.balanceDate != null) getString(R.string.title_edit_balance)
+            else getString(R.string.title_add_balance)
         }
     }
 

@@ -9,8 +9,11 @@
     <string name="action_importData">Przywróć dane z pliku</string>
     <string name="action_clearLastBalance">Usuń ostatni bilans</string>
     <string name="title_add_account">Dodaj konto</string>
+    <string name="title_edit_account">Edytuj konto</string>
     <string name="title_add_balance">Dodaj bilans</string>
+    <string name="title_edit_balance">Edytuj bilans</string>
     <string name="title_add_transaction">Dodaj transakcję</string>
+    <string name="title_edit_transaction">Edytuj transakcję</string>
     <string name="title_transaction_filter">Filtruj transakcje</string>
     <string name="neutral_filter">Przywróć</string>
     <string name="cancel">Anuluj</string>

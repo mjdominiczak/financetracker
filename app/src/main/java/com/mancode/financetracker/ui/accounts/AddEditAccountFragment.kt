@@ -117,15 +117,19 @@ class AddEditAccountFragment : Fragment(R.layout.fragment_add_account) {
                 dismiss()
             }
         }
-        binding.toolbar.setOnMenuItemClickListener { item: MenuItem ->
-            if (item.itemId == R.id.action_menu_save) {
-                validateAndSave()
+        binding.toolbar.apply {
+            setOnMenuItemClickListener { item: MenuItem ->
+                if (item.itemId == R.id.action_menu_save) {
+                    validateAndSave()
+                }
+                false
             }
-            false
+            inflateMenu(R.menu.menu_dialog)
+            setNavigationOnClickListener { dismiss() }
+            setNavigationIcon(R.drawable.ic_close_white_24dp)
+            title = if (args.accountId != 0) getString(R.string.title_edit_account)
+            else getString(R.string.title_add_account)
         }
-        binding.toolbar.inflateMenu(R.menu.menu_dialog)
-        binding.toolbar.setNavigationOnClickListener { dismiss() }
-        binding.toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
     }
 
     override fun onDestroyView() {

@@ -29,7 +29,6 @@
     <fragment
         android:id="@+id/addBalanceFragment"
         android:name="com.mancode.financetracker.ui.balances.AddBalanceFragment"
-        android:label="@string/title_add_balance"
         tools:layout="@layout/fragment_add_balance">
         <argument
             android:name="balanceDate"

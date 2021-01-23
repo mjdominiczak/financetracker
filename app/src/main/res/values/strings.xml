@@ -9,8 +9,11 @@
     <string name="action_clearLastBalance">Remove last balance</string>
 
     <string name="title_add_account">Add account</string>
+    <string name="title_edit_account">Edit account</string>
     <string name="title_add_balance">Add balance</string>
+    <string name="title_edit_balance">Edit balance</string>
     <string name="title_add_transaction">Add transaction</string>
+    <string name="title_edit_transaction">Edit transaction</string>
     <string name="title_transaction_filter">Filter transactions</string>
 
     <string name="neutral_filter">Reset</string>

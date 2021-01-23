@@ -16,7 +16,7 @@
             style="@style/Widget.MaterialComponents.Toolbar.Surface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:title="@string/title_add_balance" />
+            tools:title="@string/title_add_balance" />
 
         <RelativeLayout
             android:layout_width="match_parent"
