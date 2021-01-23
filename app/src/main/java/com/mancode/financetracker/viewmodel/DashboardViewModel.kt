@@ -61,7 +61,8 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
                                     currencies: LiveData<List<CurrencyEntity>>,
                                     invert: Boolean = false): Double? {
         val defaultCurrency = PreferenceAccessor.defaultCurrency
-        return if (balances.value == null || accounts.value == null || currencies.value == null)
+        return if (balances.value.isNullOrEmpty() || accounts.value.isNullOrEmpty()
+                || currencies.value.isNullOrEmpty())
             null
         else {
             val displayFactor = if (invert) -1.0 else 1.0
@@ -69,6 +70,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
             if (returnValue != 0.0) {
                 displayFactor * returnValue
             } else {
+                // added to avoid display of "-0.0"
                 0.0
             }
         }

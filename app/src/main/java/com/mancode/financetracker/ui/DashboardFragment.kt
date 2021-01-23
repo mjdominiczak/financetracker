@@ -43,26 +43,25 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard), View.OnClickLis
             if (it != null) {
                 binding.actualNetValue.setFormattedMoney(it)
             } else {
-                binding.actualNetValue.text = "?"
+                binding.actualNetValue.text = getString(R.string.not_available)
             }
         })
         viewModel.getActualAssets().observe(viewLifecycleOwner, {
             if (it != null) {
                 binding.actualAssets.setFormattedMoney(it)
             } else {
-                binding.actualAssets.text = "?"
+                binding.actualAssets.text = getString(R.string.not_available)
             }
         })
         viewModel.getActualLiabilities().observe(viewLifecycleOwner, {
             if (it != null) {
                 binding.actualLiabilities.setFormattedMoney(it)
             } else {
-                binding.actualAssets.text = "?"
+                binding.actualLiabilities.text = getString(R.string.not_available)
             }
         })
         with(binding) {
             reportMonthlyButton.setOnClickListener(this@DashboardFragment)
-            actualNetValue.setOnClickListener(this@DashboardFragment)
             dashboardToolbar.setOnMenuItemClickListener(this@DashboardFragment)
             assetsAccounts.text = getAccountsString(0)
             liabilitiesAccounts.text = getAccountsString(0)

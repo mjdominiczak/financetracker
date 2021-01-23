@@ -106,6 +106,7 @@
     <string name="balance_date">Balance date</string>
     <string name="opening_balance">Opening balance</string>
     <string name="skip">Skip</string>
+    <string name="not_available">n/a</string>
 
     <!--OUTCOME CATEGORIES INITIAL-->
     <string name="category_name_food">Food</string>

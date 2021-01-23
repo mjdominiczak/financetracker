@@ -32,12 +32,16 @@ public interface BalanceDao {
     List<BalanceEntity> getAllFixedBalancesSimple();
 
     @Query("SELECT * FROM balances INNER JOIN accounts ON balance_account_id = accounts._id " +
-            "WHERE balance_check_date = DATE('now', 'localtime') AND account_type = 1 " +
+            "WHERE balance_check_date = " +
+            "(SELECT balance_check_date FROM balances ORDER BY balance_check_date DESC LIMIT 1) " +
+            "AND account_type = 1 " +
             "ORDER BY balance_account_id ASC")
     LiveData<List<BalanceEntity>> getActualAssets();
 
     @Query("SELECT * FROM balances INNER JOIN accounts ON balance_account_id = accounts._id " +
-            "WHERE balance_check_date = DATE('now', 'localtime') AND account_type = -1 " +
+            "WHERE balance_check_date = " +
+            "(SELECT balance_check_date FROM balances ORDER BY balance_check_date DESC LIMIT 1) " +
+            "AND account_type = -1 " +
             "ORDER BY balance_account_id ASC")
     LiveData<List<BalanceEntity>> getActualLiabilities();
 
