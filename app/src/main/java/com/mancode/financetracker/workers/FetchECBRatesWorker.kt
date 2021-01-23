@@ -12,6 +12,7 @@ import okhttp3.*
 import org.threeten.bp.LocalDate
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
+import timber.log.Timber
 import java.io.IOException
 import java.io.Reader
 
@@ -40,7 +41,7 @@ class FetchECBRatesWorker(context: Context, params: WorkerParameters)
                 .build()
         httpClient.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                Log.e("FetchECBRatesWorker", "Fetching exchange rates from ECB failed")
+                Timber.e("Fetching exchange rates from ECB failed")
             }
 
             override fun onResponse(call: Call, response: Response) {
