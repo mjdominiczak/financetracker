@@ -6,7 +6,9 @@ import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.mancode.financetracker.database.converter.DateConverter
+import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 import org.threeten.bp.LocalDate
+import timber.log.Timber
 
 const val TAG_UPDATE = "updateState"
 const val TAG_UPDATE_PARTIAL = "updateStatePartial"
@@ -15,6 +17,13 @@ const val TAG_EXPORT = "export"
 
 fun Context.runUpdateWorker(accountIds: IntArray? = null, date: LocalDate? = null) {
     val isPartial = accountIds != null || date != null
+    if (!isPartial) {
+        val lastUpdate = PreferenceAccessor.lastUpdateDate
+        if (lastUpdate != null && lastUpdate.isEqual(LocalDate.now())) {
+            Timber.i("Full update already done today")
+            return
+        }
+    }
     val request = OneTimeWorkRequest.Builder(UpdateStateWorker::class.java).apply {
         addTag(TAG_UPDATE)
         if (isPartial) addTag(TAG_UPDATE_PARTIAL)

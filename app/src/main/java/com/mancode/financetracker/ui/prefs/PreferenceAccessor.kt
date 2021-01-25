@@ -28,6 +28,13 @@ object PreferenceAccessor {
         get() = preferences.getBoolean("first_run", true)
         set(value) = preferences.edit { putBoolean("first_run", value) }
 
+    var lastUpdateDate: LocalDate?
+        get() {
+            val string = preferences.getString("last_update_date", null)
+            return if (string != null) LocalDate.parse(string) else null
+        }
+        set(value) = preferences.edit { putString("last_update_date", value.toString()) }
+
     var ratesFetchDate: LocalDate?
         get() {
             val string = preferences.getString("rates_fetch_date", null)

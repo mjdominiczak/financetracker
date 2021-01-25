@@ -53,6 +53,10 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
             minDate = balancesToInsert.first().checkDate
             maxDate = balancesToInsert.last().checkDate
         }
+        if (isStopped) {
+            Timber.i("Work has been cancelled")
+            return Result.failure()
+        }
         if (!isPartial) {
             db.balanceDao().clearNotFixed()
         }
@@ -72,6 +76,10 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
         setProgressAsync(Data.Builder().putInt(PROGRESS, 90).build())
         Timber.i("[id=${id}] NetValues update: ${(System.currentTimeMillis() - start)}ms")
 
+        if (isStopped) {
+            Timber.i("Work has been cancelled")
+            return Result.failure()
+        }
         if (!isPartial) {
             db.netValueDao().clear()
         }
@@ -80,6 +88,7 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
         setProgressAsync(Data.Builder().putInt(PROGRESS, 100).build())
         Timber.i("[id=${id}] Update state end: ${(System.currentTimeMillis() - start)}ms")
 
+        PreferenceAccessor.lastUpdateDate = LocalDate.now()
         return Result.success()
     }
 
