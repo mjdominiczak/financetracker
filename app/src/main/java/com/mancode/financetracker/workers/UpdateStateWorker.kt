@@ -88,7 +88,7 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
         setProgressAsync(Data.Builder().putInt(PROGRESS, 100).build())
         Timber.i("[id=${id}] Update state end: ${(System.currentTimeMillis() - start)}ms")
 
-        PreferenceAccessor.lastUpdateDate = LocalDate.now()
+        if (!isPartial) PreferenceAccessor.lastUpdateDate = LocalDate.now()
         return Result.success()
     }
 
