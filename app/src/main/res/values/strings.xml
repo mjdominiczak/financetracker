@@ -110,6 +110,7 @@
     <string name="opening_balance">Opening balance</string>
     <string name="skip">Skip</string>
     <string name="not_available">n/a</string>
+    <string name="force_update">Force update</string>
 
     <!--OUTCOME CATEGORIES INITIAL-->
     <string name="category_name_food">Food</string>

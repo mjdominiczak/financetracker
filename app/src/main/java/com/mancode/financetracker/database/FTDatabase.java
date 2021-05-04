@@ -225,7 +225,7 @@ public abstract class FTDatabase extends RoomDatabase {
                     @Override
                     public void onOpen(@NonNull SupportSQLiteDatabase db) {
                         super.onOpen(db);
-                        WorkUtilsKt.runUpdateWorker(applicationContext, null, null);
+                        WorkUtilsKt.runUpdateWorker(applicationContext, null, null, false);
                     }
                 })
                 .build();

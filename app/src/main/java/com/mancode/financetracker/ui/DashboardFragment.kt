@@ -14,6 +14,7 @@ import com.mancode.financetracker.R
 import com.mancode.financetracker.databinding.FragmentDashboardBinding
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 import com.mancode.financetracker.viewmodel.DashboardViewModel
+import com.mancode.financetracker.workers.runUpdateWorker
 
 class DashboardFragment : Fragment(R.layout.fragment_dashboard), View.OnClickListener, Toolbar.OnMenuItemClickListener {
 
@@ -85,6 +86,10 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard), View.OnClickLis
         return when (item.itemId) {
             R.id.action_settings -> {
                 navController.navigate(R.id.action_global_settingsFragment)
+                true
+            }
+            R.id.action_force_update -> {
+                requireContext().runUpdateWorker(force = true)
                 true
             }
             else -> false

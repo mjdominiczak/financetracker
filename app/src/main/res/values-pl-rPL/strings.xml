@@ -133,6 +133,7 @@
     <string name="description_and_opening_balance">Wykonałeś właśnie krok w kierunku lepszego panowania nad Twoimi finansami, gratulacje!\n
 \nW aplikacji możesz śledzić stan swoich środków oraz kontrolować przychody i wydatki. Raporty pomogą Ci uzyskać wgląd w Twoją kondycję finansową.\n
 \nNa początek wprowadź bilans otwarcia swojego głównego konta (np. stan portfela lub konta w określonym banku). Inne konta możesz dodać w dowolnej chwili.</string>
+    <string name="force_update">Wymuś aktualizację danych</string>
 
     <string-array name="transaction_filter_type">
         <item>Wszystkie</item>

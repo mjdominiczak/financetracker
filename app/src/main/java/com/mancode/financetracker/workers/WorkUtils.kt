@@ -16,11 +16,11 @@ const val TAG_UPDATE_PARTIAL = "updateStatePartial"
 const val TAG_IMPORT = "import"
 const val TAG_EXPORT = "export"
 
-fun Context.runUpdateWorker(accountIds: IntArray? = null, date: LocalDate? = null) {
+fun Context.runUpdateWorker(accountIds: IntArray? = null, date: LocalDate? = null, force: Boolean = false) {
     val isPartial = accountIds != null || date != null
     if (!isPartial) {
         val lastUpdate = PreferenceAccessor.lastUpdateDate
-        if (lastUpdate != null && lastUpdate.isEqual(LocalDate.now())) {
+        if (lastUpdate != null && lastUpdate.isEqual(LocalDate.now()) && !force) {
             Timber.i("Full update already done today")
             return
         }
