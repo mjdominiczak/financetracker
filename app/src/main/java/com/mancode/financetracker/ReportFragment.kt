@@ -79,6 +79,7 @@ class ReportFragment : Fragment(R.layout.fragment_report_monthly) {
     private fun updateChartData(netValues: List<NetValue>) {
         if (netValues.isEmpty()) return
         val newValues = netValues
+                .sortedBy { it.date }
                 .map { PointValue(it.date.toEpochDay().toFloat(), it.value.toFloat()) }
                 .toMutableList()
         val datesSorted = netValues.map { it.date }.sorted()
