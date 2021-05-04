@@ -15,35 +15,36 @@ class ReportViewModel(application: Application) : AndroidViewModel(application) 
     private val netValuesRepository = getNetValuesRepository(application)
     private val transactionsRepository = getTransactionsRepository(application)
 
-    val report: Report by lazy { Report(getMonthStart(MONTH_THIS), getMonthEnd(MONTH_THIS)) }
+    val report: Report by lazy {
+        val fromDate = getMonthStart(MONTH_THIS)
+        val toDate = LocalDate.from(fromDate).plusMonths(1)
+        Report(fromDate, toDate)
+    }
     val netValues: LiveData<List<NetValue>> = netValuesRepository.netValues
-    val keyedNetValues: LiveData<List<NetValue>> = netValuesRepository.keyedNetValues
 
     fun getNetValueClosestToFrom(): LiveData<NetValue> =
-            netValuesRepository.getNetValueClosestTo(report.from)
+        netValuesRepository.getNetValueClosestTo(report.from.minusDays(1))
 
     fun getNetValueClosestToTo(): LiveData<NetValue> =
-            netValuesRepository.getNetValueClosestTo(report.to)
+        netValuesRepository.getNetValueClosestTo(report.to.minusDays(1))
 
     fun initReport(whichMonth: Int) {
-        report.init(getMonthStart(whichMonth), getMonthEnd(whichMonth))
+        val fromDate = getMonthStart(whichMonth)
+        report.init(fromDate, LocalDate.from(fromDate).plusMonths(1))
     }
+
+    fun canGetPreviousReport(): Boolean = report.netValue1.date.isBefore(report.from)
+
+    fun canGetNextReport(): Boolean = !report.to.isAfter(LocalDate.now())
 
     fun getTransactions() = transactionsRepository.getTransactionsForRange(report.from, report.to)
 
     private fun getMonthStart(whichMonth: Int): LocalDate? {
-        return if (whichMonth == MONTH_THIS) LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()) else {
+        return if (whichMonth == MONTH_THIS) LocalDate.now()
+            .with(TemporalAdjusters.firstDayOfMonth()) else {
             LocalDate.from(report.from)
-                    .plusMonths(whichMonth.toLong())
-                    .with(TemporalAdjusters.firstDayOfMonth())
-        }
-    }
-
-    private fun getMonthEnd(whichMonth: Int): LocalDate? {
-        return if (whichMonth == MONTH_THIS) LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()) else {
-            LocalDate.from(report.from)
-                    .plusMonths(whichMonth.toLong())
-                    .with(TemporalAdjusters.lastDayOfMonth())
+                .plusMonths(whichMonth.toLong())
+                .with(TemporalAdjusters.firstDayOfMonth())
         }
     }
 

@@ -150,7 +150,7 @@ class ReportFragment : Fragment(R.layout.fragment_report_monthly) {
             tvRegisteredOutcome.setFormattedMoney(viewModel.report.registeredOutcome)
             tvUnregisteredOutcome.setFormattedMoney(viewModel.report.unregisteredOutcome)
             tvBalance.setFormattedMoney(viewModel.report.balance)
-            btnNext.isEnabled = !viewModel.report.to.isAfter(LocalDate.now())
+            btnNext.isEnabled = viewModel.canGetNextReport()
         }
         updateNetValueViews()
         adjustChartViewport()
@@ -162,7 +162,7 @@ class ReportFragment : Fragment(R.layout.fragment_report_monthly) {
         if (value1Set) {
             binding.tvNetValueDate1.text = viewModel.report.netValue1.date.toString()
             binding.tvNetValue1.setFormattedMoney(viewModel.report.netValue1.value)
-            binding.btnPrev.isEnabled = viewModel.report.netValue1.date.isEqual(viewModel.report.from)
+            binding.btnPrev.isEnabled = viewModel.canGetPreviousReport()
         } else {
             binding.tvNetValueDate1.text = "n/a"
             binding.tvNetValue1.text = "n/a"
@@ -192,7 +192,7 @@ class ReportFragment : Fragment(R.layout.fragment_report_monthly) {
 
     private fun enableButtons() {
         with(binding) {
-            btnNext.isEnabled = true
+            btnNext.isEnabled = false
             btnPrev.isEnabled = true
             btnRange.isEnabled = true
         }

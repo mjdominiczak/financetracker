@@ -44,7 +44,7 @@ public interface TransactionDao {
             "FROM transactions LEFT JOIN accounts ON transaction_account = accounts._id " +
             "LEFT JOIN categories ON transaction_category = categories._id " +
             "WHERE date(transaction_date) >= date(:from)" +
-            "AND date(transaction_date) <= date(:to)")
+            "AND date(transaction_date) < date(:to)")
     LiveData<List<TransactionEntity>> getTransactionsFromRange(LocalDate from, LocalDate to);
 
     @Query("SELECT * FROM transactions WHERE _id = :id")
