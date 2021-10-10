@@ -18,7 +18,7 @@ import java.util.List;
 @TypeConverters(DateConverter.class)
 public interface NetValueDao {
 
-    @Query("SELECT * FROM net_values")
+    @Query("SELECT * FROM net_values ORDER BY date ASC")
     LiveData<List<NetValue>> getValues();
 
     @Query("SELECT * FROM net_values WHERE calculated = 0 ORDER BY date DESC")

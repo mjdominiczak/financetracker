@@ -31,3 +31,11 @@ fun TextView.setFormattedMoney(value: Double,
     formatter.maximumFractionDigits = currency.defaultFractionDigits
     text = formatter.format(value)
 }
+
+fun Double.formatAsMoney(currencyCode: String = PreferenceAccessor.defaultCurrency): String {
+    val currency = Currency.getInstance(currencyCode)
+    val formatter = NumberFormat.getCurrencyInstance(Locale.getDefault())
+    formatter.currency = currency
+    formatter.maximumFractionDigits = currency.defaultFractionDigits
+    return formatter.format(this)
+}
