@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.mancode.financetracker.R
 import com.mancode.financetracker.database.pojos.Report
@@ -38,21 +37,6 @@ fun TextReport(report: Report) {
             value = if (report.dataPresent()) report.unregisteredOutcome else null,
             false
         )
-        Spacer(modifier = Modifier.height(32.dp))
-        Row {
-            Text(
-                text = stringResource(id = R.string.monthly_balance),
-                style = MaterialTheme.typography.body2,
-                textAlign = TextAlign.End,
-                modifier = Modifier.weight(0.6f)
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Text(
-                text = report.balance.formatAsMoney(),
-                style = MaterialTheme.typography.subtitle1,
-                modifier = Modifier.weight(0.4f)
-            )
-        }
     }
 }
 

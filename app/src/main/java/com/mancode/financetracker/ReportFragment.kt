@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.core.content.ContextCompat
@@ -16,6 +17,7 @@ import com.google.android.material.composethemeadapter.MdcTheme
 import com.mancode.financetracker.database.entity.NetValue
 import com.mancode.financetracker.databinding.FragmentReportMonthlyBinding
 import com.mancode.financetracker.ui.hideKeyboard
+import com.mancode.financetracker.ui.reports.NetValuesForReport
 import com.mancode.financetracker.ui.reports.TextReport
 import com.mancode.financetracker.viewmodel.ReportViewModel
 import kotlin.math.max
@@ -74,7 +76,12 @@ class ReportFragment : Fragment(R.layout.fragment_report_monthly) {
         binding.composeView.setContent {
             MdcTheme {
                 val report by viewModel.report.observeAsState()
-                report?.let { TextReport(report = it) }
+                report?.let {
+                    Column {
+                        NetValuesForReport(netValue1 = it.netValue1, netValue2 = it.netValue2)
+                        TextReport(report = it)
+                    }
+                }
             }
         }
     }
