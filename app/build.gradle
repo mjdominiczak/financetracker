@@ -1,16 +1,3 @@
-plugins {
-    id 'com.chattylabs.versioning' version '0.19.5'
-}
-
-versioning {
-    tagPrefix "v"
-    keywords {
-        major "[incompatible]", "[major]"
-        minor "[feature]", "[minor]"
-        patch "[bug]", "[patch]"
-    }
-}
-
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
@@ -23,8 +10,8 @@ android {
         applicationId "com.mancode.financetracker"
         minSdkVersion 22
         targetSdkVersion 31
-        versionCode versioning.code()
-        versionName versioning.name()
+        versionCode 807
+        versionName "0.8.7"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         // used by Room, to test Migrations
         javaCompileOptions {

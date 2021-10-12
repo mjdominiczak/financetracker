@@ -9,7 +9,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath libs.androidgradleplugin
+        classpath 'com.android.tools.build:gradle:7.0.3'
         classpath libs.kotlin.gradleplugin
         classpath libs.androidx.navigationsafeargs_gradleplugin
         classpath libs.firebase.googleservicesplugin
