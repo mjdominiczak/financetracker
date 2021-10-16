@@ -29,10 +29,6 @@ class ReportViewModel(application: Application) : AndroidViewModel(application) 
      */
     private fun LocalDate.transform(): LocalDate = this.plusMonths(1)
 
-    val reportRange = Transformations.map(reportFrom) { from ->
-        Pair(from, from.transform())
-    }
-
     private val _previousReportAvailable = MediatorLiveData<Boolean>()
     val previousReportAvailable: LiveData<Boolean>
         get() = _previousReportAvailable
@@ -124,6 +120,4 @@ class ReportViewModel(application: Application) : AndroidViewModel(application) 
         reportFrom.value = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth())
         clearData()
     }
-
-    fun getReportRange() = Pair(reportFrom.value!!, reportFrom.value!!.transform())
 }

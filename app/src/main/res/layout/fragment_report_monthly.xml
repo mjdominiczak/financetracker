@@ -19,34 +19,9 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.compose.ui.platform.ComposeView
-        android:id="@+id/reportButtons"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/appbarlayout" />
-
-    <co.csadev.kellocharts.view.LineChartView
-        android:id="@+id/netValueChart"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reportButtons" />
-
-    <androidx.compose.ui.platform.ComposeView
         android:id="@+id/composeView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/netValueChart" />
-
-    <TextView
-        android:id="@+id/emptyChartInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/info_not_enough_data"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/netValueChart"
-        app:layout_constraintEnd_toEndOf="@+id/netValueChart"
-        app:layout_constraintStart_toStartOf="@+id/netValueChart"
-        app:layout_constraintTop_toTopOf="@+id/netValueChart" />
+        app:layout_constraintTop_toBottomOf="@+id/appbarlayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
