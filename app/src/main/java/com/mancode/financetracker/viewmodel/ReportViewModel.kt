@@ -29,6 +29,32 @@ class ReportViewModel(application: Application) : AndroidViewModel(application) 
      */
     private fun LocalDate.transform(): LocalDate = this.plusMonths(1)
 
+    val reportRange = Transformations.map(reportFrom) { from ->
+        Pair(from, from.transform())
+    }
+
+    private val _previousReportAvailable = MediatorLiveData<Boolean>()
+    val previousReportAvailable: LiveData<Boolean>
+        get() = _previousReportAvailable
+
+    val nextReportAvailable = Transformations.map(reportFrom) {
+        !it.transform().isAfter(LocalDate.now())
+    }
+
+    init {
+        _previousReportAvailable.addSource(netValues) {
+            if (it.isNotEmpty()) {
+                _previousReportAvailable.value = it.first().date.isBefore(reportFrom.value)
+            }
+        }
+        _previousReportAvailable.addSource(reportFrom) {
+            if (!netValues.value.isNullOrEmpty()) {
+                _previousReportAvailable.value =
+                    netValues.value!!.first().date.isBefore(it)
+            }
+        }
+    }
+
     private val transactionsForRange: LiveData<List<TransactionEntity>> =
         Transformations.switchMap(reportFrom) { fromDate ->
             transactionsRepository.getTransactionsForRange(fromDate, fromDate.transform())
@@ -80,25 +106,18 @@ class ReportViewModel(application: Application) : AndroidViewModel(application) 
         netValue2 = null
     }
 
-    fun canGetPreviousReport(): Boolean =
-        netValues.value?.first()?.date!!.isBefore(reportFrom.value)
-
-    fun canGetNextReport(): Boolean = !reportFrom.value!!.transform().isAfter(LocalDate.now())
-
-    fun requestPreviousReport(): Boolean {
-        return if (canGetPreviousReport()) {
+    fun requestPreviousReport() {
+        if (previousReportAvailable.value == true) {
             reportFrom.value = reportFrom.value?.minusMonths(1)
             clearData()
-            true
-        } else false
+        }
     }
 
-    fun requestNextReport(): Boolean {
-        return if (canGetNextReport()) {
+    fun requestNextReport() {
+        if (nextReportAvailable.value == true) {
             reportFrom.value = reportFrom.value?.plusMonths(1)
             clearData()
-            true
-        } else false
+        }
     }
 
     fun requestActualReport() {
