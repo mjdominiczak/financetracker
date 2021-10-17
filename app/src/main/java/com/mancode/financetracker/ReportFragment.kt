@@ -68,8 +68,8 @@ class ReportFragment : Fragment(R.layout.fragment_report_monthly) {
                             }
                         )
                         NetValuesForReport(
-                            netValue1 = report!!.netValue1,
-                            netValue2 = report!!.netValue2
+                            netValue1 = report!!.netValue1!!,
+                            netValue2 = report!!.netValue2!!
                         )
                         NetValueChart(
                             modifier = Modifier

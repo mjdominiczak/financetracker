@@ -86,8 +86,8 @@ class ReportViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun getNewReport(): Report {
-        val newReport = Report(reportFrom.value, reportFrom.value!!.transform())
-        newReport.setTransactions(transactions)
+        val newReport = Report(reportFrom.value!!, reportFrom.value!!.transform())
+        newReport.transactions = transactions
         newReport.netValue1 = netValue1
         newReport.netValue2 = netValue2
         return newReport

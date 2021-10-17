@@ -1,153 +1,108 @@
-package com.mancode.financetracker.database.pojos;
+package com.mancode.financetracker.database.pojos
 
-import com.mancode.financetracker.database.entity.NetValue;
-import com.mancode.financetracker.database.entity.TransactionEntity;
+import com.mancode.financetracker.database.entity.NetValue
+import com.mancode.financetracker.database.entity.TransactionEntity
+import org.threeten.bp.LocalDate
+import org.threeten.bp.temporal.ChronoUnit
 
-import org.threeten.bp.LocalDate;
-
-import java.util.List;
-
-import static org.threeten.bp.temporal.ChronoUnit.DAYS;
-
-public class Report {
-
-    private List<TransactionEntity> transactions;
-    private NetValue netValue1;
-    private NetValue netValue2;
-
-    private LocalDate from;
-    private LocalDate to;
-    private double income;
-    private double registeredOutcome;
-    private double unregisteredOutcome;
-    private double calculatedOutcome;
-    private double balance;
-
-    private long dayCount;
-    private double dailyAverage;
-
-    public Report(LocalDate from, LocalDate to) {
-        init(from, to);
-    }
-
-    public void init(LocalDate from, LocalDate to) {
-        this.from = from;
-        this.to = to;
-        transactions = null;
-        income = 0;
-        registeredOutcome = 0;
-        unregisteredOutcome = 0;
-        calculatedOutcome = 0;
-        balance = 0;
-        netValue1 = null;
-        netValue2 = null;
-        dailyAverage = 0;
-    }
-
-    public LocalDate getFrom() {
-        return from;
-    }
-
-    public LocalDate getTo() {
-        return to;
-    }
-
-    public double getIncome() {
-        return income;
-    }
-
-    public double getRegisteredOutcome() {
-        return registeredOutcome;
-    }
-
-    public double getUnregisteredOutcome() {
-        return unregisteredOutcome;
-    }
-
-    public double getCalculatedOutcome() {
-        return calculatedOutcome;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public long getDayCount() {
-        return dayCount;
-    }
-
-    public NetValue getNetValue1() {
-        return netValue1;
-    }
-
-    public NetValue getNetValue2() {
-        return netValue2;
-    }
-
-    public double getDailyAverage() {
-        return dailyAverage;
-    }
-
-    public void setTransactions(List<TransactionEntity> transactions) {
-        this.transactions = transactions;
-        calculateIncome();
-        calculateOutcomeWithTransactions();
-        continueIfDataPresent();
-    }
-
-    private void calculateIncome() {
-        income = sumTransactions(TransactionEntity.TYPE_INCOME);
-    }
-
-    private void calculateOutcomeWithTransactions() {
-        registeredOutcome = sumTransactions(TransactionEntity.TYPE_OUTCOME);
-    }
-
-    private double sumTransactions(int type) {
-        double sum = 0;
-        for (TransactionEntity t : transactions) {
-            if (t.getType() == type) {
-                sum += t.getValue();
+class Report(from: LocalDate, to: LocalDate) {
+    var transactions: List<TransactionEntity>? = null
+        set(value) {
+            field = value
+            if (value != null) {
+                calculateIncome()
+                calculateOutcomeWithTransactions()
+                continueIfDataPresent()
             }
         }
-        return sum;
+    var netValue1: NetValue? = null
+        set(value) {
+            field = value
+            continueIfDataPresent()
+        }
+    var netValue2: NetValue? = null
+        set(value) {
+            field = value
+            continueIfDataPresent()
+        }
+    lateinit var from: LocalDate
+        private set
+    lateinit var to: LocalDate
+        private set
+    var income = 0.0
+        private set
+    var registeredOutcome = 0.0
+        private set
+    var unregisteredOutcome = 0.0
+        private set
+    var calculatedOutcome = 0.0
+        private set
+    var balance = 0.0
+        private set
+    var dayCount: Long = 0
+        private set
+    var dailyAverage = 0.0
+        private set
+
+    fun init(from: LocalDate, to: LocalDate) {
+        this.from = from
+        this.to = to
+        transactions = null
+        income = 0.0
+        registeredOutcome = 0.0
+        unregisteredOutcome = 0.0
+        calculatedOutcome = 0.0
+        balance = 0.0
+        netValue1 = null
+        netValue2 = null
+        dailyAverage = 0.0
     }
 
-    private void updateBalance() {
-        balance = income - calculatedOutcome;
+    private fun calculateIncome() {
+        income = sumTransactions(TransactionEntity.TYPE_INCOME)
     }
 
-    public void setNetValue1(NetValue netValue) {
-        this.netValue1 = netValue;
-        continueIfDataPresent();
+    private fun calculateOutcomeWithTransactions() {
+        registeredOutcome = sumTransactions(TransactionEntity.TYPE_OUTCOME)
     }
 
-    public void setNetValue2(NetValue netValue) {
-        this.netValue2 = netValue;
-        continueIfDataPresent();
+    private fun sumTransactions(type: Int): Double {
+        var sum = 0.0
+        for ((_, _, type1, _, value) in transactions!!) {
+            if (type1 == type) {
+                sum += value
+            }
+        }
+        return sum
     }
 
-    private void continueIfDataPresent() {
+    private fun updateBalance() {
+        balance = income - calculatedOutcome
+    }
+
+    private fun continueIfDataPresent() {
         if (dataPresent()) {
-            calculateOutcomeWithBalances();
-            calculateDailyAverage();
-            updateBalance();
+            calculateOutcomeWithBalances()
+            calculateDailyAverage()
+            updateBalance()
         }
     }
 
-    public boolean dataPresent() {
-        return transactions != null && netValue1 != null && netValue2 != null;
+    fun dataPresent(): Boolean {
+        return transactions != null && netValue1 != null && netValue2 != null
     }
 
-    private void calculateDailyAverage() {
-        dayCount = DAYS.between(netValue1.getDate(), netValue2.getDate());
-        dailyAverage = unregisteredOutcome / dayCount;
+    private fun calculateDailyAverage() {
+        dayCount = ChronoUnit.DAYS.between(netValue1!!.date, netValue2!!.date)
+        dailyAverage = unregisteredOutcome / dayCount
     }
 
-    private void calculateOutcomeWithBalances() {
-        calculatedOutcome = income - (netValue2.getValue() - netValue1.getValue());
-        unregisteredOutcome = calculatedOutcome - registeredOutcome;
+    private fun calculateOutcomeWithBalances() {
+        calculatedOutcome = income - (netValue2!!.value - netValue1!!.value)
+        unregisteredOutcome = calculatedOutcome - registeredOutcome
+    }
+
+    init {
+        init(from, to)
     }
 }
-
-// TODO uwzględnić transakcje w wyliczaniu dziennej delty
