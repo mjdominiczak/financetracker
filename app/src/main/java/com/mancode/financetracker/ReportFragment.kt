@@ -51,21 +51,22 @@ class ReportFragment : Fragment(R.layout.fragment_report_monthly) {
                 val prevEnabled by viewModel.previousReportAvailable.observeAsState(false)
                 val nextEnabled by viewModel.nextReportAvailable.observeAsState(false)
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    ReportButtons(
-                        rangeLabel = "${report?.from} - ${report?.to}",
-                        leftEnabled = prevEnabled,
-                        rightEnabled = nextEnabled,
-                        onLeftClick = {
-                            viewModel.requestPreviousReport()
-                        },
-                        onMiddleClick = {
-                            viewModel.requestActualReport()
-                        },
-                        onRightClick = {
-                            viewModel.requestNextReport()
-                        }
-                    )
                     if (report != null && !netValues.isNullOrEmpty()) {
+                        ReportButtons(
+                            date1 = report!!.from,
+                            date2 = report!!.to,
+                            leftEnabled = prevEnabled,
+                            rightEnabled = nextEnabled,
+                            onLeftClick = {
+                                viewModel.requestPreviousReport()
+                            },
+                            onMiddleClick = {
+                                viewModel.requestActualReport()
+                            },
+                            onRightClick = {
+                                viewModel.requestNextReport()
+                            }
+                        )
                         NetValuesForReport(
                             netValue1 = report!!.netValue1,
                             netValue2 = report!!.netValue2

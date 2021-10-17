@@ -15,10 +15,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.threeten.bp.LocalDate
 
 @Composable
 fun ReportButtons(
-    rangeLabel: String,
+    date1: LocalDate,
+    date2: LocalDate,
     leftEnabled: Boolean = true,
     rightEnabled: Boolean = true,
     onLeftClick: () -> Unit,
@@ -41,7 +43,7 @@ fun ReportButtons(
                 .padding(horizontal = 8.dp)
                 .weight(1f)
         ) {
-            Text(text = rangeLabel)
+            Text(text = "$date1 - $date2")
         }
         IconButton(onClick = { onRightClick() }, enabled = rightEnabled) {
             Icon(imageVector = Icons.Filled.KeyboardArrowRight, contentDescription = "")
