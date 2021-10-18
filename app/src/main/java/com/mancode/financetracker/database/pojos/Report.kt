@@ -66,15 +66,8 @@ class Report(from: LocalDate, to: LocalDate) {
         registeredOutcome = sumTransactions(TransactionEntity.TYPE_OUTCOME)
     }
 
-    private fun sumTransactions(type: Int): Double {
-        var sum = 0.0
-        for ((_, _, type1, _, value) in transactions!!) {
-            if (type1 == type) {
-                sum += value
-            }
-        }
-        return sum
-    }
+    private fun sumTransactions(type: Int): Double =
+        transactions!!.filter { it.type == type }.sumOf { it.value }
 
     private fun updateBalance() {
         balance = income - calculatedOutcome
