@@ -69,6 +69,12 @@ class Report(from: LocalDate, to: LocalDate) {
     private fun sumTransactions(type: Int): Double =
         transactions!!.filter { it.type == type }.sumOf { it.value }
 
+    fun sumByCategories(type: Int) =
+        transactions!!.filter { it.type == type }
+            .groupBy({ it.categoryId }) { it.value }
+            .mapValues { entry -> entry.value.sum() }
+            .toList().sortedBy { it.second }.reversed()
+
     private fun updateBalance() {
         balance = income - calculatedOutcome
     }
