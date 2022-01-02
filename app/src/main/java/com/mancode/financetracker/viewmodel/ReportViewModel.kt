@@ -33,6 +33,7 @@ class ReportViewModel(application: Application) : AndroidViewModel(application) 
      * Function transforming "from" date to "to" date
      */
     private fun LocalDate.transform(): LocalDate = this.plusMonths(1)
+        .coerceAtMost(LocalDate.now())
 
     private val _previousReportAvailable = MediatorLiveData<Boolean>()
     val previousReportAvailable: LiveData<Boolean>
