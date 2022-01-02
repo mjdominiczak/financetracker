@@ -22,8 +22,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.composethemeadapter.MdcTheme
-import com.mancode.financetracker.database.entity.TransactionEntity.Companion.TYPE_INCOME
-import com.mancode.financetracker.database.entity.TransactionEntity.Companion.TYPE_OUTCOME
 import com.mancode.financetracker.databinding.FragmentReportMonthlyBinding
 import com.mancode.financetracker.ui.hideKeyboard
 import com.mancode.financetracker.ui.reports.*
@@ -51,6 +49,8 @@ class ReportFragment : Fragment(R.layout.fragment_report_monthly) {
                 val netValues by viewModel.netValues.observeAsState()
                 val prevEnabled by viewModel.previousReportAvailable.observeAsState(false)
                 val nextEnabled by viewModel.nextReportAvailable.observeAsState(false)
+                val incomeByCat by viewModel.sumByIncomeCategories.observeAsState()
+                val outcomeByCat by viewModel.sumByOutcomeCategories.observeAsState()
                 if (report != null && !netValues.isNullOrEmpty()) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -88,8 +88,8 @@ class ReportFragment : Fragment(R.layout.fragment_report_monthly) {
                                 )
                                 TextReport(report = report!!)
                             }
-                            1 -> CategoriesList(data = report!!.sumByCategories(TYPE_INCOME))
-                            else -> CategoriesList(data = report!!.sumByCategories(TYPE_OUTCOME))
+                            1 -> CategoriesList(data = incomeByCat)
+                            else -> CategoriesList(data = outcomeByCat)
                         }
                     }
                 } else if (report == null || netValues == null) {

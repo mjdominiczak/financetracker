@@ -2,9 +2,13 @@ package com.mancode.financetracker.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.*
+import com.mancode.financetracker.database.entity.CategoryEntity
 import com.mancode.financetracker.database.entity.NetValue
 import com.mancode.financetracker.database.entity.TransactionEntity
+import com.mancode.financetracker.database.entity.TransactionEntity.Companion.TYPE_INCOME
+import com.mancode.financetracker.database.entity.TransactionEntity.Companion.TYPE_OUTCOME
 import com.mancode.financetracker.database.pojos.Report
+import com.mancode.financetracker.utils.InjectorUtils.getCategoriesRepository
 import com.mancode.financetracker.utils.InjectorUtils.getNetValuesRepository
 import com.mancode.financetracker.utils.InjectorUtils.getTransactionsRepository
 import org.threeten.bp.LocalDate
@@ -14,6 +18,7 @@ class ReportViewModel(application: Application) : AndroidViewModel(application) 
 
     private val netValuesRepository = getNetValuesRepository(application)
     private val transactionsRepository = getTransactionsRepository(application)
+    private val categoriesRepository = getCategoriesRepository(application)
 
     val netValues: LiveData<List<NetValue>> = netValuesRepository.netValues
 
@@ -82,6 +87,41 @@ class ReportViewModel(application: Application) : AndroidViewModel(application) 
         _report.addSource(netValueClosestToTo) {
             this.netValue2 = it
             if (dataPresent()) _report.value = getNewReport()
+        }
+    }
+
+    private val incomeCategories: LiveData<List<CategoryEntity>> =
+        categoriesRepository.incomeCategories
+    private var incomeCategoriesList: List<CategoryEntity>? = null
+    private val outcomeCategories: LiveData<List<CategoryEntity>> =
+        categoriesRepository.outcomeCategories
+    private var outcomeCategoriesList: List<CategoryEntity>? = null
+
+    val sumByIncomeCategories = MediatorLiveData<List<Pair<CategoryEntity, Double>>>()
+    val sumByOutcomeCategories = MediatorLiveData<List<Pair<CategoryEntity, Double>>>()
+
+    init {
+        sumByIncomeCategories.addSource(incomeCategories) {
+            incomeCategoriesList = it
+        }
+        sumByIncomeCategories.addSource(report) { report ->
+            if (incomeCategoriesList != null) {
+                sumByIncomeCategories.value =
+                    report.sumByCategories(TYPE_INCOME).map { pair: Pair<Int, Double> ->
+                        Pair(incomeCategoriesList!!.first { it.id == pair.first }, pair.second)
+                    }
+            }
+        }
+        sumByOutcomeCategories.addSource(outcomeCategories) {
+            outcomeCategoriesList = it
+        }
+        sumByOutcomeCategories.addSource(report) { report ->
+            if (outcomeCategoriesList != null) {
+                sumByOutcomeCategories.value =
+                    report.sumByCategories(TYPE_OUTCOME).map { pair: Pair<Int, Double> ->
+                        Pair(outcomeCategoriesList!!.first { it.id == pair.first }, pair.second)
+                    }
+            }
         }
     }
 
