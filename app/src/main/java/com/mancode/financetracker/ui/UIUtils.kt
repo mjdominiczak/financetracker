@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 import java.text.NumberFormat
 import java.util.*
+import kotlin.math.absoluteValue
+import kotlin.math.pow
 
 fun Fragment.hideKeyboard() {
     val context = context
@@ -23,13 +25,11 @@ fun View.showKeyboard() {
     imm?.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
 }
 
-fun TextView.setFormattedMoney(value: Double,
-                               currencyCode: String = PreferenceAccessor.defaultCurrency) {
-    val currency = Currency.getInstance(currencyCode)
-    val formatter = NumberFormat.getCurrencyInstance(Locale.getDefault())
-    formatter.currency = currency
-    formatter.maximumFractionDigits = currency.defaultFractionDigits
-    text = formatter.format(value)
+fun TextView.setFormattedMoney(
+    value: Double,
+    currencyCode: String = PreferenceAccessor.defaultCurrency
+) {
+    text = value.formatAsMoney(currencyCode)
 }
 
 fun Double.formatAsMoney(currencyCode: String = PreferenceAccessor.defaultCurrency): String {
@@ -37,5 +37,8 @@ fun Double.formatAsMoney(currencyCode: String = PreferenceAccessor.defaultCurren
     val formatter = NumberFormat.getCurrencyInstance(Locale.getDefault())
     formatter.currency = currency
     formatter.maximumFractionDigits = currency.defaultFractionDigits
-    return formatter.format(this)
+    val result = if ((this - 0.0).absoluteValue < 10.0.pow(-currency.defaultFractionDigits))
+        this.absoluteValue else
+        this
+    return formatter.format(result)
 }
