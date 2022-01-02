@@ -117,8 +117,13 @@ class ReportViewModel(application: Application) : AndroidViewModel(application) 
         }
         sumByOutcomeCategories.addSource(report) { report ->
             if (outcomeCategoriesList != null) {
+                val outcomeSumList = report.sumByCategories(TYPE_OUTCOME).map {
+                    if (it.first == 1) // TODO weryfikacja ID kategorii, do której mają być przypisane niezarejestrowane wydatki
+                        Pair(it.first, it.second + report.unregisteredOutcome)
+                    else it
+                }.sortedByDescending { it.second }
                 sumByOutcomeCategories.value =
-                    report.sumByCategories(TYPE_OUTCOME).map { pair: Pair<Int, Double> ->
+                    outcomeSumList.map { pair: Pair<Int, Double> ->
                         Pair(outcomeCategoriesList!!.first { it.id == pair.first }, pair.second)
                     }
             }
