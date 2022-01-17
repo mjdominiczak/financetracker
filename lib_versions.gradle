@@ -6,8 +6,8 @@ def androidx = [:]
 androidx.core = "androidx.core:core-ktx:1.3.2"
 androidx.activity = "androidx.activity:activity-ktx:1.4.0"
 androidx.fragment = "androidx.fragment:fragment-ktx:1.4.0"
-androidx.appcompat = "androidx.appcompat:appcompat:1.4.0"
-androidx.constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.2"
+androidx.appcompat = "androidx.appcompat:appcompat:1.4.1"
+androidx.constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.3"
 androidx.recyclerview = "androidx.recyclerview:recyclerview:1.2.1"
 androidx.cardview = "androidx.cardview:cardview:1.0.0"
 androidx.lifecycle = "androidx.lifecycle:lifecycle-extensions:2.2.0"
@@ -35,7 +35,7 @@ google.gson = "com.google.code.gson:gson:2.8.6"
 google.truth = "com.google.truth:truth:1.1.2"
 
 def kotlin = [:]
-def kotlin_version = '1.5.21'
+def kotlin_version = '1.6.10'
 kotlin.stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 kotlin.gradleplugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
@@ -43,11 +43,11 @@ def firebase = [:]
 firebase.googleservicesplugin = "com.google.gms:google-services:4.3.4"
 firebase.crashlyticsplugin = "com.google.firebase:firebase-crashlytics-gradle:2.7.1"
 firebase.bom = "com.google.firebase:firebase-bom:26.3.0"
-firebase.analytics = "com.google.firebase:firebase-analytics-ktx"
-firebase.crashlytics = "com.google.firebase:firebase-crashlytics-ktx"
+firebase.analytics = "com.google.firebase:firebase-analytics-ktx:18.0.1"
+firebase.crashlytics = "com.google.firebase:firebase-crashlytics-ktx:17.3.0"
 
 ext.libs = [:]
-ext.libs.androidgradleplugin = "com.android.tools.build:gradle:7.0.4"
+ext.libs.androidgradleplugin = "com.android.tools.build:gradle:7.1.0-rc01"
 ext.libs.androidx = androidx
 ext.libs.google = google
 ext.libs.kotlin = kotlin
