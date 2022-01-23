@@ -34,9 +34,4 @@ Play pod 🔗 [tym linkiem](https://play.google.com/store/apps/details?id=com.ma
 
 ## Zrzuty ekranu
 
-![Zrzut 1](https://github.com/mjdominiczak/financetracker/blob/master/screenshots/Screenshot_1597868125.png?raw=true)
-![Zrzut 2](https://github.com/mjdominiczak/financetracker/blob/master/screenshots/Screenshot_1597868167.png?raw=true)
-![Zrzut 3](https://github.com/mjdominiczak/financetracker/blob/master/screenshots/Screenshot_1597868211.png?raw=true)
-![Zrzut 4](https://github.com/mjdominiczak/financetracker/blob/master/screenshots/Screenshot_1597868524.png?raw=true)
-![Zrzut 5](https://github.com/mjdominiczak/financetracker/blob/master/screenshots/Screenshot_1597868719.png?raw=true)
-![Zrzut 6](https://github.com/mjdominiczak/financetracker/blob/master/screenshots/Screenshot_1597868747.png?raw=true)
+<img src="https://github.com/mjdominiczak/financetracker/blob/master/screenshots/Screenshot_1597868125.png?raw=true" alt="Zrzut 1" width="300"/> <img src="https://github.com/mjdominiczak/financetracker/blob/master/screenshots/Screenshot_1597868167.png?raw=true" alt="Zrzut 2" width="300"/> <img src="https://github.com/mjdominiczak/financetracker/blob/master/screenshots/Screenshot_1597868211.png?raw=true" alt="Zrzut 3" width="300"/> <img src="https://github.com/mjdominiczak/financetracker/blob/master/screenshots/Screenshot_1597868524.png?raw=true" alt="Zrzut 4" width="300"/> <img src="https://github.com/mjdominiczak/financetracker/blob/master/screenshots/Screenshot_1597868719.png?raw=true" alt="Zrzut 5" width="300"/> <img src="https://github.com/mjdominiczak/financetracker/blob/master/screenshots/Screenshot_1597868747.png?raw=true" alt="Zrzut 6" width="300"/> 
