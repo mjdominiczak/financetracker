@@ -23,7 +23,7 @@ class ReportTest {
                 dateTo, 2000.0, false)
 
         val report = Report(dateFrom, dateTo)
-        report.setTransactions(transactions)
+        report.transactions = transactions
         report.netValue1 = nv1
         report.netValue2 = nv2
         assertThat(report.income).isEqualTo(3000.0)
