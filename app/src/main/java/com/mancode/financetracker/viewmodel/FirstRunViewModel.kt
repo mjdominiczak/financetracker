@@ -55,16 +55,15 @@ class FirstRunViewModel(application: Application) : AndroidViewModel(application
         PreferenceAccessor.defaultCurrency = defaultCurrency
         val accountId = 1
         accountsRepo.insert(
-                AccountEntity(accountId, accountName, AccountEntity.TYPE_ASSETS,
-                        defaultCurrency, LocalDate.now(), null))
+            AccountEntity(
+                accountId, accountName, AccountEntity.TYPE_ASSETS,
+                defaultCurrency, LocalDate.now().minusDays(1), null
+            )
+        )
         balanceRepo.insertBalance(
-                BalanceEntity(0, LocalDate.now(), accountId, openingBalance, true)
+            BalanceEntity(0, LocalDate.now().minusDays(1), accountId, openingBalance, true)
         )
 
-        PreferenceAccessor.firstRun = false
-    }
-
-    fun skip() {
         PreferenceAccessor.firstRun = false
     }
 }

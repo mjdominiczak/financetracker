@@ -61,15 +61,19 @@ class FirstRunFragment : Fragment(R.layout.fragment_first_run) {
         }
 
         binding.skipButton.setOnClickListener {
-            viewModel.skip()
-            findNavController().navigate(R.id.action_firstRunFragment_to_dashboardFragment)
+            viewModel.openingBalance = 0.0
+            storeDataAndProceed()
         }
 
         binding.saveButton.setOnClickListener {
-            viewModel.storeInitialData()
-            requireContext().runUpdateWorker()
-            findNavController().navigate(R.id.action_firstRunFragment_to_dashboardFragment)
+            storeDataAndProceed()
         }
+    }
+
+    private fun storeDataAndProceed() {
+        viewModel.storeInitialData()
+        requireContext().runUpdateWorker()
+        findNavController().navigate(R.id.action_firstRunFragment_to_dashboardFragment)
     }
 
     override fun onDestroyView() {
