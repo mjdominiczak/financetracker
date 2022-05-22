@@ -2,18 +2,20 @@
 
 buildscript {
 
-    apply from: 'lib_versions.gradle'
+    ext.nav_version = '2.5.1'
+    ext.room_version = '2.4.3'
+    ext.kotlin_version = '1.7.10'
 
     repositories {
         jcenter()
         google()
     }
     dependencies {
-        classpath libs.androidgradleplugin
-        classpath libs.kotlin.gradleplugin
-        classpath libs.androidx.navigationsafeargs_gradleplugin
-        classpath libs.firebase.googleservicesplugin
-        classpath libs.firebase.crashlyticsplugin
+        classpath "com.android.tools.build:gradle:7.2.2"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+        classpath "com.google.gms:google-services:4.3.13"
+        classpath "com.google.firebase:firebase-crashlytics-gradle:2.9.1"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
