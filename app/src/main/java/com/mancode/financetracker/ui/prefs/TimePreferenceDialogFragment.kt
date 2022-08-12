@@ -12,7 +12,7 @@ import androidx.preference.PreferenceDialogFragmentCompat
 import org.threeten.bp.LocalTime
 
 class TimePreferenceDialogFragment : PreferenceDialogFragmentCompat(),
-        TimePickerDialog.OnTimeSetListener{
+    TimePickerDialog.OnTimeSetListener {
     private val picker: TimePicker by lazy { TimePicker(context) }
     private lateinit var lastTime: LocalTime
 
@@ -22,12 +22,12 @@ class TimePreferenceDialogFragment : PreferenceDialogFragmentCompat(),
         lastTime = (preference as TimePreference).time
     }
 
-    override fun onCreateDialogView(context: Context?): View {
+    override fun onCreateDialogView(context: Context): View {
         picker.setIs24HourView(DateFormat.is24HourFormat(context))
         return picker
     }
 
-    override fun onBindDialogView(view: View?) {
+    override fun onBindDialogView(view: View) {
         super.onBindDialogView(view)
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -41,11 +41,12 @@ class TimePreferenceDialogFragment : PreferenceDialogFragmentCompat(),
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return TimePickerDialog(
-                context,
-                this,
-                lastTime.hour,
-                lastTime.minute,
-                DateFormat.is24HourFormat(context))
+            context,
+            this,
+            lastTime.hour,
+            lastTime.minute,
+            DateFormat.is24HourFormat(context)
+        )
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {

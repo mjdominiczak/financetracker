@@ -34,10 +34,11 @@ fun registerTransactionReminder(context: Context?, time: LocalTime) {
 
     alarmManager.cancel(pendingIntent)
     alarmManager.setInexactRepeating(
-            AlarmManager.RTC_WAKEUP,
-            dateTime.toInstant().toEpochMilli(),
-            AlarmManager.INTERVAL_DAY,
-            pendingIntent)
+        AlarmManager.RTC_WAKEUP,
+        dateTime.toInstant().toEpochMilli(),
+        AlarmManager.INTERVAL_DAY,
+        pendingIntent
+    )
 }
 
 fun cancelTransactionReminder(context: Context?) {
@@ -50,7 +51,12 @@ fun cancelTransactionReminder(context: Context?) {
 
 private fun constructPendingIntent(context: Context): PendingIntent {
     val intent = Intent(context, ReminderNotificationReceiver::class.java)
-    return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+    return PendingIntent.getBroadcast(
+        context,
+        0,
+        intent,
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
 }
 
 fun MainActivityNav.resetRemindersAndShowDecisionDialog() {
@@ -66,16 +72,16 @@ fun MainActivityNav.resetRemindersAndShowDecisionDialog() {
 
     val builder = MaterialAlertDialogBuilder(context)
     builder.setMessage(context.getString(R.string.question_transaction_reminder_decision))
-            .setPositiveButton(context.getString(R.string.yes)) { _, _ ->
-                PreferenceAccessor.transactionReminderDecided = true
-                PreferenceAccessor.transactionReminderEnabled = true
-                registerReminderWithProperty(context)
-                navController.navigate(R.id.action_global_settingsFragment)
-            }
-            .setNegativeButton(context.getString(R.string.no)) { _, _ ->
-                PreferenceAccessor.transactionReminderDecided = true
-                PreferenceAccessor.transactionReminderEnabled = false
-                cancelTransactionReminder(context)
-            }
-            .create().show()
+        .setPositiveButton(context.getString(R.string.yes)) { _, _ ->
+            PreferenceAccessor.transactionReminderDecided = true
+            PreferenceAccessor.transactionReminderEnabled = true
+            registerReminderWithProperty(context)
+            navController.navigate(R.id.action_global_settingsFragment)
+        }
+        .setNegativeButton(context.getString(R.string.no)) { _, _ ->
+            PreferenceAccessor.transactionReminderDecided = true
+            PreferenceAccessor.transactionReminderEnabled = false
+            cancelTransactionReminder(context)
+        }
+        .create().show()
 }

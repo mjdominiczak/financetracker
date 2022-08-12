@@ -32,12 +32,12 @@ class SettingsFragment : PreferenceFragmentCompat(),
 
     override fun onPause() {
         super.onPause()
-        preferenceManager.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+        preferenceManager.sharedPreferences?.unregisterOnSharedPreferenceChangeListener(this)
     }
 
     override fun onResume() {
         super.onResume()
-        preferenceManager.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+        preferenceManager.sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,16 +45,22 @@ class SettingsFragment : PreferenceFragmentCompat(),
         createNotificationChannel()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         val transactionReminderWeekdaysPref =
-                findPreference<MultiSelectListPreference>(getString(R.string.transaction_reminder_weekdays))
-        transactionReminderWeekdaysPref?.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValues ->
-            transactionReminderWeekdaysPref?.setSummaryFromValues(newValues as Set<String>)
-            true
-        }
+            findPreference<MultiSelectListPreference>(getString(R.string.transaction_reminder_weekdays))
+        transactionReminderWeekdaysPref?.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, newValues ->
+                transactionReminderWeekdaysPref?.setSummaryFromValues(newValues as Set<String>)
+                true
+            }
         transactionReminderWeekdaysPref?.setSummaryFromValues()
 
-        val defaultCurrencyPref = findPreference<ListPreference>(getString(R.string.default_currency))
+        val defaultCurrencyPref =
+            findPreference<ListPreference>(getString(R.string.default_currency))
         with(defaultCurrencyPref as ListPreference) {
             entries = CurrencyUnit.registeredCurrencies().map { it.code }.toTypedArray()
             entryValues = entries
@@ -105,7 +111,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
         setPreferencesFromResource(R.xml.preferences, rootKey)
     }
 
-    override fun onDisplayPreferenceDialog(preference: Preference?) {
+    override fun onDisplayPreferenceDialog(preference: Preference) {
         if (preference is TimePreference) {
             val fragment = TimePreferenceDialogFragment.newInstance(preference.key)
             fragment.setTargetFragment(this, 0)

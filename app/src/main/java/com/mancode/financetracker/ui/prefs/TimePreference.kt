@@ -22,7 +22,7 @@ class TimePreference(context: Context, attrs: AttributeSet)
             updateSummary()
         }
 
-    override fun onGetDefaultValue(a: TypedArray?, index: Int): Any? = a?.getString(index)
+    override fun onGetDefaultValue(a: TypedArray, index: Int): Any? = a.getString(index)
 
     override fun onSetInitialValue(defaultValue: Any?) {
         val timeString: String = getPersistedString(defaultValue as String?)
