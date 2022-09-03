@@ -10,8 +10,8 @@ android {
         applicationId "com.mancode.financetracker"
         minSdkVersion 22
         targetSdkVersion 31
-        versionCode 810
-        versionName "0.8.10"
+        versionCode 811
+        versionName "0.8.11"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         // used by Room, to test Migrations
         javaCompileOptions {
