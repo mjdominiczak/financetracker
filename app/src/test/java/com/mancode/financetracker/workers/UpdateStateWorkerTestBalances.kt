@@ -116,7 +116,7 @@ class UpdateStateWorkerTestBalances {
                 balances,
                 transactions
         ) // Side effect! :(
-        balanceUnderTest = balances.find { it.id == 4 }
+        balanceUnderTest = balancesList.find { it.id == 4 }
         assertThat(balanceUnderTest!!.id).isEqualTo(4)
         assertThat(balanceUnderTest.value).isWithin(0.00001).of(28.0)
     }

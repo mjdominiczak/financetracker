@@ -21,7 +21,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard), View.OnClickLis
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var navController: NavController
+    private lateinit var navController: NavController
     private val viewModel: DashboardViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -34,33 +34,33 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard), View.OnClickLis
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.assetsAccountsNumber.observe(viewLifecycleOwner, {
+        viewModel.assetsAccountsNumber.observe(viewLifecycleOwner) {
             binding.assetsAccounts.text = getAccountsString(it)
-        })
-        viewModel.liabilitiesAccountsNumber.observe(viewLifecycleOwner, {
+        }
+        viewModel.liabilitiesAccountsNumber.observe(viewLifecycleOwner) {
             binding.liabilitiesAccounts.text = getAccountsString(it)
-        })
-        viewModel.actualNetValue.observe(viewLifecycleOwner, {
+        }
+        viewModel.actualNetValue.observe(viewLifecycleOwner) {
             if (it != null) {
                 binding.actualNetValue.setFormattedMoney(it)
             } else {
                 binding.actualNetValue.text = getString(R.string.not_available)
             }
-        })
-        viewModel.getActualAssets().observe(viewLifecycleOwner, {
+        }
+        viewModel.getActualAssets().observe(viewLifecycleOwner) {
             if (it != null) {
                 binding.actualAssets.setFormattedMoney(it)
             } else {
                 binding.actualAssets.text = getString(R.string.not_available)
             }
-        })
-        viewModel.getActualLiabilities().observe(viewLifecycleOwner, {
+        }
+        viewModel.getActualLiabilities().observe(viewLifecycleOwner) {
             if (it != null) {
                 binding.actualLiabilities.setFormattedMoney(it)
             } else {
                 binding.actualLiabilities.text = getString(R.string.not_available)
             }
-        })
+        }
         with(binding) {
             reportMonthlyButton.setOnClickListener(this@DashboardFragment)
             dashboardToolbar.setOnMenuItemClickListener(this@DashboardFragment)

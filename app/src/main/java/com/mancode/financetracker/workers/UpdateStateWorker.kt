@@ -12,7 +12,8 @@ import com.mancode.financetracker.ui.prefs.PreferenceAccessor
 import org.threeten.bp.LocalDate
 import timber.log.Timber
 
-class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
+class UpdateStateWorker(context: Context, workerParams: WorkerParameters) :
+    Worker(context, workerParams) {
 
     private val defaultCurrency: String = PreferenceAccessor.defaultCurrency
     private val db: FTDatabase by lazy { FTDatabase.getInstance(applicationContext) }
@@ -41,7 +42,14 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
 
         val balancesToInsert = mutableListOf<BalanceEntity>()
         for (account in accounts) {
-            balancesToInsert.addAll(calculateBalancesForAccount(account, allBalances, allTransactions, inputDate))
+            balancesToInsert.addAll(
+                calculateBalancesForAccount(
+                    account,
+                    allBalances,
+                    allTransactions,
+                    inputDate
+                )
+            )
             val startDate = balancesToInsert.first().checkDate
             val endDate = balancesToInsert.last().checkDate
             if (minDate == null || startDate.isBefore(minDate)) minDate = startDate
@@ -99,10 +107,10 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
 
         @VisibleForTesting
         fun calculateBalancesForAccount(
-                account: AccountEntity,
-                allBalances: List<BalanceEntity>,
-                allTransactions: List<TransactionEntity>,
-                inputDate: LocalDate? = null
+            account: AccountEntity,
+            allBalances: List<BalanceEntity>,
+            allTransactions: List<TransactionEntity>,
+            inputDate: LocalDate? = null
         ): List<BalanceEntity> {
             val openDate = account.openDate
             val closeDate = account.closeDate ?: LocalDate.now()
@@ -111,7 +119,8 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
                 return emptyList()
 
             val balancesToInsert = mutableListOf<BalanceEntity>()
-            val fixedKeys = allBalances.filter { it.accountId == account.id && it.fixed }.map { it.checkDate }
+            val fixedKeys =
+                allBalances.filter { it.accountId == account.id && it.fixed }.map { it.checkDate }
             val startDate = inputDate ?: openDate
             val endDate = if (!isPartial) closeDate else
                 fixedKeys.find { !it.isBefore(inputDate) } ?: closeDate
@@ -124,7 +133,9 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
                     if (inputDate != null && date.isEqual(datesList[0])) {
                         /** if input date provided, on first date load previous day balance */
                         try {
-                            prevBalance = allBalances.first { it.accountId == account.id && it.checkDate.isEqual(date.minusDays(1)) }.value
+                            prevBalance = allBalances.first {
+                                it.accountId == account.id && it.checkDate.isEqual(date.minusDays(1))
+                            }.value
                         } catch (e: NoSuchElementException) {
                         }
                     }
@@ -133,16 +144,19 @@ class UpdateStateWorker(context: Context, workerParams: WorkerParameters) : Work
                     } catch (e: NoSuchElementException) {
                         0
                     }
-                    val transactions = allTransactions.filter { it.accountId == account.id && it.date.isEqual(date) }
-                    prevBalance += sumTransactions(transactions)
-                    val balanceToAdd = BalanceEntity(balanceId, date, account.id, prevBalance, false)
+                    val transactions =
+                        allTransactions.filter { it.accountId == account.id && it.date.isEqual(date) }
+                    prevBalance += sumTransactions(transactions) * account.accountType
+                    val balanceToAdd =
+                        BalanceEntity(balanceId, date, account.id, prevBalance, false)
                     balancesToInsert.add(balanceToAdd)
                 } else {
                     /** is fixed balance */
                     balancesToInsert.add(allBalances.find {
                         it.accountId == account.id && it.checkDate.isEqual(date)
                     }!!)
-                    prevBalance = allBalances.first { it.accountId == account.id && it.checkDate.isEqual(date) }.value
+                    prevBalance =
+                        allBalances.first { it.accountId == account.id && it.checkDate.isEqual(date) }.value
                 }
             }
             return balancesToInsert
@@ -172,10 +186,12 @@ fun sumTransactions(transactions: List<TransactionEntity>): Double {
     return sum
 }
 
-fun sumBalances(balances: List<BalanceEntity>,
-                accounts: List<AccountEntity>,
-                currencies: List<CurrencyEntity>,
-                defaultCurrency: String): Double {
+fun sumBalances(
+    balances: List<BalanceEntity>,
+    accounts: List<AccountEntity>,
+    currencies: List<CurrencyEntity>,
+    defaultCurrency: String
+): Double {
     var value = 0.0
     if (balances.isEmpty()) return value
 
@@ -183,12 +199,11 @@ fun sumBalances(balances: List<BalanceEntity>,
     for (balance in balances) {
         val account = accounts.find { it.id == balance.accountId }
         val currency = account!!.currency
-        val accountCurrencyRate = currencies
-                .find { it.currencySymbol == currency }
-                ?.exchangeRate ?: 1.0
-        val conversionRate = if (currency == defaultCurrency)
-            1.0 else
-            rateEuroToDefault / accountCurrencyRate
+        val accountCurrencyRate =
+            currencies.find { it.currencySymbol == currency }?.exchangeRate ?: 1.0
+        val conversionRate =
+            if (currency == defaultCurrency) 1.0
+            else rateEuroToDefault / accountCurrencyRate
         value += account.accountType.toDouble() * balance.value * conversionRate
     }
     return value
