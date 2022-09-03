@@ -20,16 +20,17 @@ import com.mancode.financetracker.database.entity.TransactionEntity
 import com.mancode.financetracker.database.pojos.TransactionFull
 import com.mancode.financetracker.ui.setFormattedMoney
 import org.threeten.bp.LocalDate
-import java.util.*
 
 /**
  * Created by Manveru on 18.12.2017.
  */
 
 class TransactionRecyclerViewAdapter(
-        private val context: Context,
-        val modifyRequestListener: ModifyRequestListener) :
-        ListAdapter<TransactionFull, TransactionRecyclerViewAdapter.ViewHolder>(DiffCallback()), Filterable {
+    private val context: Context,
+    val modifyRequestListener: ModifyRequestListener
+) :
+    ListAdapter<TransactionFull, TransactionRecyclerViewAdapter.ViewHolder>(DiffCallback()),
+    Filterable {
 
     private var allTransactions: List<TransactionFull>? = null
 
@@ -37,7 +38,7 @@ class TransactionRecyclerViewAdapter(
     val filterQuery = FilterQuery()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.transaction_wrapper, parent, false)
+            .inflate(R.layout.transaction_wrapper, parent, false)
         return ViewHolder(view)
     }
 
@@ -65,8 +66,20 @@ class TransactionRecyclerViewAdapter(
         filter.filter("")
     }
 
-    fun updateFilterQuery(type: Int, from: LocalDate?, to: LocalDate?, timespan: Int, bookmarked: Boolean) {
-        filterQuery.update(type = type, from = from, to = to, timespan = timespan, bookmark = bookmarked)
+    fun updateFilterQuery(
+        type: Int,
+        from: LocalDate?,
+        to: LocalDate?,
+        timespan: Int,
+        bookmarked: Boolean
+    ) {
+        filterQuery.update(
+            type = type,
+            from = from,
+            to = to,
+            timespan = timespan,
+            bookmark = bookmarked
+        )
         filter.filter("")
     }
 
@@ -77,10 +90,13 @@ class TransactionRecyclerViewAdapter(
 
     private class DiffCallback : DiffUtil.ItemCallback<TransactionFull>() {
         override fun areItemsTheSame(oldItem: TransactionFull, newItem: TransactionFull): Boolean =
-                oldItem.transaction.id == newItem.transaction.id
+            oldItem.transaction.id == newItem.transaction.id
 
-        override fun areContentsTheSame(oldItem: TransactionFull, newItem: TransactionFull): Boolean =
-                oldItem.transaction.id == newItem.transaction.id &&
+        override fun areContentsTheSame(
+            oldItem: TransactionFull,
+            newItem: TransactionFull
+        ): Boolean =
+            oldItem.transaction.id == newItem.transaction.id &&
                 oldItem.transaction.value == newItem.transaction.value &&
                 oldItem.transaction.date == newItem.transaction.date &&
                 oldItem.transaction.description == newItem.transaction.description
@@ -108,7 +124,8 @@ class TransactionRecyclerViewAdapter(
             bookmark.setOnClickListener {
                 modifyRequestListener.onBookmarkToggleRequested(mTransaction!!.transaction)
             }
-            bookmark.isChecked = (mTransaction!!.transaction.flags and TransactionEntity.BOOKMARKED) == 1
+            bookmark.isChecked =
+                (mTransaction!!.transaction.flags and TransactionEntity.BOOKMARKED) == 1
             foregroundView.setOnClickListener {
                 modifyRequestListener.onEditRequested(transaction.transaction)
             }
@@ -134,8 +151,10 @@ class TransactionRecyclerViewAdapter(
 
         @Suppress("UNCHECKED_CAST")
         override fun publishResults(charSequence: CharSequence, filterResults: FilterResults) {
-            filteredTransactions = filterResults.values as ArrayList<TransactionFull>   // TODO crash here
-            submitList(filteredTransactions)
+            filterResults.values?.let {
+                filteredTransactions = it as ArrayList<TransactionFull>
+                submitList(filteredTransactions)
+            }
         }
     }
 
